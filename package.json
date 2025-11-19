@@ -1,0 +1,40 @@
+{
+  "name": "@Lichens-Innovation/ts-common",
+  "version": "1.0.0",
+  "description": "Reusable generic typescript utilities, types, constants, helpers",
+  "main": "index.js",
+  "repository": "git@github.com:Lichens-Innovation/ts-common.git",
+  "author": "Lichens Innovation",
+  "license": "MIT",
+  "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "clean:node": "npx rimraf node_modules yarn.lock",
+    "clean:dist": "npx rimraf dist",
+    "typecheck": "npx tsc --noEmit",
+    "build": "npm run clean:dist && tsc",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "date-fns": "^3.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@faker-js/faker": "^10.1.0",
+    "@types/node": "^24.10.0",
+    "@vitest/coverage-v8": "4.0.8",
+    "commitlint": "^20.1.0",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.1",
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.1.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.3",
+    "vite": "^7.2.2",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^4.0.8"
+  }
+}
