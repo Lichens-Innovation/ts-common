@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isAlphanumeric, removeDiacriticalMarks } from './string.utils';
+import { isAlphanumeric, isBlank, isNotBlank, removeDiacriticalMarks } from './string.utils';
 
 describe('Tests suite for string utilities', () => {
   describe('isAlphanumeric', () => {
@@ -38,6 +38,40 @@ describe('Tests suite for string utilities', () => {
       ${'{{filename}}_{{{yyyy-MM-dd}}}_{{{HHmmss}}}'} | ${'{{filename}}_{{{yyyy-MM-dd}}}_{{{HHmmss}}}'}
     `('should return "$expected" for "$value"', ({ value, expected }) => {
       expect(removeDiacriticalMarks(value)).toBe(expected);
+    });
+  });
+
+  describe('isBlank', () => {
+    it.each`
+      value        | expected
+      ${null}      | ${true}
+      ${undefined} | ${true}
+      ${''}        | ${true}
+      ${'   '}     | ${true}
+      ${'\t\n'}    | ${true}
+      ${'hello'}   | ${false}
+      ${'  hello'} | ${false}
+      ${'hello  '} | ${false}
+      ${'0'}       | ${false}
+    `('should return $expected for "$value"', ({ value, expected }) => {
+      expect(isBlank(value)).toBe(expected);
+    });
+  });
+
+  describe('isNotBlank', () => {
+    it.each`
+      value        | expected
+      ${null}      | ${false}
+      ${undefined} | ${false}
+      ${''}        | ${false}
+      ${'   '}     | ${false}
+      ${'\t\n'}    | ${false}
+      ${'hello'}   | ${true}
+      ${'  hello'} | ${true}
+      ${'hello  '} | ${true}
+      ${'0'}       | ${true}
+    `('should return $expected for "$value"', ({ value, expected }) => {
+      expect(isNotBlank(value)).toBe(expected);
     });
   });
 });

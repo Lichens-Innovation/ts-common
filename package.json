@@ -15,7 +15,9 @@
     "clean:dist": "npx rimraf dist",
     "typecheck": "npx tsc --noEmit",
     "build": "npm run clean:dist && tsc",
-    "test": "vitest"
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "date-fns": "^3.0.0"
