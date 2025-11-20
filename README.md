@@ -4,19 +4,19 @@ Reusable generic typescript utilities, types, constants, helpers
 
 Table of content
 - [ts-common](#ts-common)
-    - [Prerequisites](#prerequisites)
-    - [Scripts](#scripts)
+  - [Prerequisites](#prerequisites)
+  - [Scripts](#scripts)
   - [Contributions](#contributions)
   - [Unit tests](#unit-tests)
-  - [Library version](#library-version)
+  - [Library semantic versioning](#library-semantic-versioning)
   - [Project coding guidelines](#project-coding-guidelines)
 
-### Prerequisites
+## Prerequisites
 
 - Node.js (LTS or higher)
 - Yarn
 
-### Scripts
+## Scripts
 
 | Command                      | Description                                                                 |
 |------------------------------|-----------------------------------------------------------------------------|
@@ -25,6 +25,8 @@ Table of content
 | `yarn clean:dist`            | Removes the dist directory                                                  |
 | `yarn typecheck`             | Checks TypeScript types without emitting files                              |
 | `yarn test`                  | Runs tests using Vitest                                                     |
+| `yarn test:coverage`         | Runs tests with coverage report using Vitest                                |
+| `yarn test:watch`            | Runs tests in watch mode using Vitest                                       |
 
 ## Contributions
 
@@ -34,13 +36,13 @@ Contributions to the project are made by simply improving the current codebase a
 
 Test coverage must be maintained at 80% or higher. It is therefore important to always attempt to cover new code that is added with appropriate tests.
 
-## Library version
+## Library semantic versioning
 
-When there is a breaking change, Semantic Versioning must be used to indicate that a major behavior has changed. Semantic Versioning follows the `MAJOR.MINOR.PATCH` format:
+When there is a breaking change, [Semantic Versioning](https://semver.org/#summary) must be used to indicate that a major behavior has changed. Semantic Versioning follows the `MAJOR.MINOR.PATCH` format:
 
-- **MAJOR** version is incremented for changes that are incompatible with previous versions
-- **MINOR** version is incremented when adding backward-compatible features
-- **PATCH** version is incremented for backward-compatible bug fixes
+* `MAJOR` version when you make incompatible API changes
+* `MINOR` version when you add functionality in a backward compatible manner
+* `PATCH` version when you make backward compatible bug fixes
 
 ## Project coding guidelines
 
