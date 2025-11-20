@@ -1,8 +1,12 @@
 {
   "name": "@Lichens-Innovation/ts-common",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "repository": "git@github.com:Lichens-Innovation/ts-common.git",
   "author": "Lichens Innovation",
   "license": "MIT",

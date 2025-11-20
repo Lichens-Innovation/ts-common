@@ -6,15 +6,24 @@
     "moduleResolution": "bundler",
     "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": false,
     "declarationMap": true,
+    "noEmit": false,
     "sourceMap": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+  ]
 }
-
