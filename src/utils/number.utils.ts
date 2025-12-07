@@ -9,3 +9,8 @@ export const toFixed = (value?: number | null, decimals = 0): number => {
   const multiplier = Math.pow(10, decimals);
   return Math.round(value * multiplier) / multiplier;
 };
+
+export const roundUpToNearest10 = (value?: number | null): number => {
+  if (isNullish(value)) return 0;
+  return Math.ceil(value / 10) * 10;
+};
