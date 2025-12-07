@@ -1,7 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { toFixed } from './number.utils';
+import { roundUpToNearest10, toFixed } from './number.utils';
 
 describe('Tests suite for number utilities', () => {
+  describe('roundUpToNearest10', () => {
+    it.each`
+      value        | expected
+      ${10}        | ${10}
+      ${11}        | ${20}
+      ${19}        | ${20}
+      ${288}       | ${290}
+      ${null}      | ${0}
+      ${undefined} | ${0}
+    `('should return $expected for value=$value', ({ value, expected }) => {
+      expect(roundUpToNearest10(value)).toBe(expected);
+    });
+  });
   describe('toFixed', () => {
     it.each`
       value      | decimals | expected
