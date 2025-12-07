@@ -1,7 +1,27 @@
 import { describe, expect, it } from 'vitest';
-import { roundUpToNearest10, toFixed } from './number.utils';
+import { getOrderOfMagnitudeExponent, roundUpToNearest10, toFixed } from './number.utils';
 
 describe('Tests suite for number utilities', () => {
+  describe('getOrderOfMagnitudeExponent', () => {
+    it.each`
+      value        | expected
+      ${10}        | ${1}
+      ${11}        | ${1}
+      ${19}        | ${1}
+      ${288}       | ${2}
+      ${0}         | ${0}
+      ${-10}       | ${1}
+      ${-11}       | ${1}
+      ${-19}       | ${1}
+      ${-288}      | ${2}
+      ${NaN}       | ${0}
+      ${null}      | ${0}
+      ${undefined} | ${0}
+    `('should return $expected for value=$value', ({ value, expected }) => {
+      expect(getOrderOfMagnitudeExponent(value)).toBe(expected);
+    });
+  });
+
   describe('roundUpToNearest10', () => {
     it.each`
       value        | expected
