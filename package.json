@@ -11,9 +11,6 @@
   "author": "Lichens Innovation",
   "license": "MIT",
   "type": "module",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "scripts": {
     "clean:node": "npx rimraf node_modules yarn.lock",
     "clean:dist": "npx rimraf dist",
