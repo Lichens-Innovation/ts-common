@@ -12,6 +12,7 @@
   "license": "MIT",
   "type": "module",
   "publishConfig": {
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
