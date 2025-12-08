@@ -1,6 +1,6 @@
 {
   "name": "@lichens-innovation/ts-common",
-  "version": "1.2.2",
+  "version": "1.2.1",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,6 +11,9 @@
   "author": "Lichens Innovation",
   "license": "MIT",
   "type": "module",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "clean:node": "npx rimraf node_modules yarn.lock",
     "clean:dist": "npx rimraf dist",
