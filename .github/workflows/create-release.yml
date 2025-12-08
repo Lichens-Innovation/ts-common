@@ -10,8 +10,8 @@ jobs:
     if: github.repository_owner == 'Lichens-Innovation'
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      packages: write  # required for GitHub Packages publish
+      contents: write          # pushing tags
+      id-token: write          # <-- required for npm OIDC
 
     steps:
       - uses: actions/checkout@v4
@@ -23,15 +23,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          registry-url: 'https://npm.pkg.github.com/'
-          always-auth: true
+          registry-url: 'https://registry.npmjs.org/'
+          always-auth: true       # <-- REQUIRED for OIDC publishing
+
+      - name: Install Yarn and dependencies
+        uses: mskelton/setup-yarn@v2.0.0
 
       - name: Check yarn version
         run: yarn --version
-
-      - name: Configure npm authentication
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -80,11 +79,11 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: Publish to GitHub Packages
+      - name: Publish to npm (OIDC)
         if: steps.check.outputs.version_changed == 'true'
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish --access public --no-git-checks
+        # 👇 IMPORTANT: no NODE_AUTH_TOKEN needed
+        # npm automatically gets an OIDC token from GitHub
 
       - name: Tag release
         if: steps.check.outputs.version_changed == 'true'

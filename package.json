@@ -1,6 +1,6 @@
 {
-  "name": "@Lichens-Innovation/ts-common",
-  "version": "1.2.0",
+  "name": "@lichens-innovation/ts-common",
+  "version": "1.2.1",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
