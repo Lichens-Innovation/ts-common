@@ -8,3 +8,4 @@ export * from './thread.utils';
 export * from './time.utils';
 export * from './types.utils';
 export * from './units.utils';
+export * from './websocket.utils';
