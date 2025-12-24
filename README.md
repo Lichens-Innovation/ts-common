@@ -2,12 +2,26 @@
 
 Reusable generic typescript utilities, types, constants, helpers
 
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+<!-- Package & Status -->
+[![npm version](https://img.shields.io/npm/v/@lichens-innovation/ts-common.svg?style=flat-square)](https://www.npmjs.com/package/@lichens-innovation/ts-common)
+[![npm downloads](https://img.shields.io/npm/dm/@lichens-innovation/ts-common.svg?style=flat-square)](https://www.npmjs.com/package/@lichens-innovation/ts-common)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Lichens-Innovation/ts-common/create-release.yml?branch=main&style=flat-square&logo=github)](https://github.com/Lichens-Innovation/ts-common/actions)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
+
+<!-- Tech Stack -->
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-LTS-green.svg?style=flat-square&logo=node.js)](https://nodejs.org/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-[![Vitest](https://img.shields.io/badge/Vitest-4.0-6E9F18.svg?style=flat-square&logo=vitest)](https://vitest.dev/)
 [![Yarn](https://img.shields.io/badge/Yarn-1.22+-2C8EBB.svg?style=flat-square&logo=yarn)](https://yarnpkg.com/)
+
+<!-- Code Quality -->
+[![Vitest](https://img.shields.io/badge/Vitest-4.0-6E9F18.svg?style=flat-square&logo=vitest)](https://vitest.dev/)
+[![ESLint](https://img.shields.io/badge/ESLint-9.x-4B32C3.svg?style=flat-square&logo=eslint)](https://eslint.org/)
+[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square&logo=prettier)](https://prettier.io/)
+
+<!-- Standards -->
+[![Semantic Versioning](https://img.shields.io/badge/semver-2.0.0-blue.svg?style=flat-square)](https://semver.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 Table of content
 - [ts-common](#ts-common)
