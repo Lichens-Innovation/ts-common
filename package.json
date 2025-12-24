@@ -2,6 +2,13 @@
   "name": "@lichens-innovation/ts-common",
   "version": "1.3.0",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
+  "keywords": [
+    "typescript",
+    "utilities",
+    "utils",
+    "helpers",
+    "common"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
