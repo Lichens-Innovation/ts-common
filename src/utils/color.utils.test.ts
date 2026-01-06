@@ -156,4 +156,3 @@ describe('Tests suite for color utilities', () => {
     });
   });
 });
-
