@@ -15,8 +15,8 @@ describe('Tests suite for thread utilities', () => {
       const end = Date.now();
       const elapsed = end - start;
 
-      // Allow some tolerance for timing (at least the specified time, but may be slightly more)
-      expect(elapsed).toBeGreaterThanOrEqual(milliseconds);
+      // Allow some tolerance for timing (timers can fire 1-2ms early due to system timer resolution)
+      expect(elapsed).toBeGreaterThanOrEqual(milliseconds - 2);
       // But shouldn't be too much more (allow 50ms tolerance for test execution)
       expect(elapsed).toBeLessThan(milliseconds + 50);
     });
