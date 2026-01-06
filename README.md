@@ -31,6 +31,7 @@ Table of content
   - [Unit tests](#unit-tests)
   - [Library semantic versioning](#library-semantic-versioning)
   - [Project coding guidelines](#project-coding-guidelines)
+  - [License](#license)
 
 ## Prerequisites
 
@@ -70,3 +71,7 @@ When there is a breaking change, [Semantic Versioning](https://semver.org/#summa
 Adhering to established coding guidelines is essential for developing efficient, maintainable, and scalable software. These guidelines promote consistency across codebases, making it easier for teams to collaborate and for new developers to understand existing code. By following standardized patterns, such as those outlined in the [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md), developers can reduce errors and enhance code readability.
 
 * [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
