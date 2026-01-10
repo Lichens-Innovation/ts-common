@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { isAlphanumeric, isBlank, isNotBlank, removeDiacriticalMarks } from './string.utils';
+import {
+  capitalizeFirst,
+  countWords,
+  isAlphanumeric,
+  isBlank,
+  isNotBlank,
+  removeDiacriticalMarks,
+  truncate,
+} from './string.utils';
 
 describe('Tests suite for string utilities', () => {
   describe('isAlphanumeric', () => {
@@ -72,6 +80,64 @@ describe('Tests suite for string utilities', () => {
       ${'0'}       | ${true}
     `('should return $expected for "$value"', ({ value, expected }) => {
       expect(isNotBlank(value)).toBe(expected);
+    });
+  });
+
+  describe('capitalizeFirst', () => {
+    it.each`
+      value        | expected
+      ${'hello'}   | ${'Hello'}
+      ${'Hello'}   | ${'Hello'}
+      ${'HELLO'}   | ${'HELLO'}
+      ${'h'}       | ${'H'}
+      ${''}        | ${''}
+      ${null}      | ${null}
+      ${undefined} | ${undefined}
+      ${'123abc'}  | ${'123abc'}
+      ${'éclair'}  | ${'Éclair'}
+    `('should return "$expected" for "$value"', ({ value, expected }) => {
+      expect(capitalizeFirst(value)).toBe(expected);
+    });
+  });
+
+  describe('countWords', () => {
+    it.each`
+      text                          | expected
+      ${'hello world'}              | ${2}
+      ${'one'}                      | ${1}
+      ${'one two three four five'}  | ${5}
+      ${'  spaced   out  words  '}  | ${3}
+      ${''}                         | ${0}
+      ${'   '}                      | ${0}
+      ${null}                       | ${0}
+      ${undefined}                  | ${0}
+      ${'hello\nworld\ttab'}        | ${3}
+    `('should return $expected for "$text"', ({ text, expected }) => {
+      expect(countWords(text)).toBe(expected);
+    });
+  });
+
+  describe('truncate', () => {
+    it.each`
+      str                        | maxLength | ellipsis     | expected
+      ${'hello world'}           | ${5}      | ${'...'}     | ${'he...'}
+      ${'hello world'}           | ${11}     | ${'...'}     | ${'hello world'}
+      ${'hello world'}           | ${12}     | ${'...'}     | ${'hello world'}
+      ${'hello'}                 | ${10}     | ${'...'}     | ${'hello'}
+      ${'hello world'}           | ${8}      | ${'…'}       | ${'hello w…'}
+      ${'short'}                 | ${3}      | ${'...'}     | ${'...'}
+      ${''}                      | ${10}     | ${'...'}     | ${''}
+      ${null}                    | ${10}     | ${'...'}     | ${null}
+      ${undefined}               | ${10}     | ${'...'}     | ${undefined}
+    `(
+      'should return "$expected" for str="$str", maxLength=$maxLength, ellipsis="$ellipsis"',
+      ({ str, maxLength, ellipsis, expected }) => {
+        expect(truncate(str, maxLength, ellipsis)).toBe(expected);
+      }
+    );
+
+    it('should use default ellipsis when not provided', () => {
+      expect(truncate('hello world', 8)).toBe('hello...');
     });
   });
 });

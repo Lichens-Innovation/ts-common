@@ -3,7 +3,9 @@ import {
   getContrastTextColor,
   getLuminance,
   getOpacityHexValue,
+  hexToNormalizedRgb,
   hexToRgb,
+  isLightColor,
   rgbaToHex,
   rgbaToHexWithAlpha,
   rgbaToString,
@@ -153,6 +155,47 @@ describe('Tests suite for color utilities', () => {
       ${'#333333'} | ${'#ffffff'}
     `('should return "$expected" for hexColor="$hexColor"', ({ hexColor, expected }) => {
       expect(getContrastTextColor(hexColor)).toBe(expected);
+    });
+  });
+
+  describe('hexToNormalizedRgb', () => {
+    it.each`
+      hex          | expected
+      ${'#000000'} | ${{ r: 0, g: 0, b: 0 }}
+      ${'000000'}  | ${{ r: 0, g: 0, b: 0 }}
+      ${'#ffffff'} | ${{ r: 1, g: 1, b: 1 }}
+      ${'ffffff'}  | ${{ r: 1, g: 1, b: 1 }}
+      ${'#ff0000'} | ${{ r: 1, g: 0, b: 0 }}
+      ${'#00ff00'} | ${{ r: 0, g: 1, b: 0 }}
+      ${'#0000ff'} | ${{ r: 0, g: 0, b: 1 }}
+      ${'#808080'} | ${{ r: 128 / 255, g: 128 / 255, b: 128 / 255 }}
+    `('should return normalized RGB for hex="$hex"', ({ hex, expected }) => {
+      const result = hexToNormalizedRgb(hex);
+      expect(result.r).toBeCloseTo(expected.r, 5);
+      expect(result.g).toBeCloseTo(expected.g, 5);
+      expect(result.b).toBeCloseTo(expected.b, 5);
+    });
+
+    it('should return black for invalid hex', () => {
+      expect(hexToNormalizedRgb('invalid')).toEqual({ r: 0, g: 0, b: 0 });
+      expect(hexToNormalizedRgb('')).toEqual({ r: 0, g: 0, b: 0 });
+    });
+  });
+
+  describe('isLightColor', () => {
+    it.each`
+      hex          | expected
+      ${'#ffffff'} | ${true}
+      ${'#000000'} | ${false}
+      ${'#ffff00'} | ${true}
+      ${'#0000ff'} | ${false}
+      ${'#ff0000'} | ${false}
+      ${'#00ff00'} | ${true}
+      ${'#808080'} | ${true}
+      ${'#777777'} | ${false}
+      ${'#cccccc'} | ${true}
+    `('should return $expected for hex="$hex"', ({ hex, expected }) => {
+      expect(isLightColor(hex)).toBe(expected);
     });
   });
 });
