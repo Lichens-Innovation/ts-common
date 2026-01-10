@@ -32,14 +32,13 @@ const DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
  * Format a Unix timestamp (seconds since epoch) to a human-readable string.
  * @param timestamp - Unix timestamp in seconds
  * @param dateFormat - Date format string (default: "yyyy-MM-dd HH:mm:ss")
- * @returns Formatted date string or "N/A" if invalid
+ * @returns Formatted date string or "N/A" if invalid or zero.
  */
 export const formatUnixTimestamp = (
   timestamp: number,
   dateFormat: string = DEFAULT_DATE_FORMAT
 ): string => {
-  if (isNullish(timestamp)) return "N/A";
-
+  if (!timestamp) return "N/A";
   try {
     return format(new Date(timestamp * 1000), dateFormat);
   } catch {
