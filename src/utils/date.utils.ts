@@ -38,7 +38,8 @@ export const formatUnixTimestamp = (
   timestamp: number,
   dateFormat: string = DEFAULT_DATE_FORMAT
 ): string => {
-  if (!timestamp) return "N/A";
+  if (isNullish(timestamp)) return "N/A";
+
   try {
     return format(new Date(timestamp * 1000), dateFormat);
   } catch {
