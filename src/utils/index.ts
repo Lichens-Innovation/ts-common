@@ -9,4 +9,5 @@ export * from './thread.utils';
 export * from './time.utils';
 export * from './types.utils';
 export * from './units.utils';
+export * from './uri.utils';
 export * from './websocket.utils';
