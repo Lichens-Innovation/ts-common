@@ -108,6 +108,10 @@ const PERCENT_COLORS = [
 
 // https://stackoverflow.com/a/7128796/704681
 export const getColorForPercentage = (percent: number): string => {
+  if (percent < 0 || percent > 1) {
+    throw new Error(`Percentage must be between 0 and 1: ${percent}`);
+  }
+
   let i = 0;
   for (i = 1; i < PERCENT_COLORS.length - 1; i++) {
     if (percent < PERCENT_COLORS[i].pct) {
