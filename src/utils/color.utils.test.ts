@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  getColorForPercentage,
   getContrastTextColor,
   getLuminance,
   getOpacityHexValue,
@@ -196,6 +197,42 @@ describe('Tests suite for color utilities', () => {
       ${'#cccccc'} | ${true}
     `('should return $expected for hex="$hex"', ({ hex, expected }) => {
       expect(isLightColor(hex)).toBe(expected);
+    });
+  });
+
+  describe('getColorForPercentage', () => {
+    it('should return red for 0%', () => {
+      expect(getColorForPercentage(0)).toBe('rgb(255,0,0)');
+    });
+
+    it('should return yellow for 50%', () => {
+      expect(getColorForPercentage(0.5)).toBe('rgb(255,255,0)');
+    });
+
+    it('should return green for 100%', () => {
+      expect(getColorForPercentage(1)).toBe('rgb(0,255,0)');
+    });
+
+    it('should return orange-ish for 25%', () => {
+      // Interpolation between red (0%) and yellow (50%)
+      // At 25%, we're halfway between red and yellow
+      expect(getColorForPercentage(0.25)).toBe('rgb(255,127,0)');
+    });
+
+    it('should return yellow-green for 75%', () => {
+      // Interpolation between yellow (50%) and green (100%)
+      // At 75%, we're halfway between yellow and green
+      expect(getColorForPercentage(0.75)).toBe('rgb(127,255,0)');
+    });
+
+    it('should handle values close to boundaries', () => {
+      // Very small value - should be close to red
+      const verySmall = getColorForPercentage(0.01);
+      expect(verySmall).toMatch(/^rgb\(255,\d+,0\)$/);
+
+      // Very close to 1 - should be close to green
+      const nearOne = getColorForPercentage(0.99);
+      expect(nearOne).toMatch(/^rgb\(\d+,255,0\)$/);
     });
   });
 });

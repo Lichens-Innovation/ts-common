@@ -99,3 +99,37 @@ export const isLightColor = (hex: string): boolean => {
   const luminance = 0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b;
   return luminance > 0.5;
 };
+
+const PERCENT_COLORS = [
+  { pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
+  { pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
+  { pct: 1.0, color: { r: 0x00, g: 0xff, b: 0 } },
+] as const;
+
+// https://stackoverflow.com/a/7128796/704681
+export const getColorForPercentage = (percent: number): string => {
+  if (percent < 0 || percent > 1) {
+    throw new Error(`Percentage must be between 0 and 1: ${percent}`);
+  }
+
+  let i = 0;
+  for (i = 1; i < PERCENT_COLORS.length - 1; i++) {
+    if (percent < PERCENT_COLORS[i].pct) {
+      break;
+    }
+  }
+
+  const lower = PERCENT_COLORS[i - 1];
+  const upper = PERCENT_COLORS[i];
+  const range = upper.pct - lower.pct;
+  const rangePct = (percent - lower.pct) / range;
+  const pctLower = 1 - rangePct;
+  const pctUpper = rangePct;
+  const color = {
+    r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+    g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+    b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper),
+  };
+
+  return "rgb(" + [color.r, color.g, color.b].join(",") + ")";
+};
