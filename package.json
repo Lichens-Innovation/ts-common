@@ -1,6 +1,6 @@
 {
   "name": "@lichens-innovation/ts-common",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
   "keywords": [
     "typescript",
@@ -9,8 +9,18 @@
     "helpers",
     "common"
   ],
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    }
+  },
+  "sideEffects": false,
   "files": [
     "dist"
   ],
@@ -26,7 +36,7 @@
     "clean:node": "npx rimraf node_modules yarn.lock",
     "clean:dist": "npx rimraf dist",
     "typecheck": "npx tsc --noEmit",
-    "build": "npm run clean:dist && tsc",
+    "build": "tsup",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
@@ -54,6 +64,7 @@
     "typescript-eslint": "^8.46.3",
     "vite": "^7.2.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "tsup": "^8.3.5"
   }
 }

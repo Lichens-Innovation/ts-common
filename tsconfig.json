@@ -18,7 +18,7 @@
     "declarationDir": "dist",
     "emitDeclarationOnly": false,
     "declarationMap": true,
-    "noEmit": false,
+    "noEmit": true,
     "sourceMap": true
   },
   "include": ["src/**/*"],
