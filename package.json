@@ -1,6 +1,6 @@
 {
   "name": "@lichens-innovation/ts-common",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
   "keywords": [
     "typescript",
