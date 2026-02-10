@@ -75,6 +75,28 @@ describe('chart.utils', () => {
         expect(tooltipValueFormatter(range)).toBe(expected);
       });
     });
+
+    describe('fallback for non-numeric / invalid input', () => {
+      it('returns string as-is for string input', () => {
+        expect(tooltipValueFormatter('hello')).toBe('hello');
+        expect(tooltipValueFormatter('42')).toBe('42');
+      });
+
+      it('returns empty string for null and undefined', () => {
+        expect(tooltipValueFormatter(null)).toBe('');
+        expect(tooltipValueFormatter(undefined)).toBe('');
+      });
+
+      it('returns string representation for object input', () => {
+        expect(tooltipValueFormatter({})).toBe('[object Object]');
+        expect(tooltipValueFormatter({ foo: 1 })).toBe('[object Object]');
+      });
+
+      it('returns string representation for array with non-numeric elements', () => {
+        expect(tooltipValueFormatter(['a', 'b'])).toBe('a,b');
+        expect(tooltipValueFormatter(['x'])).toBe('x');
+      });
+    });
   });
 
   describe('roundToNiceNumber', () => {

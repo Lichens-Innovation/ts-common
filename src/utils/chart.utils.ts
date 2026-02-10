@@ -1,3 +1,5 @@
+import { isNullish } from "./types.utils";
+
 export interface ToleranceArea {
   flow: number;
   toleranceRange: [number, number];
@@ -25,7 +27,11 @@ export const tickFormatter = (value: number): string => value.toFixed(0);
 
 export const toToleranceLabel = (value: number): string => `±${(value * 100).toFixed(0)}%`;
 
-export const tooltipValueFormatter = (data: unknown): string => {
+export const tooltipValueFormatter = (data?: unknown | null): string => {
+  if (isNullish(data)) {
+    return '';
+  }
+
   if (typeof data === 'number') {
     return data.toFixed(2);
   }
