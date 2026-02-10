@@ -19,3 +19,15 @@ export const hasScheme = (uri?: string | null): boolean => {
   const lowerUri = uri.toLowerCase();
   return SCHEME_PREFIXES_ARRAY.some((prefix) => lowerUri.startsWith(`${prefix}://`));
 };
+
+/**
+ * Extracts the base64 data from a data URI string.
+ * Data URIs have the format: data:[<mediatype>][;base64],<data>
+ * This function extracts everything after the first comma.
+ *
+ * @param dataUri - The data URI string (e.g., "data:image/png;base64,iVBORw0KG...")
+ * @returns The base64 data without the data URI prefix, or the original string if no comma is found
+ */
+export const extractBase64FromDataUri = (dataUri: string): string => {
+  return dataUri.split(',')[1] ?? dataUri;
+};

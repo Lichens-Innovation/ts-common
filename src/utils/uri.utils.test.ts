@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { hasScheme, SCHEME_PREFIXES } from './uri.utils';
+import { extractBase64FromDataUri, hasScheme, SCHEME_PREFIXES } from './uri.utils';
 
 describe('Tests suite for URI utilities', () => {
   describe('SCHEME_PREFIXES', () => {
@@ -41,6 +41,20 @@ describe('Tests suite for URI utilities', () => {
       ${undefined}                       | ${false} | ${'undefined value'}
     `('should return $expected for $description', ({ uri, expected }) => {
       expect(hasScheme(uri)).toBe(expected);
+    });
+  });
+
+  describe('extractBase64FromDataUri', () => {
+    it.each`
+      dataUri                          | expected
+      ${'data:image/png;base64,ABC'}   | ${'ABC'}
+      ${'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4='} | ${'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4='}
+      ${'data:text/plain,hello'}       | ${'hello'}
+      ${'no-comma'}                    | ${'no-comma'}
+      ${''}                            | ${''}
+      ${'data:,'}                      | ${''}
+    `('should return "$expected" for dataUri "$dataUri"', ({ dataUri, expected }) => {
+      expect(extractBase64FromDataUri(dataUri)).toBe(expected);
     });
   });
 });
