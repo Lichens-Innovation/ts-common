@@ -1,5 +1,7 @@
+export * from './chart.utils';
 export * from './color.utils';
 export * from './date.utils';
+export * from './dimensions.utils';
 export * from './errors.utils';
 export * from './http.utils';
 export * from './number.utils';
