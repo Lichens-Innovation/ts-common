@@ -2,6 +2,8 @@
 
 Reusable generic typescript utilities, types, constants, helpers
 
+> **Note:** This package is designed to remain **pure TypeScript** and **environment-agnostic**. It does not depend on Node.js, browser, or React Native APIs, so the same code can be used in any of these runtimes without modification.
+
 <!-- Package & Status -->
 [![npm version](https://img.shields.io/npm/v/@lichens-innovation/ts-common.svg?style=flat-square)](https://www.npmjs.com/package/@lichens-innovation/ts-common)
 [![npm downloads](https://img.shields.io/npm/dm/@lichens-innovation/ts-common.svg?style=flat-square)](https://www.npmjs.com/package/@lichens-innovation/ts-common)
