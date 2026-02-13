@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { getOrderOfMagnitudeExponent, roundUpToNearest10, toFixed } from './number.utils';
+import {
+  formatIntegerDisplay,
+  getOrderOfMagnitudeExponent,
+  isInputValidInteger,
+  isInputValidNumber,
+  roundUpToNearest10,
+  toFixed,
+} from './number.utils';
 
 describe('Tests suite for number utilities', () => {
   describe('getOrderOfMagnitudeExponent', () => {
@@ -61,6 +68,56 @@ describe('Tests suite for number utilities', () => {
 
     it('should throw error when decimals is negative', () => {
       expect(() => toFixed(3.14, -1)).toThrow('[toFixed] decimals must be >= 0');
+    });
+  });
+
+  describe('isInputValidNumber', () => {
+    it.each`
+      value          | expected
+      ${''}          | ${false}
+      ${'   '}       | ${false}
+      ${'abc'}       | ${false}
+      ${'12.34'}     | ${true}
+      ${'0'}         | ${true}
+      ${'-5'}        | ${true}
+      ${' 42 '}      | ${true}
+      ${'1500.5'}    | ${true}
+      ${'1e2'}       | ${true}
+      ${'NaN'}       | ${false}
+      ${'1.2.3'}     | ${false}
+    `('should return $expected for value="$value"', ({ value, expected }) => {
+      expect(isInputValidNumber(value)).toBe(expected);
+    });
+  });
+
+  describe('isInputValidInteger', () => {
+    it.each`
+      value          | expected
+      ${''}          | ${false}
+      ${'   '}       | ${false}
+      ${'12.34'}     | ${false}
+      ${'1500.5'}    | ${false}
+      ${'0'}         | ${true}
+      ${'42'}        | ${true}
+      ${'-7'}        | ${true}
+      ${' 100 '}     | ${true}
+    `('should return $expected for value="$value"', ({ value, expected }) => {
+      expect(isInputValidInteger(value)).toBe(expected);
+    });
+  });
+
+  describe('formatIntegerDisplay', () => {
+    it.each`
+      value      | expected
+      ${42}      | ${'42'}
+      ${42.7}    | ${'43'}
+      ${42.3}    | ${'42'}
+      ${0}       | ${'0'}
+      ${-3.8}    | ${'-4'}
+      ${null}    | ${'0'}
+      ${undefined} | ${'0'}
+    `('should return "$expected" for value=$value', ({ value, expected }) => {
+      expect(formatIntegerDisplay(value)).toBe(expected);
     });
   });
 });

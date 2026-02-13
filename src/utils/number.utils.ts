@@ -1,4 +1,29 @@
+import { isBlank } from './string.utils';
 import { isNullish, isNumber } from "./types.utils";
+
+/**
+ * Returns true if the input string is a valid number (blank and non-numeric strings are invalid).
+ */
+export const isInputValidNumber = (value: string): boolean => {
+  if (isBlank(value)) return false;
+  const num = Number(value.trim());
+  return Number.isFinite(num);
+};
+
+/**
+ * Returns true if the input string is a valid integer (decimals like "1500.5" are invalid).
+ */
+export const isInputValidInteger = (value: string): boolean => {
+  if (!isInputValidNumber(value)) return false;
+  const num = Number(value.trim());
+  return Number.isInteger(num);
+};
+
+/**
+ * Formats a number as an integer display string (removes decimals).
+ */
+export const formatIntegerDisplay = (value?: number | null): string =>
+  String(toFixed(value, 0));
 
 // Example: toFixed(3.14159, 3) // 3.142
 export const toFixed = (value?: number | null, decimals = 0): number => {
