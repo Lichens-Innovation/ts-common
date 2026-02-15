@@ -1,6 +1,6 @@
 {
   "name": "@lichens-innovation/ts-common",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
   "keywords": ["typescript", "utilities", "utils", "helpers", "common"],
   "main": "dist/index.cjs",
