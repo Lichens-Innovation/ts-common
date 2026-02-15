@@ -24,6 +24,11 @@ export class WorksheetBuilder {
     this.defaultRowStyles = [];
   }
 
+  /** Returns the current row index (1-based). */
+  get rowCount(): number {
+    return this.currentRow;
+  }
+
   addCell({ row, col, value, style }: AddCellArgs): void {
     const cell = this.worksheet.getCell(row + 1, col + 1); // Convert to 1-based
     cell.value = value ?? "";

@@ -25,6 +25,7 @@ export const fetchUrlAsDataUri = async (url: string): Promise<string | null> => 
   try {
     const response = await fetch(url);
     if (!response.ok) {
+      console.warn(`[fetchUrlAsDataUri] Response not ok (${response.status}). url: "${url}"`);
       return null;
     }
 

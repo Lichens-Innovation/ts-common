@@ -1,4 +1,4 @@
-import type { Dimensions } from "../utils";
+import { getErrorMessage, type Dimensions } from "../utils";
 
 export const hasRechartsElements = (svg: SVGSVGElement): boolean => {
   return (
@@ -40,13 +40,13 @@ export const getRechartsSvgFromElement = ({
 }: GetRechartsSvgFromElementArgs): SVGSVGElement | null => {
   const allSvgs = chartElement.querySelectorAll<SVGSVGElement>("svg");
   if (allSvgs.length === 0) {
-    console.info(`[getSvgAsBase64] SVG element not found inside element with id "${chartElementId}"`);
+    console.info(`[getRechartsSvgFromElement] SVG element not found inside element with id "${chartElementId}"`);
     return null;
   }
 
   const rechartSvg = findRechartsSvg(allSvgs);
   if (!rechartSvg) {
-    console.info(`[getSvgAsBase64] No Recharts SVG element found inside element with id "${chartElementId}"`);
+    console.info(`[getRechartsSvgFromElement] No Recharts SVG element found inside element with id "${chartElementId}"`);
     return null;
   }
 
@@ -120,12 +120,12 @@ export const resizeSvgXml = ({ svgXml, targetWidth, targetHeight }: ResizeSvgXml
   const widthAttr = `width="${targetWidth}"`;
   const heightAttr = `height="${targetHeight}"`;
 
-  let result = svgXml.replace(/\bwidth="[^"]*"/, widthAttr);
+  let result = svgXml.replace(/\bwidth=["'][^"']*["']/, widthAttr);
   if (!/\bwidth\s*=/.test(result)) {
     result = result.replace(/<svg/, `<svg ${widthAttr}`);
   }
 
-  result = result.replace(/\bheight="[^"]*"/, heightAttr);
+  result = result.replace(/\bheight=["'][^"']*["']/, heightAttr);
   if (!/\bheight\s*=/.test(result)) {
     result = result.replace(/<svg/, `<svg ${heightAttr}`);
   }
@@ -258,7 +258,8 @@ export const svgToPngDataUri = async ({
     };
 
     img.onerror = (error) => {
-      reject(new Error(`Failed to load SVG image: ${error}`));
+      const message = getErrorMessage(error);
+      reject(new Error(`Failed to load SVG image: ${message}`));
     };
 
     img.src = svgDataUri;

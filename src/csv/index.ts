@@ -13,7 +13,7 @@ export const convertToCsvRow = (row: Record<string, CellValue>): Record<string, 
   return stringRow;
 };
 
-export const generateCsvBlob = async (data: Record<string, CellValue>[]): Promise<Blob> => {
+export const generateCsvBlob = (data: Record<string, CellValue>[]): Blob => {
   const rows: Record<string, string>[] = data.map(convertToCsvRow);
   const csv = Papa.unparse(rows, { header: true, delimiter: "," });
 

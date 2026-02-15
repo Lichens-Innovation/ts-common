@@ -26,7 +26,7 @@ export const sanitizeWorksheetTitle = (title: string): string => {
   const MAX_LENGTH = 31;
   const INVALID_CHARS = /[:/\\?*[\]]/g;
 
-  return title.replace(INVALID_CHARS, "").slice(0, MAX_LENGTH);
+  return title.trim().replace(INVALID_CHARS, "").slice(0, MAX_LENGTH);
 };
 
 interface ToSafeCellValueArgs {

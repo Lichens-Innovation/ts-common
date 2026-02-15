@@ -2,7 +2,7 @@
 
 Reusable generic typescript utilities, types, constants, helpers
 
-> **Note:** This package is designed to remain **pure TypeScript** and **environment-agnostic**. It does not depend on Node.js, browser, or React Native APIs, so the same code can be used in any of these runtimes without modification.
+> **Note:** The default export is **pure TypeScript** and **environment-agnostic**—it has no dependency on Node.js, browser, or React Native APIs, so the same code runs in any of these runtimes. Subpath imports such as `@lichens-innovation/ts-common/web` target a specific environment and rely on its APIs.
 
 <!-- Package & Status -->
 [![npm version](https://img.shields.io/npm/v/@lichens-innovation/ts-common.svg?style=flat-square)](https://www.npmjs.com/package/@lichens-innovation/ts-common)
@@ -31,10 +31,6 @@ Table of content
   - [Scripts](#scripts)
   - [Optional modules](#optional-modules)
     - [Excel (`@lichens-innovation/ts-common/excel`)](#excel-lichens-innovationts-commonexcel)
-    - [CSV (`@lichens-innovation/ts-common/csv`)](#csv-lichens-innovationts-commoncsv)
-    - [PDF (`@lichens-innovation/ts-common/pdf`)](#pdf-lichens-innovationts-commonpdf)
-    - [Web (`@lichens-innovation/ts-common/web`)](#web-lichens-innovationts-commonweb)
-    - [MIME (`@lichens-innovation/ts-common/mime`)](#mime-lichens-innovationts-commonmime)
   - [Contributions](#contributions)
   - [Unit tests](#unit-tests)
   - [Library semantic versioning](#library-semantic-versioning)
@@ -64,31 +60,7 @@ This library provides optional subpath modules with external dependencies. Insta
 
 ### Excel (`@lichens-innovation/ts-common/excel`)
 
-```bash
-npm install exceljs mime
-```
 
-### CSV (`@lichens-innovation/ts-common/csv`)
-
-```bash
-npm install papaparse mime
-```
-
-### PDF (`@lichens-innovation/ts-common/pdf`)
-
-```bash
-npm install jspdf jspdf-autotable
-```
-
-### Web (`@lichens-innovation/ts-common/web`)
-
-No external dependency required.
-
-### MIME (`@lichens-innovation/ts-common/mime`)
-
-```bash
-npm install mime
-```
 
 ## Contributions
 
