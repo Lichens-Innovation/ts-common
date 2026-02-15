@@ -1,14 +1,8 @@
 {
   "name": "@lichens-innovation/ts-common",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
-  "keywords": [
-    "typescript",
-    "utilities",
-    "utils",
-    "helpers",
-    "common"
-  ],
+  "keywords": ["typescript", "utilities", "utils", "helpers", "common"],
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -18,12 +12,40 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.js"
+    },
+    "./excel": {
+      "types": "./dist/excel.d.ts",
+      "import": "./dist/excel.js",
+      "require": "./dist/excel.cjs",
+      "default": "./dist/excel.js"
+    },
+    "./csv": {
+      "types": "./dist/csv.d.ts",
+      "import": "./dist/csv.js",
+      "require": "./dist/csv.cjs",
+      "default": "./dist/csv.js"
+    },
+    "./pdf": {
+      "types": "./dist/pdf.d.ts",
+      "import": "./dist/pdf.js",
+      "require": "./dist/pdf.cjs",
+      "default": "./dist/pdf.js"
+    },
+    "./web": {
+      "types": "./dist/web.d.ts",
+      "import": "./dist/web.js",
+      "require": "./dist/web.cjs",
+      "default": "./dist/web.js"
+    },
+    "./mime": {
+      "types": "./dist/mime.d.ts",
+      "import": "./dist/mime.js",
+      "require": "./dist/mime.cjs",
+      "default": "./dist/mime.js"
     }
   },
   "sideEffects": false,
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "repository": "git@github.com:Lichens-Innovation/ts-common.git",
   "author": "Lichens Innovation",
   "license": "MIT",
@@ -44,6 +66,20 @@
   "dependencies": {
     "date-fns": "^3.0.0"
   },
+  "peerDependencies": {
+    "exceljs": "^4.4.0",
+    "papaparse": "^5.4.1",
+    "jspdf": "^4.1.0",
+    "jspdf-autotable": "^5.0.7",
+    "mime": "^4.1.0"
+  },
+  "peerDependenciesMeta": {
+    "exceljs": { "optional": true },
+    "papaparse": { "optional": true },
+    "jspdf": { "optional": true },
+    "jspdf-autotable": { "optional": true },
+    "mime": { "optional": true }
+  },
   "engines": {
     "node": ">=20.0.0"
   },
@@ -53,18 +89,24 @@
     "@eslint/js": "^9.39.1",
     "@faker-js/faker": "^10.1.0",
     "@types/node": "^24.10.0",
+    "@types/papaparse": "^5.3.14",
     "@vitest/coverage-v8": "4.0.8",
     "commitlint": "^20.1.0",
     "cross-env": "^10.1.0",
     "eslint": "^9.39.1",
+    "exceljs": "^4.4.0",
     "husky": "^9.1.7",
+    "jspdf": "^4.1.0",
+    "jspdf-autotable": "^5.0.7",
+    "mime": "^4.1.0",
+    "papaparse": "^5.4.1",
     "prettier": "^3.6.2",
     "rimraf": "^6.1.0",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.3",
+    "tsup": "^8.3.5",
     "vite": "^7.2.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.8",
-    "tsup": "^8.3.5"
+    "vitest": "^4.0.8"
   }
 }
