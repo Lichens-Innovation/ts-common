@@ -29,6 +29,12 @@ Table of content
 - [ts-common](#ts-common)
   - [Prerequisites](#prerequisites)
   - [Scripts](#scripts)
+  - [Optional modules](#optional-modules)
+    - [Excel (`@lichens-innovation/ts-common/excel`)](#excel-lichens-innovationts-commonexcel)
+    - [CSV (`@lichens-innovation/ts-common/csv`)](#csv-lichens-innovationts-commoncsv)
+    - [PDF (`@lichens-innovation/ts-common/pdf`)](#pdf-lichens-innovationts-commonpdf)
+    - [Web (`@lichens-innovation/ts-common/web`)](#web-lichens-innovationts-commonweb)
+    - [MIME (`@lichens-innovation/ts-common/mime`)](#mime-lichens-innovationts-commonmime)
   - [Contributions](#contributions)
   - [Unit tests](#unit-tests)
   - [Library semantic versioning](#library-semantic-versioning)
@@ -51,6 +57,38 @@ Table of content
 | `yarn test`                  | Runs tests using Vitest                                                     |
 | `yarn test:coverage`         | Runs tests with coverage report using Vitest                                |
 | `yarn test:watch`            | Runs tests in watch mode using Vitest                                       |
+
+## Optional modules
+
+This library provides optional subpath modules with external dependencies. Install only the dependencies you need.
+
+### Excel (`@lichens-innovation/ts-common/excel`)
+
+```bash
+npm install exceljs mime
+```
+
+### CSV (`@lichens-innovation/ts-common/csv`)
+
+```bash
+npm install papaparse mime
+```
+
+### PDF (`@lichens-innovation/ts-common/pdf`)
+
+```bash
+npm install jspdf jspdf-autotable
+```
+
+### Web (`@lichens-innovation/ts-common/web`)
+
+No external dependency required.
+
+### MIME (`@lichens-innovation/ts-common/mime`)
+
+```bash
+npm install mime
+```
 
 ## Contributions
 
