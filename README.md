@@ -60,7 +60,7 @@ Table of content
 
 ## Optional modules
 
-This library provides optional subpath modules with external dependencies. Install only the dependencies you need.
+This library provides optional subpath modules with external dependencies. Install only the dependencies you need. For more information regarding the packaging, see the [following technical explaination](docs/packaging-approach.md).
 
 ### Excel (`@lichens-innovation/ts-common/excel`)
 
