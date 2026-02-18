@@ -20,6 +20,24 @@ export const isInputValidInteger = (value: string): boolean => {
 };
 
 /**
+ * Returns true if the input string is a valid positive integer (decimals like "1500.5" are invalid).
+ */
+export const isInputValidPositiveInteger = (value: string): boolean => {
+  if (!isInputValidInteger(value)) return false;
+  const num = Number(value.trim());
+  return num > 0;
+};
+
+/**
+ * Returns true if the input string is a valid negative integer (decimals like "1500.5" are invalid).
+ */
+export const isInputValidNegativeInteger = (value: string): boolean => {
+  if (!isInputValidInteger(value)) return false;
+  const num = Number(value.trim());
+  return num < 0;
+};
+
+/**
  * Formats a number as an integer display string (removes decimals).
  */
 export const formatIntegerDisplay = (value?: number | null): string =>

@@ -3,7 +3,9 @@ import {
   formatIntegerDisplay,
   getOrderOfMagnitudeExponent,
   isInputValidInteger,
+  isInputValidNegativeInteger,
   isInputValidNumber,
+  isInputValidPositiveInteger,
   roundUpToNearest10,
   toFixed,
 } from './number.utils';
@@ -103,6 +105,40 @@ describe('Tests suite for number utilities', () => {
       ${' 100 '}     | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
       expect(isInputValidInteger(value)).toBe(expected);
+    });
+  });
+
+  describe('isInputValidPositiveInteger', () => {
+    it.each`
+      value          | expected
+      ${''}          | ${false}
+      ${'   '}       | ${false}
+      ${'0'}         | ${false}
+      ${'12.34'}     | ${false}
+      ${'1500.5'}    | ${false}
+      ${'-7'}        | ${false}
+      ${'1'}         | ${true}
+      ${'42'}        | ${true}
+      ${' 100 '}     | ${true}
+    `('should return $expected for value="$value"', ({ value, expected }) => {
+      expect(isInputValidPositiveInteger(value)).toBe(expected);
+    });
+  });
+
+  describe('isInputValidNegativeInteger', () => {
+    it.each`
+      value          | expected
+      ${''}          | ${false}
+      ${'   '}       | ${false}
+      ${'0'}         | ${false}
+      ${'42'}        | ${false}
+      ${'12.34'}     | ${false}
+      ${'1500.5'}    | ${false}
+      ${'-1'}        | ${true}
+      ${'-7'}        | ${true}
+      ${' -100 '}    | ${true}
+    `('should return $expected for value="$value"', ({ value, expected }) => {
+      expect(isInputValidNegativeInteger(value)).toBe(expected);
     });
   });
 
