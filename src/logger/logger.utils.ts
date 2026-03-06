@@ -1,5 +1,11 @@
 import pino from "pino";
 
+/**
+ * True when running in Node.js (no window).
+ * Used to choose stdout vs browser console.
+ */
+const isNode = typeof window === "undefined";
+
 const LEVEL_LABELS: Record<number, string> = {
   10: "trace",
   20: "debug",
@@ -65,8 +71,13 @@ const buildMainArgs = ({ timestamp, label, color, msg, extraArgs, rest }: BuildM
   return mainArgs;
 };
 
-const pinoLogger = pino({
+const baseOptions: pino.LoggerOptions = {
   timestamp: pino.stdTimeFunctions.isoTime,
+  messageKey: MESSAGE_KEY,
+};
+
+const browserOptions: pino.LoggerOptions = {
+  ...baseOptions,
   browser: {
     write: (logObj: object, ...args: unknown[]) => {
       const obj = logObj as LogObject;
@@ -88,13 +99,24 @@ const pinoLogger = pino({
       (console[consoleMethod] as (...a: unknown[]) => void)(...mainArgs);
     },
   },
-});
+};
+
+const createPinoLogger = (): pino.Logger => {
+  if (isNode) {
+    const transport = pino.transport({ target: "pino-pretty", options: { colorize: true } });
+    return pino(baseOptions, transport);
+  }
+
+  return pino(browserOptions);
+};
+
+const pinoLogger = createPinoLogger();
+
+export type Level = "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 
 export const setLoggerMinimumLevel = (level: Level) => {
   pinoLogger.level = level;
 };
-
-export type Level = "trace" | "debug" | "info" | "warn" | "error" | "fatal";
 
 const consoleMethodToPinoMethod = (level: Level) => (message: string, payload?: Record<string, unknown>) => {
   if (payload == null) {

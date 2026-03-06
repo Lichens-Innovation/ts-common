@@ -93,12 +93,21 @@ npm install mime
 
 ### Logger (`@lichens-innovation/ts-common/logger`)
 
-Logger based on [pino](https://getpino.io/) with formatted console output (timestamp, colored levels). Usable in browser or Node.js.
+Logger based on [pino](https://getpino.io/) with formatted console output (timestamp, colored levels). Works in **browser** and **Node.js**.
 
-**Install the dependency:**
+- **Browser:** logs are formatted and sent to `console` with colored level labels.
+- **Node.js:** logs are formatted with [pino-pretty](https://github.com/pinojs/pino-pretty) (colorized, readable output). Install `pino-pretty` when using the logger in Node.
+
+**Install the dependencies:**
 
 ```bash
 npm install pino
+```
+
+For **Node.js** (required for pretty output):
+
+```bash
+npm install pino-pretty
 ```
 
 **Exports:** `logger`, `setLoggerMinimumLevel`, type `Level`.
