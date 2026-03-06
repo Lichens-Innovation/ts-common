@@ -1,10 +1,5 @@
 import pino from "pino";
-
-/**
- * True when running in Node.js (no window).
- * Used to choose stdout vs browser console.
- */
-const isNode = typeof window === "undefined";
+import { isRuntimeEnvNodeJs } from "../utils/runtime-env.utils";
 
 const LEVEL_LABELS: Record<number, string> = {
   10: "trace",
@@ -102,9 +97,14 @@ const browserOptions: pino.LoggerOptions = {
 };
 
 const createPinoLogger = (): pino.Logger => {
-  if (isNode) {
-    const transport = pino.transport({ target: "pino-pretty", options: { colorize: true } });
-    return pino(baseOptions, transport);
+  if (isRuntimeEnvNodeJs()) {
+    try {
+      const transport = pino.transport({ target: "pino-pretty", options: { colorize: true } });
+      return pino(baseOptions, transport);
+    } catch (e: unknown) {
+      console.warn("pino-pretty not installed, using default pino output", e);
+      return pino(baseOptions);
+    }
   }
 
   return pino(browserOptions);
