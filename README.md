@@ -35,6 +35,7 @@ Table of content
     - [PDF (`@lichens-innovation/ts-common/pdf`)](#pdf-lichens-innovationts-commonpdf)
     - [Web (`@lichens-innovation/ts-common/web`)](#web-lichens-innovationts-commonweb)
     - [MIME (`@lichens-innovation/ts-common/mime`)](#mime-lichens-innovationts-commonmime)
+    - [Logger (`@lichens-innovation/ts-common/logger`)](#logger-lichens-innovationts-commonlogger)
   - [Contributions](#contributions)
   - [Unit tests](#unit-tests)
   - [Library semantic versioning](#library-semantic-versioning)
@@ -88,6 +89,40 @@ No external dependency required.
 
 ```bash
 npm install mime
+```
+
+### Logger (`@lichens-innovation/ts-common/logger`)
+
+Logger based on [pino](https://getpino.io/) with formatted console output (timestamp, colored levels). Works in **browser** and **Node.js**.
+
+- **Browser:** logs are formatted and sent to `console` with colored level labels.
+- **Node.js:** logs are formatted with [pino-pretty](https://github.com/pinojs/pino-pretty) (colorized, readable output). Install `pino-pretty` when using the logger in Node.
+
+**Install the dependencies:**
+
+```bash
+npm install pino
+```
+
+For **Node.js** (required for pretty output):
+
+```bash
+npm install pino-pretty
+```
+
+**Exports:** `logger`, `setLoggerMinimumLevel`, type `Level`.
+
+**Usage example:**
+
+```ts
+import { logger, setLoggerMinimumLevel, type Level } from "@lichens-innovation/ts-common/logger";
+
+// Minimum level (optional): "trace" | "debug" | "info" | "warn" | "error" | "fatal"
+setLoggerMinimumLevel("debug");
+
+logger.info("Simple message");
+logger.debug("Debug", { userId: "123", action: "login" });
+logger.error("Error", { code: 500 });
 ```
 
 ## Contributions

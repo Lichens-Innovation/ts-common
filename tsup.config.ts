@@ -8,6 +8,7 @@ export default defineConfig({
     pdf: 'src/pdf/index.ts',
     web: 'src/web/index.ts',
     mime: 'src/mime/index.ts',
+    logger: 'src/logger/index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -17,5 +18,5 @@ export default defineConfig({
   sourcemap: true,
   target: 'es2022',
   outDir: 'dist',
-  external: ['exceljs', 'papaparse', 'jspdf', 'jspdf-autotable', 'mime'],
+  external: ['exceljs', 'papaparse', 'jspdf', 'jspdf-autotable', 'mime', 'pino'],
 });
