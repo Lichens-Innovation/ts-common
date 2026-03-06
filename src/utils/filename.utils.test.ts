@@ -16,7 +16,7 @@ describe('Tests suite for filename utilities', () => {
       ${'image.JPEG'} | ${'jpeg'}
       ${'a.b.c'}      | ${'c'}
       ${'.hidden'}    | ${'hidden'}
-      ${'noextension'} | ${'noextension'}
+      ${'noextension'} | ${''}
       ${'file.'}      | ${''}
     `('should return "$expected" for "$filename"', ({ filename, expected }) => {
       expect(getFileExtension(filename)).toBe(expected);

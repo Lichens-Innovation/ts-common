@@ -1,4 +1,5 @@
-import { isBlank, isNullish } from "@lichens-innovation/ts-common";
+import { isBlank } from "./string.utils";
+import { isNullish } from "./types.utils";
 
 export const parseOptionalFormNumber = (value?: string | null): number | null => {
   if (isBlank(value)) return null;
