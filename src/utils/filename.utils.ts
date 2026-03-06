@@ -6,8 +6,9 @@ export const getFileExtension = (filename?: string | null): string => {
   }
 
   const lastDotIndex = filename.lastIndexOf(".");
-  if (lastDotIndex === -1 || lastDotIndex === 0) {
-    // No dot, or dot is at start (hidden file without extension)
+  if (lastDotIndex <= 0) {
+    // No dot (-1), or dot is at start (0)
+    // hidden file without extension
     return lastDotIndex === 0 ? filename.slice(1).toLowerCase() : "";
   }
 
