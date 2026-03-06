@@ -65,3 +65,17 @@ export const truncate = (str: string, maxLength: number, ellipsis = "..."): stri
   if (!str || str.length <= maxLength) return str;
   return str.slice(0, maxLength - ellipsis.length) + ellipsis;
 };
+
+/**
+ * Parses an optional comma-separated string into a trimmed, non-blank string array.
+ */
+export const parseCommaSeparatedList = (raw?: string | null): string[] => {
+  if (isBlank(raw)) {
+    return [];
+  }
+
+  return raw
+    .split(",")
+    .map((s: string) => s.trim())
+    .filter(isNotBlank);
+};
