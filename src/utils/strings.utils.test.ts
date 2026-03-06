@@ -5,6 +5,7 @@ import {
   isAlphanumeric,
   isBlank,
   isNotBlank,
+  parseCommaSeparatedList,
   removeDiacriticalMarks,
   truncate,
 } from './string.utils';
@@ -138,6 +139,25 @@ describe('Tests suite for string utilities', () => {
 
     it('should use default ellipsis when not provided', () => {
       expect(truncate('hello world', 8)).toBe('hello...');
+    });
+  });
+
+  describe('parseCommaSeparatedList', () => {
+    it.each`
+      raw              | expected
+      ${null}          | ${[]}
+      ${undefined}     | ${[]}
+      ${''}            | ${[]}
+      ${'   '}         | ${[]}
+      ${'\t\n'}        | ${[]}
+      ${'a'}           | ${['a']}
+      ${'a,b,c'}       | ${['a', 'b', 'c']}
+      ${' a , b , c '} | ${['a', 'b', 'c']}
+      ${'a,,b,,c'}     | ${['a', 'b', 'c']}
+      ${',a,b,c,'}     | ${['a', 'b', 'c']}
+      ${'  a  ,  b  '} | ${['a', 'b']}
+    `('should return $expected for "$raw"', ({ raw, expected }) => {
+      expect(parseCommaSeparatedList(raw)).toEqual(expected);
     });
   });
 });

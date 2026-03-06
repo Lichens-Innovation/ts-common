@@ -3,6 +3,8 @@ export * from './color.utils';
 export * from './date.utils';
 export * from './dimensions.utils';
 export * from './errors.utils';
+export * from './filename.utils';
+export * from './form.utils';
 export * from './http.utils';
 export * from './number.utils';
 export * from './regex';
