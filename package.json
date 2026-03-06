@@ -1,8 +1,14 @@
 {
   "name": "@lichens-innovation/ts-common",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
-  "keywords": ["typescript", "utilities", "utils", "helpers", "common"],
+  "keywords": [
+    "typescript",
+    "utilities",
+    "utils",
+    "helpers",
+    "common"
+  ],
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -42,10 +48,18 @@
       "import": "./dist/mime.js",
       "require": "./dist/mime.cjs",
       "default": "./dist/mime.js"
+    },
+    "./logger": {
+      "types": "./dist/logger.d.ts",
+      "import": "./dist/logger.js",
+      "require": "./dist/logger.cjs",
+      "default": "./dist/logger.js"
     }
   },
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "repository": "git@github.com:Lichens-Innovation/ts-common.git",
   "author": "Lichens Innovation",
   "license": "MIT",
@@ -64,49 +78,64 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "date-fns": "^3.0.0"
+    "date-fns": "^4.1.0"
   },
   "peerDependencies": {
     "exceljs": "^4.4.0",
-    "papaparse": "^5.4.1",
     "jspdf": "^4.1.0",
     "jspdf-autotable": "^5.0.7",
-    "mime": "^4.1.0"
+    "mime": "^4.1.0",
+    "papaparse": "^5.4.1",
+    "pino": "^10.3.1"
   },
   "peerDependenciesMeta": {
-    "exceljs": { "optional": true },
-    "papaparse": { "optional": true },
-    "jspdf": { "optional": true },
-    "jspdf-autotable": { "optional": true },
-    "mime": { "optional": true }
+    "exceljs": {
+      "optional": true
+    },
+    "papaparse": {
+      "optional": true
+    },
+    "pino": {
+      "optional": true
+    },
+    "jspdf": {
+      "optional": true
+    },
+    "jspdf-autotable": {
+      "optional": true
+    },
+    "mime": {
+      "optional": true
+    }
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.3.0",
-    "@commitlint/config-conventional": "^20.3.0",
-    "@eslint/js": "^9.39.1",
-    "@faker-js/faker": "^10.1.0",
-    "@types/node": "^24.10.0",
-    "@types/papaparse": "^5.3.14",
-    "@vitest/coverage-v8": "4.0.8",
-    "commitlint": "^20.1.0",
+    "@commitlint/cli": "^20.4.3",
+    "@commitlint/config-conventional": "^20.4.3",
+    "@eslint/js": "^10.0.1",
+    "@faker-js/faker": "^10.3.0",
+    "@types/node": "^25.3.5",
+    "@types/papaparse": "^5.5.2",
+    "@vitest/coverage-v8": "4.0.18",
+    "commitlint": "^20.4.3",
     "cross-env": "^10.1.0",
-    "eslint": "^9.39.1",
+    "eslint": "^10.0.2",
     "exceljs": "^4.4.0",
     "husky": "^9.1.7",
-    "jspdf": "^4.1.0",
+    "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",
     "mime": "^4.1.0",
-    "papaparse": "^5.4.1",
-    "prettier": "^3.6.2",
-    "rimraf": "^6.1.0",
+    "papaparse": "^5.5.3",
+    "pino": "^10.3.1",
+    "prettier": "^3.8.1",
+    "rimraf": "^6.1.3",
+    "tsup": "^8.5.1",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.3",
-    "tsup": "^8.3.5",
-    "vite": "^7.2.2",
-    "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^4.0.8"
+    "typescript-eslint": "^8.56.1",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.0.18"
   }
 }
