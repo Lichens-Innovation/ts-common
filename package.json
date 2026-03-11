@@ -69,6 +69,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "prepare": "husky",
     "clean:node": "npx rimraf node_modules yarn.lock",
     "clean:dist": "npx rimraf dist",
     "typecheck": "npx tsc --noEmit",
