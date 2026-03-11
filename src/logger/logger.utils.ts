@@ -125,7 +125,7 @@ const consoleMethodToPinoMethod = (level: Level): ConsoleLogMethod => {
   return (...args: unknown[]) => {
     (pinoLogger[level] as ConsoleLogMethod)(...args);
   };
-}
+};
 
 export const logger = {
   trace: consoleMethodToPinoMethod("trace"),
