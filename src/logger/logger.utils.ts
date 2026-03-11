@@ -119,12 +119,12 @@ export const setLoggerMinimumLevel = (level: Level) => {
   pinoLogger.level = level;
 };
 
-type ConsoleLogMethod = Console["log"];
-
-const consoleMethodToPinoMethod = (level: Level): ConsoleLogMethod => {
-  return (...args: unknown[]) => {
-    (pinoLogger[level] as ConsoleLogMethod)(...args);
-  };
+const consoleMethodToPinoMethod = (level: Level) => (message: string, payload?: Record<string, unknown>) => {
+  if (isNullish(payload)) {
+    pinoLogger[level](message);
+  } else {
+    pinoLogger[level](payload, message);
+  }
 };
 
 export const logger = {
