@@ -1,5 +1,6 @@
 import pino from "pino";
 import { isRuntimeEnvNodeJs } from "../utils/runtime-env.utils";
+import { isNullish } from "../utils/types.utils";
 
 const LEVEL_LABELS: Record<number, string> = {
   10: "trace",
@@ -59,7 +60,7 @@ const buildMainArgs = ({ timestamp, label, color, msg, extraArgs, rest }: BuildM
   const hasRest = Object.keys(rest).length > 0;
   const mainArgs: unknown[] = [`${prefix}%c${levelPart}%c`, color, "color: inherit"];
 
-  if (msg != null) mainArgs.push(msg);
+  if (!isNullish(msg)) mainArgs.push(msg);
   if (extraArgs.length > 0) mainArgs.push(...extraArgs);
   if (hasRest) mainArgs.push(rest);
 
@@ -118,12 +119,12 @@ export const setLoggerMinimumLevel = (level: Level) => {
   pinoLogger.level = level;
 };
 
-const consoleMethodToPinoMethod = (level: Level) => (message: string, payload?: Record<string, unknown>) => {
-  if (payload == null) {
-    pinoLogger[level](message);
-  } else {
-    pinoLogger[level](payload, message);
-  }
+type ConsoleLogMethod = Console["log"];
+
+const consoleMethodToPinoMethod = (level: Level): ConsoleLogMethod => {
+  return (...args: unknown[]) => {
+    (pinoLogger[level] as ConsoleLogMethod)(...args);
+  };
 };
 
 export const logger = {

@@ -1,6 +1,6 @@
 {
   "name": "@lichens-innovation/ts-common",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "description": "Reusable generic typescript utilities, types, constants, helpers",
   "keywords": [
     "typescript",
@@ -69,9 +69,12 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
+    "prepare": "husky",
     "clean:node": "npx rimraf node_modules yarn.lock",
     "clean:dist": "npx rimraf dist",
     "typecheck": "npx tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build": "tsup",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
@@ -113,7 +116,7 @@
     }
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.11.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.4.3",
@@ -127,6 +130,7 @@
     "cross-env": "^10.1.0",
     "eslint": "^10.0.2",
     "exceljs": "^4.4.0",
+    "globals": "^17.4.0",
     "husky": "^9.1.7",
     "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",

@@ -51,13 +51,16 @@ Table of content
 
 | Command                      | Description                                                                 |
 |------------------------------|-----------------------------------------------------------------------------|
-| `yarn build`                 | Cleans the dist folder and compiles TypeScript                              |
-| `yarn clean:node`            | Removes node_modules directories and yarn.lock file                         |
-| `yarn clean:dist`            | Removes the dist directory                                                  |
-| `yarn typecheck`             | Checks TypeScript types without emitting files                              |
-| `yarn test`                  | Runs tests using Vitest                                                     |
-| `yarn test:coverage`         | Runs tests with coverage report using Vitest                                |
-| `yarn test:watch`            | Runs tests in watch mode using Vitest                                       |
+| `yarn prepare`               | Configures Husky (Git hooks). Runs automatically after `yarn install`.      |
+| `yarn build`                 | Compiles the project with tsup (outputs to `dist/`).                        |
+| `yarn clean:node`            | Removes `node_modules` and `yarn.lock`.                                     |
+| `yarn clean:dist`            | Removes the `dist` directory.                                               |
+| `yarn typecheck`             | Type-checks TypeScript without emitting files (`tsc --noEmit`).             |
+| `yarn lint`                  | Runs ESLint on the project.                                                 |
+| `yarn lint:fix`              | Runs ESLint and applies automatic fixes.                                    |
+| `yarn test`                  | Runs tests with Vitest and coverage report.                                 |
+| `yarn test:watch`            | Runs tests in watch mode with Vitest.                                       |
+| `yarn test:coverage`         | Runs tests with coverage report using Vitest.                               |
 
 ## Optional modules
 

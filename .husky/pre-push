@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Exit immediately if any command fails
+set -e
+
+echo "Running lint..."
+yarn lint
+echo "  -->  ✅ Lint completed"
+
 # Prevent force push on protected branches
 # This is a soft protection - can be bypassed with --no-verify if needed
 protected_branches='main|master|development'

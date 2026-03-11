@@ -54,8 +54,8 @@ export const getRechartsSvgFromElement = ({
 };
 
 export const getSvgDimensions = (svgElement: SVGSVGElement): Dimensions => {
-  const width = svgElement.clientWidth || parseInt(svgElement.getAttribute("width") || "800", 10);
-  const height = svgElement.clientHeight || parseInt(svgElement.getAttribute("height") || "600", 10);
+  const width = svgElement.clientWidth ?? parseInt(svgElement.getAttribute("width") ?? "800", 10);
+  const height = svgElement.clientHeight ?? parseInt(svgElement.getAttribute("height") ?? "600", 10);
   return { width, height };
 };
 
