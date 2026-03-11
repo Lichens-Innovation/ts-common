@@ -16,6 +16,7 @@ class MockWebSocket {
   close = vi.fn();
   send = vi.fn();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- Mock constructor signature
   constructor(_url: string, _protocols?: string | string[]) {}
 }
 

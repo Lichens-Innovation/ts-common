@@ -14,8 +14,6 @@ import {
 } from './date.utils';
 
 describe('Tests suite for date utilities', () => {
-  const fixedDate = new Date('2024-03-15T14:30:45.123Z');
-
   describe('dateAs_HHMMSS', () => {
     it.each`
       value                                | expected
