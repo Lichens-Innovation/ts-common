@@ -23,6 +23,8 @@ describe('Tests suite for errors utilities', () => {
       ${{ message: '' }}                       | ${''}
       ${null}                                  | ${''}
       ${undefined}                             | ${''}
+      ${false}                                 | ${''}
+      ${0}                                     | ${''}
       ${42}                                    | ${'42'}
       ${true}                                  | ${'true'}
       ${{}}                                    | ${'{}'}

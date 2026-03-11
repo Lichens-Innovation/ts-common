@@ -3,7 +3,7 @@
 # Exit immediately if any command fails
 set -e
 
-echo "Running lint and security check..."
+echo "Running lint..."
 yarn lint
 echo "  -->  ✅ Lint completed"
 
