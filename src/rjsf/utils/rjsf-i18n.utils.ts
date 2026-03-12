@@ -26,7 +26,7 @@ export const translateRjsfString = ({ stringToTranslate, params }: TranslateStri
   const i18nKey = RJSF_STRING_TO_I18N_KEY[stringToTranslate];
   if (isBlank(i18nKey)) {
     // eslint-disable-next-line no-console
-    console.warn(`[translateString] RJSF i18n: missing key: "${stringToTranslate}"`);
+    console.warn(`[translateRjsfString] RJSF i18n: missing key: "${stringToTranslate}"`);
   }
 
   const translated = i18nKey ? i18next.t(i18nKey) : stringToTranslate;

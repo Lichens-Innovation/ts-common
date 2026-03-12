@@ -182,7 +182,7 @@ Adhering to established coding guidelines is essential for developing efficient,
 ## TODOs
 
 This section list remaining tasks (not yet completed)
-* RJSF-001: find a way to dynamicaly resolve the rjsf-i18n.utils "%1 Key" pattern
+* RJSF-001: find a way to dynamically resolve the rjsf-i18n.utils "%1 Key" pattern
 
 ## License
 

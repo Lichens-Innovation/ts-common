@@ -3,7 +3,7 @@ import localizer from "ajv-i18n";
 import { useTranslation } from "react-i18next";
 
 const customFormats = {
-  "phone-america": /\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/,
+  "phone-america": /^\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/,
 };
 
 type ValidationLanguages = keyof typeof localizer;
