@@ -1,0 +1,17 @@
+{
+  "rjsf": {
+    "add": "Add",
+    "debugFormDataTitle": "JSON data",
+    "addItem": "Add Item",
+    "clear": "Clear",
+    "errors": "Errors detected in the form",
+    "copy": "Copy",
+    "keyLabel": "%1 Key",
+    "moveDown": "Move down",
+    "moveUp": "Move up",
+    "no": "No",
+    "remove": "Remove",
+    "submit": "Submit",
+    "yes": "Yes"
+  }
+}

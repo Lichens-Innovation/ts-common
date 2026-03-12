@@ -37,6 +37,7 @@ const baseConfig = tseslint.config(
     },
     rules: {
       "prefer-const": "error",
+      "no-console": "warn",
       eqeqeq: ["error", "always"],
       "no-nested-ternary": "error",
       "no-empty": ["error", { allowEmptyCatch: false }],
@@ -58,7 +59,7 @@ export default [
       "todo-plz/ticket-ref": [
         "warn",
         {
-          pattern: "([A-Z]+-\\d+)",
+          pattern: "([A-Z]+(?:-[A-Z0-9]+)*-\\d+)",
           comment:
             "TODO must include a ticket reference (e.g. TODO: JIRA-1234 - description)",
         },

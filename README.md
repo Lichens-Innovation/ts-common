@@ -36,10 +36,12 @@ Table of content
     - [Web (`@lichens-innovation/ts-common/web`)](#web-lichens-innovationts-commonweb)
     - [MIME (`@lichens-innovation/ts-common/mime`)](#mime-lichens-innovationts-commonmime)
     - [Logger (`@lichens-innovation/ts-common/logger`)](#logger-lichens-innovationts-commonlogger)
+    - [RJSF (`@lichens-innovation/ts-common/rjsf`)](#rjsf-lichens-innovationts-commonrjsf)
   - [Contributions](#contributions)
   - [Unit tests](#unit-tests)
   - [Library semantic versioning](#library-semantic-versioning)
   - [Project coding guidelines](#project-coding-guidelines)
+  - [TODOs](#todos)
   - [License](#license)
 
 ## Prerequisites
@@ -64,7 +66,7 @@ Table of content
 
 ## Optional modules
 
-This library provides optional subpath modules with external dependencies. Install only the dependencies you need. For more information regarding the packaging, see the [following technical explaination](docs/packaging-approach.md).
+This library provides optional subpath modules with external dependencies. Install only the dependencies you need. For more information regarding the packaging, see the [following technical explanation](docs/packaging-approach.md).
 
 ### Excel (`@lichens-innovation/ts-common/excel`)
 
@@ -128,6 +130,33 @@ logger.debug("Debug", { userId: "123", action: "login" });
 logger.error("Error", { code: 500 });
 ```
 
+### RJSF (`@lichens-innovation/ts-common/rjsf`)
+
+Utilities and hooks for [React JSON Schema Form (RJSF)](https://rjsf-team.github.io/react-jsonschema-form/) with i18n (i18next / react-i18next), localized validation (ajv-i18n), and form layout. For React apps using RJSF with translation and validation.
+
+**Install the dependencies:**
+
+```bash
+npm install @rjsf/utils @rjsf/validator-ajv8 ajv-i18n i18next react-i18next
+```
+
+**Exports:** `initRjsf`, `useLocalizedForm`, `useRjsfValidator`, `useFormLayoutCols`, `translateRjsfString`, `RJSF_STRING_TO_I18N_KEY`, types (`LocalizedFormSchema`, `MetaFormSchema`, etc.).
+
+**Usage example:**
+
+```ts
+import { initRjsf, useLocalizedForm, useRjsfValidator } from "@lichens-innovation/ts-common/rjsf";
+
+// After i18next is initialized (e.g. initI18N())
+initRjsf();
+
+// In a form component: localized schema from meta schema
+const localizedSchema = useLocalizedForm(metaFormSchema);
+
+// Validator with localized AJV messages (e.g. fr, en)
+const validator = useRjsfValidator();
+```
+
 ## Contributions
 
 Contributions to the project are made by simply improving the current codebase and then creating a Pull Request. If the version field in `package.json` is incremented, the build will be automatically triggered when the PR is merged into the `main` branch, and the new version will be published to our enterprise Git repository.
@@ -149,6 +178,11 @@ When there is a breaking change, [Semantic Versioning](https://semver.org/#summa
 Adhering to established coding guidelines is essential for developing efficient, maintainable, and scalable software. These guidelines promote consistency across codebases, making it easier for teams to collaborate and for new developers to understand existing code. By following standardized patterns, such as those outlined in the [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md), developers can reduce errors and enhance code readability.
 
 * [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md)
+
+## TODOs
+
+This section list remaining tasks (not yet completed)
+* RJSF-001: find a way to dynamicaly resolve the rjsf-i18n.utils "%1 Key" pattern
 
 ## License
 
