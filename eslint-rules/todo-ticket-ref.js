@@ -32,7 +32,8 @@ const ticketRefRule = {
   },
   create(context) {
     const opts = context.options[0] ?? {};
-    const pattern = opts.pattern ?? "([A-Z]+-\\d+)";
+    // Default pattern: PROJECT-NUM (e.g. JIRA-123) or PROJECT-SUB-NUM (e.g. LICHENS-RJSF-001)
+    const pattern = opts.pattern ?? "([A-Z]+(?:-[A-Z0-9]+)*-\\d+)";
     const terms = opts.terms ?? ["TODO"];
     const commentPattern = opts.commentPattern;
     const description = opts.description;
@@ -44,7 +45,7 @@ const ticketRefRule = {
     for (const term of terms) {
       termSearchPatterns[term] = commentPattern
         ? new RegExp(commentPattern, "i")
-        : new RegExp(`${term}\\s?\\((${pattern}[,\\s]*)+\\)`, "i");
+        : new RegExp(`${term}\\s*[:(]\\s*${pattern}`, "i");
     }
 
     function getMessageId() {
