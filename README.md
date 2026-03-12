@@ -183,7 +183,6 @@ Adhering to established coding guidelines is essential for developing efficient,
 
 This section list remaining tasks (not yet completed)
 * RJSF-001: find a way to dynamicaly resolve the rjsf-i18n.utils "%1 Key" pattern
-* RJSF-002: hook vs not hook prefix for useFormLayoutCols since it's not really a hook
 
 ## License
 

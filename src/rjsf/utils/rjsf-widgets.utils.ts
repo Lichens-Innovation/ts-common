@@ -1,6 +1,6 @@
+import type { WidgetProps } from "@rjsf/utils";
 import { isBlank } from "~/utils/string.utils";
 import { isNullish } from "~/utils/types.utils";
-import type { WidgetProps } from "@rjsf/utils";
 
 /**
  * Returns true when the widget has at least one validation error from RJSF.
@@ -123,4 +123,26 @@ export const formatDateOnlyForDisplay = (value?: string): string => {
 export const formatDateTimeForDisplay = (value?: string): string => {
   const date = parseDateOrNull(value);
   return date ? date.toLocaleString() : "";
+};
+
+type FormLayoutContext = {
+  labelCol?: { span: number };
+  wrapperCol?: { span: number };
+};
+
+const DEFAULT_SPAN = 24;
+
+export const getFormLayoutCols = (formContext?: unknown): FormLayoutContext => {
+  if (isNullish(formContext)) {
+    return {
+      labelCol: { span: DEFAULT_SPAN },
+      wrapperCol: { span: DEFAULT_SPAN },
+    };
+  }
+
+  const { labelCol, wrapperCol } = formContext as FormLayoutContext;
+  return {
+    labelCol: labelCol ?? { span: DEFAULT_SPAN },
+    wrapperCol: wrapperCol ?? { span: DEFAULT_SPAN },
+  };
 };
