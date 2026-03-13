@@ -5,9 +5,9 @@ import fr from "./fr/rjsf.json";
 
 const NAMESPACE = "rjsf";
 
-export const initRjsf = (i18next: i18n): void => {
-  if (!i18next.isInitialized) {
-    throw new Error("[initRjsf] i18next must be initialized before calling initRjsf. Call initI18N() or i18next.init() first.");
+export const addResourceBundleForRjsf = (i18next: i18n): void => {
+  if (!i18next?.isInitialized) {
+    throw new Error("[addResourceBundleForRjsf] i18next must be initialized prior to calling this method. Call initI18N() or i18next.init() first.");
   }
 
   if (i18next.hasResourceBundle("en", NAMESPACE)) return;
@@ -19,5 +19,5 @@ export const initRjsf = (i18next: i18n): void => {
   i18next.addResourceBundle("fr", NAMESPACE, fr.rjsf, isDeep, isOverwrite);
 
   // eslint-disable-next-line no-console
-  console.info('[initRjsf] RJSF i18n initialized');  
+  console.info('[addResourceBundleForRjsf] RJSF i18n initialized');  
 };

@@ -140,23 +140,6 @@ Utilities and hooks for [React JSON Schema Form (RJSF)](https://rjsf-team.github
 npm install @rjsf/core @rjsf/utils @rjsf/validator-ajv8 ajv-i18n i18next react-i18next
 ```
 
-**Exports:** `initRjsf`, `useLocalizedForm`, `useRjsfValidator`, `useFormLayoutCols`, `translateRjsfString`, `RJSF_STRING_TO_I18N_KEY`, types (`LocalizedFormSchema`, `MetaFormSchema`, etc.).
-
-**Usage example:**
-
-```ts
-import { initRjsf, useLocalizedForm, useRjsfValidator } from "@lichens-innovation/ts-common/rjsf";
-
-// After i18next is initialized (e.g. initI18N())
-initRjsf();
-
-// In a form component: localized schema from meta schema
-const localizedSchema = useLocalizedForm(metaFormSchema);
-
-// Validator with localized AJV messages (e.g. fr, en)
-const validator = useRjsfValidator();
-```
-
 ## Contributions
 
 Contributions to the project are made by simply improving the current codebase and then creating a Pull Request. If the version field in `package.json` is incremented, the build will be automatically triggered when the PR is merged into the `main` branch, and the new version will be published to our enterprise Git repository.
