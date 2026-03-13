@@ -137,7 +137,7 @@ Utilities and hooks for [React JSON Schema Form (RJSF)](https://rjsf-team.github
 **Install the dependencies:**
 
 ```bash
-npm install @rjsf/utils @rjsf/validator-ajv8 ajv-i18n i18next react-i18next
+npm install @rjsf/core @rjsf/utils @rjsf/validator-ajv8 ajv-i18n i18next react-i18next
 ```
 
 **Exports:** `initRjsf`, `useLocalizedForm`, `useRjsfValidator`, `useFormLayoutCols`, `translateRjsfString`, `RJSF_STRING_TO_I18N_KEY`, types (`LocalizedFormSchema`, `MetaFormSchema`, etc.).
