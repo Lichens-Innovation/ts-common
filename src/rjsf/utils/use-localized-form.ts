@@ -1,4 +1,4 @@
-import { isBlank } from "~/utils/string.utils";
+import { isBlank } from "../../utils/string.utils";
 import { useTranslation } from "react-i18next";
 import type { LocalizedFormSchema, MetaFormSchema } from "./rjsf-i18n-types";
 

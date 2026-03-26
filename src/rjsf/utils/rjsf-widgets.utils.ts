@@ -1,6 +1,6 @@
 import type { WidgetProps } from "@rjsf/utils";
-import { isBlank } from "~/utils/string.utils";
-import { isNullish } from "~/utils/types.utils";
+import { isBlank } from "../../utils/string.utils";
+import { isNullish } from "../../utils/types.utils";
 
 /**
  * Returns true when the widget has at least one validation error from RJSF.
