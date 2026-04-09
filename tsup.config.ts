@@ -26,6 +26,7 @@ export default defineConfig({
     'jspdf-autotable',
     'mime',
     'pino',
+    'pino-pretty',
     'i18next',
     'react-i18next',
     '@rjsf/utils',
