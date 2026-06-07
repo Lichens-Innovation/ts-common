@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { extractBase64FromDataUri, hasScheme, isValidDataUri, SCHEME_PREFIXES } from './uri.utils';
+import {
+  decodeUrl,
+  encodeUrl,
+  extractBase64FromDataUri,
+  formatDataUri,
+  getBase64ApproxSize,
+  hasScheme,
+  isValidDataUri,
+  SCHEME_PREFIXES,
+} from './uri.utils';
 
 describe('Tests suite for URI utilities', () => {
   describe('SCHEME_PREFIXES', () => {
@@ -64,6 +73,37 @@ describe('Tests suite for URI utilities', () => {
 
       // Assert
       expect(result).toBe(expected);
+    });
+  });
+
+  describe('encodeUrl and decodeUrl', () => {
+    it('encodes and decodes URL components', () => {
+      const encoded = encodeUrl('hello world');
+      expect(encoded).toBe('hello%20world');
+      expect(decodeUrl(encoded)).toBe('hello world');
+    });
+
+    it('returns empty string for blank input', () => {
+      expect(encodeUrl()).toBe('');
+      expect(decodeUrl()).toBe('');
+    });
+
+    it('returns original value when decode fails', () => {
+      expect(decodeUrl('%E0%A4%A')).toBe('%E0%A4%A');
+    });
+  });
+
+  describe('formatDataUri', () => {
+    it('builds a base64 data URI', () => {
+      expect(formatDataUri({ mimeType: 'image/png', base64: 'abc' })).toBe(
+        'data:image/png;base64,abc',
+      );
+    });
+  });
+
+  describe('getBase64ApproxSize', () => {
+    it('estimates decoded byte size', () => {
+      expect(getBase64ApproxSize('abcd')).toBe(3);
     });
   });
 

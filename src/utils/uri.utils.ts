@@ -43,3 +43,30 @@ export const hasScheme = (uri?: string | null): boolean => {
 export const extractBase64FromDataUri = (dataUri: string): string => {
   return dataUri.split(',')[1] ?? dataUri;
 };
+
+export const encodeUrl = (value?: string): string => {
+  if (!value) return '';
+  return encodeURIComponent(value);
+};
+
+export const decodeUrl = (value?: string): string => {
+  if (!value) return '';
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+};
+
+interface FormatDataUriArgs {
+  mimeType: string;
+  base64: string;
+}
+
+export const formatDataUri = ({ mimeType, base64 }: FormatDataUriArgs): string => {
+  return `data:${mimeType};base64,${base64}`;
+};
+
+export const getBase64ApproxSize = (base64: string): number => {
+  return Math.round((base64.length * 3) / 4);
+};

@@ -58,6 +58,29 @@ export const roundUpToNearest10 = (value?: number | null): number => {
   return Math.ceil(value / 10) * 10;
 };
 
+/**
+ * Format a number with K (thousands) or M (millions) suffix.
+ */
+export const formatCount = (count: number): string => {
+  if (count >= 1_000_000) {
+    return `${(count / 1_000_000).toFixed(1)}M`;
+  }
+  if (count >= 1_000) {
+    return `${(count / 1_000).toFixed(1)}K`;
+  }
+  return count.toString();
+};
+
+/**
+ * Format a duration in milliseconds to a human-readable string.
+ */
+export const formatDuration = (ms: number): string => {
+  if (ms < 1000) {
+    return `${ms}ms`;
+  }
+  return `${(ms / 1000).toFixed(1)}s`;
+};
+
 export const getOrderOfMagnitudeExponent = (n?: number | null): number => {
   if (isNullish(n)) return 0;
   if (!isNumber(n)) return 0;

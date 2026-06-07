@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
+  getExtensionFromDataUri,
   getImagePreviewSrc,
   getMimeType,
   isImageMimeType,
+  isValidImageFile,
   mimeToExt,
   parseDataUri,
+  VALID_IMAGE_TYPES,
 } from './index';
 
 const PNG_DATA_URI = 'data:image/png;base64,iVBORw0KGgo=';
@@ -129,6 +132,33 @@ describe('MIME utilities', () => {
 
       // Assert
       expect(result).toBe('x-custom');
+    });
+  });
+
+  describe('VALID_IMAGE_TYPES', () => {
+    it('includes common image MIME types', () => {
+      expect(VALID_IMAGE_TYPES).toContain('image/png');
+      expect(VALID_IMAGE_TYPES).toContain('image/svg+xml');
+    });
+  });
+
+  describe('isValidImageFile', () => {
+    it('returns true for a file with a valid image MIME type', () => {
+      expect(isValidImageFile({ type: 'image/png' })).toBe(true);
+    });
+
+    it('returns false for a file with a non-image MIME type', () => {
+      expect(isValidImageFile({ type: 'application/pdf' })).toBe(false);
+    });
+  });
+
+  describe('getExtensionFromDataUri', () => {
+    it('returns extension from a valid data URI', () => {
+      expect(getExtensionFromDataUri(PNG_DATA_URI)).toBe('png');
+    });
+
+    it('returns bin for invalid data URI', () => {
+      expect(getExtensionFromDataUri('not-a-data-uri')).toBe('bin');
     });
   });
 
