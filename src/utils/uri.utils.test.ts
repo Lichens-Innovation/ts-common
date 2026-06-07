@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extractBase64FromDataUri, hasScheme, SCHEME_PREFIXES } from './uri.utils';
+import { extractBase64FromDataUri, hasScheme, isValidDataUri, SCHEME_PREFIXES } from './uri.utils';
 
 describe('Tests suite for URI utilities', () => {
   describe('SCHEME_PREFIXES', () => {
@@ -41,6 +41,29 @@ describe('Tests suite for URI utilities', () => {
       ${undefined}                       | ${false} | ${'undefined value'}
     `('should return $expected for $description', ({ uri, expected }) => {
       expect(hasScheme(uri)).toBe(expected);
+    });
+  });
+
+  describe('isValidDataUri', () => {
+    it.each`
+      uri                                                                                      | expected | description
+      ${'data:image/png;base64,iVBORw0KGgo='}                                                  | ${true}  | ${'valid PNG data URI'}
+      ${'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4='} | ${true}  | ${'valid SVG data URI'}
+      ${'data:application/json;base64,eyJrZXkiOiJ2YWx1ZSJ9'}                                   | ${true}  | ${'valid JSON data URI'}
+      ${'data:text/plain,hello'}                                                                 | ${false} | ${'data URI without base64 encoding'}
+      ${'data:image/png;base64,'}                                                                | ${false} | ${'data URI with empty base64 payload'}
+      ${'http://example.com/image.png'}                                                          | ${false} | ${'HTTP URL'}
+      ${'/path/to/file.png'}                                                                     | ${false} | ${'absolute path'}
+      ${''}                                                                                      | ${false} | ${'empty string'}
+      ${'   '}                                                                                   | ${false} | ${'blank string'}
+      ${null}                                                                                    | ${false} | ${'null value'}
+      ${undefined}                                                                               | ${false} | ${'undefined value'}
+    `('should return $expected for $description', ({ uri, expected }) => {
+      // Act
+      const result = isValidDataUri(uri);
+
+      // Assert
+      expect(result).toBe(expected);
     });
   });
 

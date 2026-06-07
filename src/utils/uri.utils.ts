@@ -1,3 +1,5 @@
+import { isBlank } from ".";
+
 export const SCHEME_PREFIXES = {
   file: 'file',
   content: 'content',
@@ -10,6 +12,16 @@ export const SCHEME_PREFIXES = {
 } as const;
 
 const SCHEME_PREFIXES_ARRAY = Object.values(SCHEME_PREFIXES);
+
+export const DATA_URI_PATTERN = /^data:([\w.+-]+\/[\w.+-]+);base64,(.+)$/;
+
+export const isValidDataUri = (uri?: string | null): boolean => {
+  if (isBlank(uri)) {
+    return false;
+  }
+
+  return DATA_URI_PATTERN.test(uri);
+};
 
 export const hasScheme = (uri?: string | null): boolean => {
   if (!uri) {
