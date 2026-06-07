@@ -1,3 +1,4 @@
+export * from './base64.utils';
 export * from './chart.utils';
 export * from './color.utils';
 export * from './date.utils';
@@ -5,7 +6,9 @@ export * from './dimensions.utils';
 export * from './errors.utils';
 export * from './filename.utils';
 export * from './form.utils';
+export * from './html.utils';
 export * from './http.utils';
+export * from './json.utils';
 export * from './number.utils';
 export * from './regex';
 export * from './runtime-env.utils';

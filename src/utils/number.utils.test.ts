@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  formatCount,
+  formatDuration,
   formatIntegerDisplay,
   getOrderOfMagnitudeExponent,
   isInputValidInteger,
@@ -139,6 +141,27 @@ describe('Tests suite for number utilities', () => {
       ${' -100 '}    | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
       expect(isInputValidNegativeInteger(value)).toBe(expected);
+    });
+  });
+
+  describe('formatCount', () => {
+    it.each`
+      count        | expected
+      ${500}       | ${'500'}
+      ${1500}      | ${'1.5K'}
+      ${2_500_000} | ${'2.5M'}
+    `('should return $expected for count=$count', ({ count, expected }) => {
+      expect(formatCount(count)).toBe(expected);
+    });
+  });
+
+  describe('formatDuration', () => {
+    it.each`
+      ms     | expected
+      ${150} | ${'150ms'}
+      ${2500}| ${'2.5s'}
+    `('should return $expected for ms=$ms', ({ ms, expected }) => {
+      expect(formatDuration(ms)).toBe(expected);
     });
   });
 

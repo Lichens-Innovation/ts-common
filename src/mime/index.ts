@@ -1,7 +1,9 @@
 import mime from "mime";
 
 import { DATA_URI_PATTERN, isValidDataUri } from "~/utils/uri.utils";
-import { VALID_IMAGE_TYPES } from "./mime.utils";
+import { VALID_IMAGE_TYPES } from './mime.utils';
+
+export { VALID_IMAGE_TYPES } from './mime.utils';
 
 export interface ParseDataUriResult {
   mimeType: string;
@@ -23,6 +25,17 @@ export const parseDataUri = (input: string): ParseDataUriResult | null => {
 
 export const isImageMimeType = (mimeType: string): boolean => {
   return VALID_IMAGE_TYPES.includes(mimeType);
+};
+
+export const isValidImageFile = (file: { type: string }): boolean => {
+  return isImageMimeType(file.type);
+};
+
+export const getExtensionFromDataUri = (dataUri: string): string => {
+  const parsed = parseDataUri(dataUri);
+  if (!parsed) return 'bin';
+
+  return parsed.ext;
 };
 
 export const getImagePreviewSrc = (input: string): string | null => {
