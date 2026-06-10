@@ -34,6 +34,21 @@ export const getRjsfDisplayLabel = ({ label, required, hideLabel }: GetRjsfDispl
   return `${label}${requiredSuffix}`;
 };
 
+const HEX_COLOR_PATTERN = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+
+/**
+ * Reads the `labelColor` from a widget/field `ui:options` object.
+ *
+ * @param options - The `ui:options` object (e.g. WidgetProps.options or uiSchema["ui:options"]).
+ * @returns A validated hex color string (#RGB or #RRGGBB), or undefined when missing/invalid (default color).
+ */
+export const getRjsfLabelColor = (options?: Record<string, unknown> | null): string | undefined => {
+  const color = options?.labelColor;
+  if (typeof color !== "string") return undefined;
+  const trimmed = color.trim();
+  return HEX_COLOR_PATTERN.test(trimmed) ? trimmed : undefined;
+};
+
 interface EnumOption {
   value: string;
   label: string;
