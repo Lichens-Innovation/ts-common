@@ -1,8 +1,6 @@
 #!/usr/bin/env sh
 
-# Exit immediately if any command fails
 set -e
 
-echo "Running typecheck..."
-yarn typecheck
-echo "  -->  ✅ Typecheck completed"
+bun run lint-staged
+bun typecheck

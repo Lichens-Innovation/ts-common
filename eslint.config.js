@@ -10,7 +10,7 @@ import { globalIgnores } from "eslint/config";
 import todoTicketRef from "./eslint-rules/todo-ticket-ref.js";
 
 const baseConfig = tseslint.config(
-  globalIgnores(["dist", "**/*.gen.ts"]),
+  globalIgnores(["dist", "**/*.gen.ts", ".husky"]),
   js.configs.recommended,
   {
     files: ["eslint.config.js", "prettier.config.js", "scripts/**"],
