@@ -3,7 +3,12 @@ export const firstSentence = (s: string): string => {
   return m ? m[0].trim() : s.trim();
 };
 
-export const titleFromName = (name: string, fallback = 'my-thing'): string => {
+interface TitleFromNameArgs {
+  name: string;
+  fallback?: string;
+}
+
+export const titleFromName = ({ name, fallback = '' }: TitleFromNameArgs): string => {
   return (name || fallback)
     .split('-')
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))

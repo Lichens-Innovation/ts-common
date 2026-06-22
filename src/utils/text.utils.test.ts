@@ -23,11 +23,11 @@ describe('text.utils', () => {
       ${'my-skill'}        | ${undefined}  | ${'My Skill'}
       ${'hello-world'}     | ${undefined}  | ${'Hello World'}
       ${'single'}          | ${undefined}  | ${'Single'}
-      ${''}                | ${undefined}  | ${'My Thing'}
+      ${''}                | ${undefined}  | ${''}
       ${''}                | ${'my-agent'} | ${'My Agent'}
       ${'three-part-name'} | ${undefined}  | ${'Three Part Name'}
     `('titleFromName("$name") → "$expected"', ({ name, fallback, expected }) => {
-      const result = fallback !== undefined ? titleFromName(name, fallback) : titleFromName(name);
+      const result = fallback !== undefined ? titleFromName({ name, fallback }) : titleFromName({ name });
       expect(result).toBe(expected);
     });
   });
