@@ -3,11 +3,13 @@ import {
   formatCount,
   formatDuration,
   formatIntegerDisplay,
+  formatWithSpaceSeparator,
   getOrderOfMagnitudeExponent,
   isInputValidInteger,
   isInputValidNegativeInteger,
   isInputValidNumber,
   isInputValidPositiveInteger,
+  parseWithSpaceSeparator,
   roundUpToNearest10,
   toFixed,
 } from './number.utils';
@@ -48,24 +50,24 @@ describe('Tests suite for number utilities', () => {
   });
   describe('toFixed', () => {
     it.each`
-      value      | decimals | expected
-      ${3.14159} | ${3}     | ${3.142}
-      ${3.14159} | ${2}     | ${3.14}
-      ${3.14159} | ${1}     | ${3.1}
-      ${3.14159} | ${0}     | ${3}
-      ${3.5}     | ${0}     | ${4}
-      ${3.4}     | ${0}     | ${3}
-      ${10.999}  | ${2}     | ${11}
-      ${10.995}  | ${2}     | ${11}
-      ${10.994}  | ${2}     | ${10.99}
-      ${-3.14159}| ${2}     | ${-3.14}
-      ${0}       | ${2}     | ${0}
-      ${0.1}     | ${1}     | ${0.1}
-      ${0.05}    | ${1}     | ${0.1}
-      ${0.04}    | ${1}     | ${0}
-      ${null}    | ${2}     | ${0}
-      ${undefined}| ${2}    | ${0}
-      ${3.14159} | ${undefined}| ${3}
+      value        | decimals     | expected
+      ${3.14159}   | ${3}         | ${3.142}
+      ${3.14159}   | ${2}         | ${3.14}
+      ${3.14159}   | ${1}         | ${3.1}
+      ${3.14159}   | ${0}         | ${3}
+      ${3.5}       | ${0}         | ${4}
+      ${3.4}       | ${0}         | ${3}
+      ${10.999}    | ${2}         | ${11}
+      ${10.995}    | ${2}         | ${11}
+      ${10.994}    | ${2}         | ${10.99}
+      ${-3.14159}  | ${2}         | ${-3.14}
+      ${0}         | ${2}         | ${0}
+      ${0.1}       | ${1}         | ${0.1}
+      ${0.05}      | ${1}         | ${0.1}
+      ${0.04}      | ${1}         | ${0}
+      ${null}      | ${2}         | ${0}
+      ${undefined} | ${2}         | ${0}
+      ${3.14159}   | ${undefined} | ${3}
     `('should return $expected for value=$value and decimals=$decimals', ({ value, decimals, expected }) => {
       expect(toFixed(value, decimals)).toBe(expected);
     });
@@ -77,18 +79,18 @@ describe('Tests suite for number utilities', () => {
 
   describe('isInputValidNumber', () => {
     it.each`
-      value          | expected
-      ${''}          | ${false}
-      ${'   '}       | ${false}
-      ${'abc'}       | ${false}
-      ${'12.34'}     | ${true}
-      ${'0'}         | ${true}
-      ${'-5'}        | ${true}
-      ${' 42 '}      | ${true}
-      ${'1500.5'}    | ${true}
-      ${'1e2'}       | ${true}
-      ${'NaN'}       | ${false}
-      ${'1.2.3'}     | ${false}
+      value       | expected
+      ${''}       | ${false}
+      ${'   '}    | ${false}
+      ${'abc'}    | ${false}
+      ${'12.34'}  | ${true}
+      ${'0'}      | ${true}
+      ${'-5'}     | ${true}
+      ${' 42 '}   | ${true}
+      ${'1500.5'} | ${true}
+      ${'1e2'}    | ${true}
+      ${'NaN'}    | ${false}
+      ${'1.2.3'}  | ${false}
     `('should return $expected for value="$value"', ({ value, expected }) => {
       expect(isInputValidNumber(value)).toBe(expected);
     });
@@ -96,15 +98,15 @@ describe('Tests suite for number utilities', () => {
 
   describe('isInputValidInteger', () => {
     it.each`
-      value          | expected
-      ${''}          | ${false}
-      ${'   '}       | ${false}
-      ${'12.34'}     | ${false}
-      ${'1500.5'}    | ${false}
-      ${'0'}         | ${true}
-      ${'42'}        | ${true}
-      ${'-7'}        | ${true}
-      ${' 100 '}     | ${true}
+      value       | expected
+      ${''}       | ${false}
+      ${'   '}    | ${false}
+      ${'12.34'}  | ${false}
+      ${'1500.5'} | ${false}
+      ${'0'}      | ${true}
+      ${'42'}     | ${true}
+      ${'-7'}     | ${true}
+      ${' 100 '}  | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
       expect(isInputValidInteger(value)).toBe(expected);
     });
@@ -112,16 +114,16 @@ describe('Tests suite for number utilities', () => {
 
   describe('isInputValidPositiveInteger', () => {
     it.each`
-      value          | expected
-      ${''}          | ${false}
-      ${'   '}       | ${false}
-      ${'0'}         | ${false}
-      ${'12.34'}     | ${false}
-      ${'1500.5'}    | ${false}
-      ${'-7'}        | ${false}
-      ${'1'}         | ${true}
-      ${'42'}        | ${true}
-      ${' 100 '}     | ${true}
+      value       | expected
+      ${''}       | ${false}
+      ${'   '}    | ${false}
+      ${'0'}      | ${false}
+      ${'12.34'}  | ${false}
+      ${'1500.5'} | ${false}
+      ${'-7'}     | ${false}
+      ${'1'}      | ${true}
+      ${'42'}     | ${true}
+      ${' 100 '}  | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
       expect(isInputValidPositiveInteger(value)).toBe(expected);
     });
@@ -129,16 +131,16 @@ describe('Tests suite for number utilities', () => {
 
   describe('isInputValidNegativeInteger', () => {
     it.each`
-      value          | expected
-      ${''}          | ${false}
-      ${'   '}       | ${false}
-      ${'0'}         | ${false}
-      ${'42'}        | ${false}
-      ${'12.34'}     | ${false}
-      ${'1500.5'}    | ${false}
-      ${'-1'}        | ${true}
-      ${'-7'}        | ${true}
-      ${' -100 '}    | ${true}
+      value       | expected
+      ${''}       | ${false}
+      ${'   '}    | ${false}
+      ${'0'}      | ${false}
+      ${'42'}     | ${false}
+      ${'12.34'}  | ${false}
+      ${'1500.5'} | ${false}
+      ${'-1'}     | ${true}
+      ${'-7'}     | ${true}
+      ${' -100 '} | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
       expect(isInputValidNegativeInteger(value)).toBe(expected);
     });
@@ -157,9 +159,9 @@ describe('Tests suite for number utilities', () => {
 
   describe('formatDuration', () => {
     it.each`
-      ms     | expected
-      ${150} | ${'150ms'}
-      ${2500}| ${'2.5s'}
+      ms      | expected
+      ${150}  | ${'150ms'}
+      ${2500} | ${'2.5s'}
     `('should return $expected for ms=$ms', ({ ms, expected }) => {
       expect(formatDuration(ms)).toBe(expected);
     });
@@ -167,17 +169,48 @@ describe('Tests suite for number utilities', () => {
 
   describe('formatIntegerDisplay', () => {
     it.each`
-      value      | expected
-      ${42}      | ${'42'}
-      ${42.7}    | ${'43'}
-      ${42.3}    | ${'42'}
-      ${0}       | ${'0'}
-      ${-3.8}    | ${'-4'}
-      ${null}    | ${'0'}
+      value        | expected
+      ${42}        | ${'42'}
+      ${42.7}      | ${'43'}
+      ${42.3}      | ${'42'}
+      ${0}         | ${'0'}
+      ${-3.8}      | ${'-4'}
+      ${null}      | ${'0'}
       ${undefined} | ${'0'}
     `('should return "$expected" for value=$value', ({ value, expected }) => {
       expect(formatIntegerDisplay(value)).toBe(expected);
     });
   });
-});
 
+  describe('formatWithSpaceSeparator', () => {
+    it.each`
+      val          | rawExpected
+      ${1000}      | ${1000}
+      ${1000000}   | ${1000000}
+      ${999}       | ${999}
+      ${0}         | ${0}
+      ${'1500'}    | ${1500}
+      ${null}      | ${null}
+      ${undefined} | ${null}
+    `('round-trips $val through format→parse', ({ val, rawExpected }) => {
+      const formatted = formatWithSpaceSeparator(val);
+      if (rawExpected === null) {
+        expect(formatted).toBe('');
+      } else {
+        expect(parseWithSpaceSeparator(formatted)).toBe(rawExpected);
+      }
+    });
+  });
+
+  describe('parseWithSpaceSeparator', () => {
+    it('returns NaN for undefined', () => {
+      expect(parseWithSpaceSeparator(undefined)).toBeNaN();
+    });
+
+    it('round-trips numbers through format→parse', () => {
+      expect(parseWithSpaceSeparator(formatWithSpaceSeparator(1000))).toBe(1000);
+      expect(parseWithSpaceSeparator(formatWithSpaceSeparator(1000000))).toBe(1000000);
+      expect(parseWithSpaceSeparator(formatWithSpaceSeparator(999))).toBe(999);
+    });
+  });
+});
