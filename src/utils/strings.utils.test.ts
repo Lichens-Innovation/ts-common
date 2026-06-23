@@ -8,6 +8,8 @@ import {
   parseCommaSeparatedList,
   removeDiacriticalMarks,
   slugify,
+  toCamelCase,
+  toKebabCase,
   truncate,
 } from './string.utils';
 
@@ -140,6 +142,44 @@ describe('Tests suite for string utilities', () => {
 
     it('should use default ellipsis when not provided', () => {
       expect(truncate('hello world', 8)).toBe('hello...');
+    });
+  });
+
+  describe('toKebabCase', () => {
+    it.each`
+      value                      | expected
+      ${'myComponentName'}       | ${'my-component-name'}
+      ${'MyPascalCase'}          | ${'my-pascal-case'}
+      ${'XMLParser'}             | ${'xml-parser'}
+      ${'snake_case_string'}     | ${'snake-case-string'}
+      ${'already-kebab'}         | ${'already-kebab'}
+      ${'some string spaces'}    | ${'some-string-spaces'}
+      ${'  trimmed  '}           | ${'trimmed'}
+      ${'multiple__underscores'} | ${'multiple-underscores'}
+      ${''}                      | ${''}
+      ${null}                    | ${''}
+      ${undefined}               | ${''}
+    `('should return "$expected" for "$value"', ({ value, expected }) => {
+      expect(toKebabCase(value)).toBe(expected);
+    });
+  });
+
+  describe('toCamelCase', () => {
+    it.each`
+      value                      | expected
+      ${'my-component-name'}     | ${'myComponentName'}
+      ${'my_snake_case'}         | ${'mySnakeCase'}
+      ${'MyPascalCase'}          | ${'myPascalCase'}
+      ${'hello world'}           | ${'helloWorld'}
+      ${'already'}               | ${'already'}
+      ${'multiple--dashes'}      | ${'multipleDashes'}
+      ${'multiple__underscores'} | ${'multipleUnderscores'}
+      ${'  spaced  words  '}     | ${'spacedWords'}
+      ${''}                      | ${''}
+      ${null}                    | ${''}
+      ${undefined}               | ${''}
+    `('should return "$expected" for "$value"', ({ value, expected }) => {
+      expect(toCamelCase(value)).toBe(expected);
     });
   });
 
