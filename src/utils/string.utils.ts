@@ -67,6 +67,41 @@ export const truncate = (str: string, maxLength: number, ellipsis = '...'): stri
 };
 
 /**
+ * Converts a string to kebab-case.
+ * Handles camelCase, PascalCase, snake_case, and space-separated strings.
+ *
+ * @example
+ * toKebabCase("myComponentName") // → "my-component-name"
+ * toKebabCase("XMLParser")       // → "xml-parser"
+ */
+export const toKebabCase = (value?: string | null): string => {
+  if (isBlank(value)) return '';
+  return value
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+};
+
+/**
+ * Converts a string to camelCase.
+ * Handles kebab-case, snake_case, PascalCase, and space-separated strings.
+ *
+ * @example
+ * toCamelCase("my-component-name") // → "myComponentName"
+ * toCamelCase("my_snake_case")     // → "mySnakeCase"
+ */
+export const toCamelCase = (value?: string | null): string => {
+  if (isBlank(value)) return '';
+  return value
+    .trim()
+    .replace(/[-_\s]+(.)/g, (_, char: string) => char.toUpperCase())
+    .replace(/^[A-Z]/, (char) => char.toLowerCase());
+};
+
+/**
  * Converts a string to a URL-safe slug.
  * Removes diacritical marks, lowercases, replaces non-alphanumeric characters with hyphens,
  * and strips leading/trailing hyphens.
