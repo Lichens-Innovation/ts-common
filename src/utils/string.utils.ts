@@ -61,9 +61,29 @@ export const countWords = (text: string): number => {
  * @param ellipsis - The ellipsis string to append (default: "...")
  * @returns The truncated string
  */
-export const truncate = (str: string, maxLength: number, ellipsis = "..."): string => {
+export const truncate = (str: string, maxLength: number, ellipsis = '...'): string => {
   if (!str || str.length <= maxLength) return str;
   return str.slice(0, maxLength - ellipsis.length) + ellipsis;
+};
+
+/**
+ * Converts a string to a URL-safe slug.
+ * Removes diacritical marks, lowercases, replaces non-alphanumeric characters with hyphens,
+ * and strips leading/trailing hyphens.
+ *
+ * @param value - The input string to slugify
+ * @returns The slugified string
+ *
+ * @example
+ * slugify("Héllo Wörld!") // → "hello-world"
+ * slugify("  My Blog Post  ") // → "my-blog-post"
+ */
+export const slugify = (value: string): string => {
+  if (!value) return '';
+  return removeDiacriticalMarks(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 };
 
 /**
@@ -75,7 +95,7 @@ export const parseCommaSeparatedList = (raw?: string | null): string[] => {
   }
 
   return raw
-    .split(",")
+    .split(',')
     .map((s: string) => s.trim())
     .filter(isNotBlank);
 };

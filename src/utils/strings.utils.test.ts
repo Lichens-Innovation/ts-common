@@ -7,6 +7,7 @@ import {
   isNotBlank,
   parseCommaSeparatedList,
   removeDiacriticalMarks,
+  slugify,
   truncate,
 } from './string.utils';
 
@@ -103,16 +104,16 @@ describe('Tests suite for string utilities', () => {
 
   describe('countWords', () => {
     it.each`
-      text                          | expected
-      ${'hello world'}              | ${2}
-      ${'one'}                      | ${1}
-      ${'one two three four five'}  | ${5}
-      ${'  spaced   out  words  '}  | ${3}
-      ${''}                         | ${0}
-      ${'   '}                      | ${0}
-      ${null}                       | ${0}
-      ${undefined}                  | ${0}
-      ${'hello\nworld\ttab'}        | ${3}
+      text                         | expected
+      ${'hello world'}             | ${2}
+      ${'one'}                     | ${1}
+      ${'one two three four five'} | ${5}
+      ${'  spaced   out  words  '} | ${3}
+      ${''}                        | ${0}
+      ${'   '}                     | ${0}
+      ${null}                      | ${0}
+      ${undefined}                 | ${0}
+      ${'hello\nworld\ttab'}       | ${3}
     `('should return $expected for "$text"', ({ text, expected }) => {
       expect(countWords(text)).toBe(expected);
     });
@@ -120,16 +121,16 @@ describe('Tests suite for string utilities', () => {
 
   describe('truncate', () => {
     it.each`
-      str                        | maxLength | ellipsis     | expected
-      ${'hello world'}           | ${5}      | ${'...'}     | ${'he...'}
-      ${'hello world'}           | ${11}     | ${'...'}     | ${'hello world'}
-      ${'hello world'}           | ${12}     | ${'...'}     | ${'hello world'}
-      ${'hello'}                 | ${10}     | ${'...'}     | ${'hello'}
-      ${'hello world'}           | ${8}      | ${'…'}       | ${'hello w…'}
-      ${'short'}                 | ${3}      | ${'...'}     | ${'...'}
-      ${''}                      | ${10}     | ${'...'}     | ${''}
-      ${null}                    | ${10}     | ${'...'}     | ${null}
-      ${undefined}               | ${10}     | ${'...'}     | ${undefined}
+      str              | maxLength | ellipsis | expected
+      ${'hello world'} | ${5}      | ${'...'} | ${'he...'}
+      ${'hello world'} | ${11}     | ${'...'} | ${'hello world'}
+      ${'hello world'} | ${12}     | ${'...'} | ${'hello world'}
+      ${'hello'}       | ${10}     | ${'...'} | ${'hello'}
+      ${'hello world'} | ${8}      | ${'…'}   | ${'hello w…'}
+      ${'short'}       | ${3}      | ${'...'} | ${'...'}
+      ${''}            | ${10}     | ${'...'} | ${''}
+      ${null}          | ${10}     | ${'...'} | ${null}
+      ${undefined}     | ${10}     | ${'...'} | ${undefined}
     `(
       'should return "$expected" for str="$str", maxLength=$maxLength, ellipsis="$ellipsis"',
       ({ str, maxLength, ellipsis, expected }) => {
@@ -139,6 +140,27 @@ describe('Tests suite for string utilities', () => {
 
     it('should use default ellipsis when not provided', () => {
       expect(truncate('hello world', 8)).toBe('hello...');
+    });
+  });
+
+  describe('slugify', () => {
+    it.each`
+      value                       | expected
+      ${'Hello World'}            | ${'hello-world'}
+      ${'Héllo Wörld!'}           | ${'hello-world'}
+      ${'  My Blog Post  '}       | ${'my-blog-post'}
+      ${'múltiple---hyphens'}     | ${'multiple-hyphens'}
+      ${'---leading-trailing---'} | ${'leading-trailing'}
+      ${'Ça va très bien'}        | ${'ca-va-tres-bien'}
+      ${'UPPERCASE STRING'}       | ${'uppercase-string'}
+      ${'special!@#$%chars'}      | ${'special-chars'}
+      ${'already-a-slug'}         | ${'already-a-slug'}
+      ${'123 numbers 456'}        | ${'123-numbers-456'}
+      ${''}                       | ${''}
+      ${null}                     | ${''}
+      ${undefined}                | ${''}
+    `('should return "$expected" for "$value"', ({ value, expected }) => {
+      expect(slugify(value)).toBe(expected);
     });
   });
 
