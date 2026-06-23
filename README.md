@@ -5,27 +5,32 @@ Reusable generic typescript utilities, types, constants, helpers
 > **Note:** The default export is **pure TypeScript** and **environment-agnostic**—it has no dependency on Node.js, browser, or React Native APIs, so the same code runs in any of these runtimes. Subpath imports such as `@lichens-innovation/ts-common/web` target a specific environment and rely on its APIs.
 
 <!-- Package & Status -->
+
 [![npm version](https://img.shields.io/npm/v/@lichens-innovation/ts-common.svg?style=flat-square)](https://www.npmjs.com/package/@lichens-innovation/ts-common)
 [![npm downloads](https://img.shields.io/npm/dm/@lichens-innovation/ts-common.svg?style=flat-square)](https://www.npmjs.com/package/@lichens-innovation/ts-common)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/Lichens-Innovation/ts-common/create-release.yml?branch=main&style=flat-square&logo=github)](https://github.com/Lichens-Innovation/ts-common/actions)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
 <!-- Tech Stack -->
+
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-LTS-green.svg?style=flat-square&logo=node.js)](https://nodejs.org/)
-[![Yarn](https://img.shields.io/badge/Yarn-1.22+-2C8EBB.svg?style=flat-square&logo=yarn)](https://yarnpkg.com/)
+[![Bun](https://img.shields.io/badge/Bun-1.2+-FBF0DF.svg?style=flat-square&logo=bun)](https://bun.sh/)
 
 <!-- Code Quality -->
+
 [![Vitest](https://img.shields.io/badge/Vitest-4.0-6E9F18.svg?style=flat-square&logo=vitest)](https://vitest.dev/)
 [![ESLint](https://img.shields.io/badge/ESLint-9.x-4B32C3.svg?style=flat-square&logo=eslint)](https://eslint.org/)
 [![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square&logo=prettier)](https://prettier.io/)
 
 <!-- Standards -->
+
 [![Semantic Versioning](https://img.shields.io/badge/semver-2.0.0-blue.svg?style=flat-square)](https://semver.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://makeapullrequest.com)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 Table of content
+
 - [ts-common](#ts-common)
   - [Prerequisites](#prerequisites)
   - [Scripts](#scripts)
@@ -46,23 +51,23 @@ Table of content
 
 ## Prerequisites
 
-- Node.js (LTS or higher)
-- Yarn
+- Node.js (>=20.x)
+- Bun (>=1.2.0)
 
 ## Scripts
 
-| Command                      | Description                                                                 |
-|------------------------------|-----------------------------------------------------------------------------|
-| `yarn prepare`               | Configures Husky (Git hooks). Runs automatically after `yarn install`.      |
-| `yarn build`                 | Compiles the project with tsup (outputs to `dist/`).                        |
-| `yarn clean:node`            | Removes `node_modules` and `yarn.lock`.                                     |
-| `yarn clean:dist`            | Removes the `dist` directory.                                               |
-| `yarn typecheck`             | Type-checks TypeScript without emitting files (`tsc --noEmit`).             |
-| `yarn lint`                  | Runs ESLint on the project.                                                 |
-| `yarn lint:fix`              | Runs ESLint and applies automatic fixes.                                    |
-| `yarn test`                  | Runs tests with Vitest and coverage report.                                 |
-| `yarn test:watch`            | Runs tests in watch mode with Vitest.                                       |
-| `yarn test:coverage`         | Runs tests with coverage report using Vitest.                               |
+| Command                 | Description                                                           |
+| ----------------------- | --------------------------------------------------------------------- |
+| `bun run prepare`       | Configures Husky (Git hooks). Runs automatically after `bun install`. |
+| `bun run build`         | Compiles the project with tsup (outputs to `dist/`).                  |
+| `bun run clean:node`    | Removes `node_modules` and `bun.lockb`.                               |
+| `bun run clean:dist`    | Removes the `dist` directory.                                         |
+| `bun run typecheck`     | Type-checks TypeScript without emitting files (`tsc --noEmit`).       |
+| `bun run lint`          | Runs ESLint on the project.                                           |
+| `bun run lint:fix`      | Runs ESLint and applies automatic fixes.                              |
+| `bun run test`          | Runs tests with Vitest and coverage report.                           |
+| `bun run test:watch`    | Runs tests in watch mode with Vitest.                                 |
+| `bun run test:coverage` | Runs tests with coverage report using Vitest.                         |
 
 ## Optional modules
 
@@ -120,14 +125,14 @@ npm install pino-pretty
 **Usage example:**
 
 ```ts
-import { logger, setLoggerMinimumLevel, type Level } from "@lichens-innovation/ts-common/logger";
+import { logger, setLoggerMinimumLevel, type Level } from '@lichens-innovation/ts-common/logger';
 
 // Minimum level (optional): "trace" | "debug" | "info" | "warn" | "error" | "fatal"
-setLoggerMinimumLevel("debug");
+setLoggerMinimumLevel('debug');
 
-logger.info("Simple message");
-logger.debug("Debug", { userId: "123", action: "login" });
-logger.error("Error", { code: 500 });
+logger.info('Simple message');
+logger.debug('Debug', { userId: '123', action: 'login' });
+logger.error('Error', { code: 500 });
 ```
 
 ### RJSF (`@lichens-innovation/ts-common/rjsf`)
@@ -142,7 +147,7 @@ npm install @rjsf/core @rjsf/utils @rjsf/validator-ajv8 ajv-i18n i18next react-i
 
 ## Contributions
 
-Contributions to the project are made by simply improving the current codebase and then creating a Pull Request. If the version field in `package.json` is incremented, the build will be automatically triggered when the PR is merged into the `main` branch, and the new version will be published to our enterprise Git repository.
+Contributions to the project are made by simply improving the current codebase and then creating a Pull Request. When the PR is merged into `main`, the CI pipeline runs automatically. [semantic-release](https://semantic-release.gitbook.io/) determines the next version from conventional commit messages, updates `CHANGELOG.md` and `package.json`, and publishes the new version to the GitHub Packages registry — no manual version bump required.
 
 ## Unit tests
 
@@ -150,22 +155,27 @@ Test coverage must be maintained at 80% or higher. It is therefore important to 
 
 ## Library semantic versioning
 
-When there is a breaking change, [Semantic Versioning](https://semver.org/#summary) must be used to indicate that a major behavior has changed. Semantic Versioning follows the `MAJOR.MINOR.PATCH` format:
+Versioning is automated by [semantic-release](https://semantic-release.gitbook.io/) using [Conventional Commits](https://www.conventionalcommits.org/). The release type is derived from commit message prefixes:
 
-* `MAJOR` version when you make incompatible API changes
-* `MINOR` version when you add functionality in a backward compatible manner
-* `PATCH` version when you make backward compatible bug fixes
+| Commit prefix                 | Release type                                    |
+| ----------------------------- | ----------------------------------------------- |
+| `fix:`                        | `PATCH` — backward-compatible bug fix           |
+| `feat:`                       | `MINOR` — new backward-compatible functionality |
+| `feat!:` / `BREAKING CHANGE:` | `MAJOR` — incompatible API change               |
+
+Follow [Semantic Versioning](https://semver.org/#summary) (`MAJOR.MINOR.PATCH`) when writing commit messages — the tooling takes care of the rest.
 
 ## Project coding guidelines
 
 Adhering to established coding guidelines is essential for developing efficient, maintainable, and scalable software. These guidelines promote consistency across codebases, making it easier for teams to collaborate and for new developers to understand existing code. By following standardized patterns, such as those outlined in the [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md), developers can reduce errors and enhance code readability.
 
-* [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md)
+- [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md)
 
 ## TODOs
 
 This section list remaining tasks (not yet completed)
-* RJSF-001: find a way to dynamically resolve the rjsf-i18n.utils "%1 Key" pattern
+
+- RJSF-001: find a way to dynamically resolve the rjsf-i18n.utils "%1 Key" pattern
 
 ## License
 

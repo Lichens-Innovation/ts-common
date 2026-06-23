@@ -1,5 +1,5 @@
 import { isBlank } from './string.utils';
-import { isNullish, isNumber } from "./types.utils";
+import { isNullish, isNumber } from './types.utils';
 
 /**
  * Returns true if the input string is a valid number (blank and non-numeric strings are invalid).
@@ -40,13 +40,12 @@ export const isInputValidNegativeInteger = (value: string): boolean => {
 /**
  * Formats a number as an integer display string (removes decimals).
  */
-export const formatIntegerDisplay = (value?: number | null): string =>
-  String(toFixed(value, 0));
+export const formatIntegerDisplay = (value?: number | null): string => String(toFixed(value, 0));
 
 // Example: toFixed(3.14159, 3) // 3.142
 export const toFixed = (value?: number | null, decimals = 0): number => {
   if (isNullish(value)) return 0;
-  if (decimals < 0) throw new Error("[toFixed] decimals must be >= 0");
+  if (decimals < 0) throw new Error('[toFixed] decimals must be >= 0');
   if (decimals === 0) return Math.round(value);
 
   const multiplier = Math.pow(10, decimals);
@@ -81,15 +80,24 @@ export const formatDuration = (ms: number): string => {
   return `${(ms / 1000).toFixed(1)}s`;
 };
 
+export const formatWithSpaceSeparator = (val?: number | string | null): string => {
+  if (isNullish(val)) return '';
+  return String(val).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+};
+
+export const parseWithSpaceSeparator = (val?: string): number => {
+  return Number(val?.replace(/\u00a0/g, ''));
+};
+
 export const getOrderOfMagnitudeExponent = (n?: number | null): number => {
   if (isNullish(n)) return 0;
   if (!isNumber(n)) return 0;
 
-  const absValue = Math.abs(n);  
+  const absValue = Math.abs(n);
   if (absValue === 0) {
     return 0;
   }
-  
+
   const integerPart = Math.floor(absValue);
   return Math.floor(Math.log10(integerPart));
-}
+};

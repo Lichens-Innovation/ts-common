@@ -13,6 +13,7 @@ export * from './number.utils';
 export * from './regex';
 export * from './runtime-env.utils';
 export * from './string.utils';
+export * from './text.utils';
 export * from './thread.utils';
 export * from './time.utils';
 export * from './types.utils';
