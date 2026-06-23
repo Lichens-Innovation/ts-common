@@ -1,3 +1,9 @@
+# [1.21.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.20.0...v1.21.0) (2026-06-23)
+
+### Features
+
+- toKebabCase / toCamelCase ([#33](https://github.com/Lichens-Innovation/ts-common/issues/33)) ([f6b92ab](https://github.com/Lichens-Innovation/ts-common/commit/f6b92aba343b4dd5d9d2afb28970e31d7b1366ac))
+
 # [1.20.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.19.0...v1.20.0) (2026-06-23)
 
 ### Features
