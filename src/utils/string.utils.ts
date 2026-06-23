@@ -74,7 +74,7 @@ export const truncate = (str: string, maxLength: number, ellipsis = '...'): stri
  * toKebabCase("myComponentName") // → "my-component-name"
  * toKebabCase("XMLParser")       // → "xml-parser"
  */
-export const toKebabCase = (value: string): string => {
+export const toKebabCase = (value?: string | null): string => {
   if (isBlank(value)) return '';
   return value
     .replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -93,7 +93,7 @@ export const toKebabCase = (value: string): string => {
  * toCamelCase("my-component-name") // → "myComponentName"
  * toCamelCase("my_snake_case")     // → "mySnakeCase"
  */
-export const toCamelCase = (value: string): string => {
+export const toCamelCase = (value?: string | null): string => {
   if (isBlank(value)) return '';
   return value
     .trim()
