@@ -1,3 +1,9 @@
+# [1.20.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.19.0...v1.20.0) (2026-06-23)
+
+### Features
+
+- slugify string utility ([#32](https://github.com/Lichens-Innovation/ts-common/issues/32)) ([cf183eb](https://github.com/Lichens-Innovation/ts-common/commit/cf183ebdbbaebe5c1b0035d92b912f00b4d20d11))
+
 # [1.19.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.18.0...v1.19.0) (2026-06-23)
 
 ### Features
