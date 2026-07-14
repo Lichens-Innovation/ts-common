@@ -163,7 +163,7 @@
     "@rjsf/utils": "6.4.1",
     "@rjsf/validator-ajv8": "6.4.1",
     "ajv-i18n": "4.2.0",
-    "i18next": "25.8.18",
+    "i18next": "26.3.4",
     "react-i18next": "16.5.8",
     "@commitlint/config-conventional": "20.4.4",
     "@eslint/js": "10.0.1",
