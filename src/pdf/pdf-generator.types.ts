@@ -1,5 +1,5 @@
-import { format } from "date-fns";
-import type { jsPDF, jsPDFOptions } from "jspdf";
+import { format } from 'date-fns';
+import type { jsPDF, jsPDFOptions } from 'jspdf';
 
 interface FontSize {
   title: number;
@@ -20,11 +20,11 @@ export interface ThemeConfig {
   fontSize: FontSize;
 }
 
-export type PageSize = jsPDF["internal"]["pageSize"];
-export type PageOrientation = jsPDFOptions["orientation"];
-export type PaperFormat = jsPDFOptions["format"];
+export type PageSize = jsPDF['internal']['pageSize'];
+export type PageOrientation = jsPDFOptions['orientation'];
+export type PaperFormat = jsPDFOptions['format'];
 
-export const DEFAULT_REPORT_FILENAME = "report.pdf";
+export const DEFAULT_REPORT_FILENAME = 'report.pdf';
 export const IMAGE_GAP = 0.5; // space in inches between image and footer
 
 export const DEFAULT_THEME: ThemeConfig = {
@@ -57,14 +57,14 @@ export interface PdfOptions {
 }
 
 export const DEFAULT_FOOTER_CELL_BUILDER = ({ align, currentPage, totalPages }: FooterCellArgs): string => {
-  if (align === "left") return format(new Date(), "yyyy-MM-dd HH:mm");
-  if (align === "center") return "";
+  if (align === 'left') return format(new Date(), 'yyyy-MM-dd HH:mm');
+  if (align === 'center') return '';
   return `Page ${currentPage}/${totalPages}`;
 };
 
 export const DEFAULT_OPTIONS: Readonly<Required<PdfOptions>> = {
-  orientation: "portrait",
-  paperFormat: "letter",
+  orientation: 'portrait',
+  paperFormat: 'letter',
   filename: DEFAULT_REPORT_FILENAME,
   theme: DEFAULT_THEME,
   margin: 0.5,
@@ -85,9 +85,9 @@ export const PdfColors: Record<string, FillColorRgbTuple> = {
   LIGHT_GRAY: [240, 240, 240],
 };
 
-export type TableCellHalign = "left" | "center" | "right";
-export type TableCellValign = "top" | "middle" | "bottom";
-export type FontStyle = "normal" | "bold";
+export type TableCellHalign = 'left' | 'center' | 'right';
+export type TableCellValign = 'top' | 'middle' | 'bottom';
+export type FontStyle = 'normal' | 'bold';
 export type FillColorRgbTuple = [number, number, number];
 
 export type CellStyle = {
@@ -131,6 +131,8 @@ export interface AddTableArgs {
   lineWidth?: number;
   /** Table border color as a grayscale value: 0 = black, 200 = light gray, 255 = white (default 0). */
   lineColor?: number;
+  /** Cell padding in doc units (inches) (default 0.05). */
+  cellPadding?: number;
 }
 
 export interface AddImageArgs {
