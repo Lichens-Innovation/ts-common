@@ -98,6 +98,11 @@ export type CellStyle = {
   fillColor?: FillColorRgbTuple;
 };
 
+export interface ComputeTableMarginsArgs {
+  tableWidth: number;
+  tableAlign: TableCellHalign;
+}
+
 export type CellValue = string | number;
 
 /** Cell with rowSpan/colSpan for merged cells (passed through to autoTable). */
@@ -133,6 +138,8 @@ export interface AddTableArgs {
   lineColor?: number;
   /** Cell padding in doc units (inches) (default 0.05). */
   cellPadding?: number;
+  /** Horizontal placement of the table within the available width (default 'left'). */
+  tableAlign?: TableCellHalign;
 }
 
 export interface AddImageArgs {

@@ -1,6 +1,6 @@
-import { isNullish, type Dimensions } from '../utils';
 import { jsPDF, type ImageCompression, type ImageFormat } from 'jspdf';
-import { autoTable } from 'jspdf-autotable';
+import { autoTable, type MarginPaddingInput } from 'jspdf-autotable';
+import { isNullish, type Dimensions } from '../utils';
 import {
   DEFAULT_FOOTER_CELL_BUILDER,
   DEFAULT_OPTIONS,
@@ -8,8 +8,10 @@ import {
   type AddImageArgs,
   type AddTableArgs,
   type CellStyle,
+  type ComputeTableMarginsArgs,
   type PageSize,
   type PdfOptions,
+  type TableCellHalign,
   type ThemeConfig,
 } from './pdf-generator.types';
 
@@ -105,6 +107,13 @@ export class PdfGenerator {
     console.warn('[checkTableOverflow] table overflow', infos);
   }
 
+  private computeTableMargins({ tableWidth, tableAlign }: ComputeTableMarginsArgs): MarginPaddingInput {
+    const leftover = this.availableWidth - tableWidth;
+    const alignOffsets: Record<TableCellHalign, number> = { left: 0, center: leftover / 2, right: leftover };
+    const offset = alignOffsets[tableAlign];
+    return { left: this.margin + offset, right: this.margin + (leftover - offset) };
+  }
+
   public addTable(addTableArgs: AddTableArgs) {
     const {
       lineWidth = 0.005,
@@ -116,6 +125,7 @@ export class PdfGenerator {
       startY = this._currentY,
       columnWidths,
       cellPadding = 0.05,
+      tableAlign = 'left',
     } = addTableArgs;
 
     if (body.length === 0) {
@@ -134,6 +144,9 @@ export class PdfGenerator {
     const tableLineWidth = drawLineForTable ? lineWidth : 0;
     const cellLineWidth = drawLineForCells ? lineWidth : 0;
 
+    const tableWidth = widths.reduce((sum, width) => sum + width, 0);
+    const margin: MarginPaddingInput = this.computeTableMargins({ tableWidth, tableAlign });
+
     autoTable(this.doc, {
       startY,
       head: !isNullish(head) ? [head] : undefined,
@@ -141,7 +154,7 @@ export class PdfGenerator {
       theme: 'grid',
       tableLineWidth,
       tableLineColor: lineColor,
-      margin: { left: this.margin, right: this.margin },
+      margin,
       bodyStyles: { fontSize, font: this.font, cellPadding, lineWidth: cellLineWidth, lineColor },
       headStyles: { fontSize, font: this.font, cellPadding, lineWidth: cellLineWidth, lineColor },
       columnStyles,
