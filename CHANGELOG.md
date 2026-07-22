@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.22.0...v1.23.0) (2026-07-22)
+
+
+### Features
+
+* full table align attribute ([#35](https://github.com/Lichens-Innovation/ts-common/issues/35)) ([d28ce73](https://github.com/Lichens-Innovation/ts-common/commit/d28ce73fe91dd11f8fb07359ed4ae6859fd6fcfa))
+
 # [1.22.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.21.0...v1.22.0) (2026-07-22)
 
 
