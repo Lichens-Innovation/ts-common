@@ -1,6 +1,7 @@
 {
   "ignoreDependencies": [
     "@semantic-release/github",
-    "cross-env"
+    "cross-env",
+    "prettier"
   ]
 }
