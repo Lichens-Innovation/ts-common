@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.21.0...v1.22.0) (2026-07-22)
+
+
+### Features
+
+* **pdf:** add cellPadding option to addTable ([#34](https://github.com/Lichens-Innovation/ts-common/issues/34)) ([756aedd](https://github.com/Lichens-Innovation/ts-common/commit/756aedd00a37df97490a86f9471eeb3cc168e17c))
+
 # [1.21.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.20.0...v1.21.0) (2026-06-23)
 
 ### Features
