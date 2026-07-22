@@ -162,7 +162,6 @@
     "@commitlint/cli": "20.4.4",
     "@commitlint/config-conventional": "20.4.4",
     "@eslint/js": "10.0.1",
-    "@faker-js/faker": "10.3.0",
     "@rjsf/utils": "6.4.1",
     "@rjsf/validator-ajv8": "6.4.1",
     "@semantic-release/changelog": "6.0.3",

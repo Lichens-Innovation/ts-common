@@ -11,7 +11,6 @@
         "@commitlint/cli": "20.4.4",
         "@commitlint/config-conventional": "20.4.4",
         "@eslint/js": "10.0.1",
-        "@faker-js/faker": "10.3.0",
         "@rjsf/utils": "6.4.1",
         "@rjsf/validator-ajv8": "6.4.1",
         "@semantic-release/changelog": "6.0.3",
@@ -31,7 +30,7 @@
         "i18next": "25.8.18",
         "jspdf": "4.2.0",
         "jspdf-autotable": "5.0.7",
-        "knip": "^6.29.0",
+        "knip": "6.29.0",
         "lint-staged": "15.0.0",
         "mime": "4.1.0",
         "papaparse": "5.5.3",
@@ -206,8 +205,6 @@
     "@eslint/object-schema": ["@eslint/object-schema@3.0.5", "", {}, "sha512-vqTaUEgxzm+YDSdElad6PiRoX4t8VGDjCtt05zn4nU810UIx/uNEV7/lZJ6KwFThKZOzOxzXy48da+No7HZaMw=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.6.1", "", { "dependencies": { "@eslint/core": "^1.1.1", "levn": "^0.4.1" } }, "sha512-iH1B076HoAshH1mLpHMgwdGeTs0CYwL0SPMkGuSebZrwBp16v415e9NZXg2jtrqPVQjf6IANe2Vtlr5KswtcZQ=="],
-
-    "@faker-js/faker": ["@faker-js/faker@10.3.0", "", {}, "sha512-It0Sne6P3szg7JIi6CgKbvTZoMjxBZhcv91ZrqrNuaZQfB5WoqYYbzCUOq89YR+VY8juY9M1vDWmDDa2TzfXCw=="],
 
     "@fast-csv/format": ["@fast-csv/format@4.3.5", "", { "dependencies": { "@types/node": "^14.0.1", "lodash.escaperegexp": "^4.1.2", "lodash.isboolean": "^3.0.3", "lodash.isequal": "^4.5.0", "lodash.isfunction": "^3.0.9", "lodash.isnil": "^4.0.0" } }, "sha512-8iRn6QF3I8Ak78lNAa+Gdl5MJJBM5vRHivFtMRUWINdevNo00K7OXxS2PshawLKTejVwieIlPmK5YlLu6w4u8A=="],
 
