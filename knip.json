@@ -1,7 +1,6 @@
 {
   "ignoreDependencies": [
     "@semantic-release/github",
-    "cross-env",
-    "lint-staged"
+    "cross-env"
   ]
 }
