@@ -1,6 +1,6 @@
-import { isNullish, type Dimensions } from "../utils";
-import { jsPDF, type ImageCompression, type ImageFormat } from "jspdf";
-import { autoTable } from "jspdf-autotable";
+import { isNullish, type Dimensions } from '../utils';
+import { jsPDF, type ImageCompression, type ImageFormat } from 'jspdf';
+import { autoTable } from 'jspdf-autotable';
 import {
   DEFAULT_FOOTER_CELL_BUILDER,
   DEFAULT_OPTIONS,
@@ -11,7 +11,7 @@ import {
   type PageSize,
   type PdfOptions,
   type ThemeConfig,
-} from "./pdf-generator.types";
+} from './pdf-generator.types';
 
 export class PdfGenerator {
   private doc: jsPDF;
@@ -25,8 +25,8 @@ export class PdfGenerator {
     };
 
     const { orientation, paperFormat } = this.options;
-    this.doc = new jsPDF({ orientation, format: paperFormat, unit: "in" });
-    this.doc.setFont("helvetica");
+    this.doc = new jsPDF({ orientation, format: paperFormat, unit: 'in' });
+    this.doc.setFont('helvetica');
 
     this._currentY = this.margin;
   }
@@ -102,7 +102,7 @@ export class PdfGenerator {
       computedSum,
       columnWidths: JSON.stringify(columnWidths),
     };
-    console.warn("[checkTableOverflow] table overflow", infos);
+    console.warn('[checkTableOverflow] table overflow', infos);
   }
 
   public addTable(addTableArgs: AddTableArgs) {
@@ -115,6 +115,7 @@ export class PdfGenerator {
       body,
       startY = this._currentY,
       columnWidths,
+      cellPadding = 0.05,
     } = addTableArgs;
 
     if (body.length === 0) {
@@ -122,7 +123,6 @@ export class PdfGenerator {
       return startY;
     }
 
-    const cellPadding = 0.05;
     const fontSize = this.theme.fontSize.small;
     const colCount = columnWidths?.length ?? Math.max(...body.map((row) => row.length), 0);
     const widths = columnWidths ?? Array(colCount).fill(this.availableWidth / colCount);
@@ -138,7 +138,7 @@ export class PdfGenerator {
       startY,
       head: !isNullish(head) ? [head] : undefined,
       body,
-      theme: "grid",
+      theme: 'grid',
       tableLineWidth,
       tableLineColor: lineColor,
       margin: { left: this.margin, right: this.margin },
@@ -155,8 +155,8 @@ export class PdfGenerator {
    * Add an image at the given position and size. Does not update currentY.
    */
   public addImage({ dataUri, x, y, width, height }: AddImageArgs): void {
-    const imageFormat: ImageFormat = "PNG";
-    const imageCompression: ImageCompression = "NONE";
+    const imageFormat: ImageFormat = 'PNG';
+    const imageCompression: ImageCompression = 'NONE';
     this.doc.addImage(dataUri, imageFormat, x, y, width, height, undefined, imageCompression);
   }
 
@@ -170,8 +170,8 @@ export class PdfGenerator {
   }
 
   public addFullPagePNG(dataURI: string, aspectRatio: number): void {
-    const imageFormat: ImageFormat = "PNG";
-    const imageCompression: ImageCompression = "NONE";
+    const imageFormat: ImageFormat = 'PNG';
+    const imageCompression: ImageCompression = 'NONE';
 
     const alias = undefined;
     const x = this.margin;
@@ -207,15 +207,15 @@ export class PdfGenerator {
     const cellWidth = this.availableWidth / 3;
 
     return {
-      0: { cellWidth, halign: "left" as const },
-      1: { cellWidth, halign: "center" as const },
-      2: { cellWidth, halign: "right" as const },
+      0: { cellWidth, halign: 'left' as const },
+      1: { cellWidth, halign: 'center' as const },
+      2: { cellWidth, halign: 'right' as const },
     };
   }
 
   public renderFooters(): void {
     if (!this.options.hasFooter) {
-      console.warn("[renderFooters] Footer is disabled");
+      console.warn('[renderFooters] Footer is disabled');
       return;
     }
 
@@ -228,14 +228,14 @@ export class PdfGenerator {
     for (let currentPage = 1; currentPage <= totalPages; currentPage++) {
       this.doc.setPage(currentPage);
       this.drawAvailableAreaRectangle();
-      const footerCells = (["left", "center", "right"] as const).map((align) => ({
+      const footerCells = (['left', 'center', 'right'] as const).map((align) => ({
         content: footerCellBuilder({ align, currentPage, totalPages }),
       }));
 
       autoTable(this.doc, {
         startY,
         body: [footerCells],
-        theme: "plain",
+        theme: 'plain',
         bodyStyles: { fontSize: this.footerFontSizePoints, font: this.font },
         margin: { left: this.margin, right: this.margin },
         columnStyles,
@@ -271,10 +271,10 @@ export class PdfGenerator {
         this.margin,
         this.availableWidth,
         this.availableHeight,
-        "S" // Stroke only, no fill
+        'S' // Stroke only, no fill
       );
     } catch (error) {
-      console.error("[drawAvailableAreaRectangle] Error drawing available area rect", error);
+      console.error('[drawAvailableAreaRectangle] Error drawing available area rect', error);
     } finally {
       // Restore previous state
       this.doc.setDrawColor(currentDrawColor);

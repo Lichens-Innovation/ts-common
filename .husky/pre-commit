@@ -1,6 +1,12 @@
 #!/usr/bin/env sh
 
+# exit immediately if any command fails
 set -e
 
-bun run lint-staged
-bun typecheck
+echo "Running typecheck to ensure the code is type-safe..."
+bun run typecheck
+echo "✅ Typecheck completed"
+
+echo "Running lint:fix to apply automatic fixes to the code..."
+bun run lint:fix
+echo "✅ Lint completed"
