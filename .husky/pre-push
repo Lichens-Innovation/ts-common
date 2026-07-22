@@ -1,2 +1,8 @@
 #!/usr/bin/env sh
-bunx tsx .husky/pre-push.ts
+
+# exit immediately if any command fails
+set -e
+
+echo "Running knip to detect unused dependencies or dead code..."
+bun run knip
+echo "✅ Knip completed"
