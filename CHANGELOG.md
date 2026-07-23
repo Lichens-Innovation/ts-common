@@ -1,3 +1,11 @@
+# [1.24.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.23.0...v1.24.0) (2026-07-23)
+
+
+### Features
+
+* memoized rjsf validator ([76acd02](https://github.com/Lichens-Innovation/ts-common/commit/76acd027086b4453af56f75b8b07d8ee57b2e8bd))
+* moved use memo to react layer ([b0e779e](https://github.com/Lichens-Innovation/ts-common/commit/b0e779ed564053b626653e44be89a8139f81b4b3))
+
 # [1.23.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.22.0...v1.23.0) (2026-07-22)
 
 
