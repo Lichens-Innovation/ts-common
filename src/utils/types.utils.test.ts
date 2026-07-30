@@ -16,7 +16,10 @@ describe('Tests suite for types utilities', () => {
       ${'hello'}   | ${false}
       ${42}        | ${false}
     `('should return $expected for $value', ({ value, expected }) => {
-      expect(isNullish(value)).toBe(expected);
+      // act
+      const result = isNullish(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -40,7 +43,10 @@ describe('Tests suite for types utilities', () => {
       ${{}}        | ${false}
       ${NaN}       | ${false}
     `('should return $expected for $value', ({ value, expected }) => {
-      expect(isNumber(value)).toBe(expected);
+      // act
+      const result = isNumber(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -60,15 +66,22 @@ describe('Tests suite for types utilities', () => {
       ${[]}        | ${false}
       ${{}}        | ${false}
     `('should return $expected for $value', ({ value, expected }) => {
-      expect(isString(value)).toBe(expected);
+      // act
+      const result = isString(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
   describe('NO_OP', () => {
     it('should be a function that does nothing', () => {
+      // assert
       expect(typeof NO_OP).toBe('function');
-      expect(NO_OP()).toBeUndefined();
+
+      // act
+      const result = NO_OP();
+      // assert
+      expect(result).toBeUndefined();
     });
   });
 });
-

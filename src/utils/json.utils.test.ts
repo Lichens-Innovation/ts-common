@@ -12,32 +12,49 @@ import {
 describe('json.utils', () => {
   describe('safeJsonParse', () => {
     it('parses valid JSON', () => {
-      expect(safeJsonParse('{"a":1}')).toEqual({ a: 1 });
+      // act
+      const result = safeJsonParse('{"a":1}');
+      // assert
+      expect(result).toEqual({ a: 1 });
     });
 
     it('returns fallback on invalid JSON', () => {
-      expect(safeJsonParse('not json', { ok: false })).toEqual({ ok: false });
+      // act
+      const result = safeJsonParse('not json', { ok: false });
+      // assert
+      expect(result).toEqual({ ok: false });
     });
   });
 
   describe('safeJsonStringify', () => {
     it('stringifies objects with indentation', () => {
-      expect(safeJsonStringify({ a: 1 })).toBe('{\n  "a": 1\n}');
+      // act
+      const result = safeJsonStringify({ a: 1 });
+      // assert
+      expect(result).toBe('{\n  "a": 1\n}');
     });
 
     it('returns empty string for falsy values', () => {
-      expect(safeJsonStringify(null)).toBe('');
+      // act
+      const result = safeJsonStringify(null);
+      // assert
+      expect(result).toBe('');
     });
   });
 
   describe('formatJson', () => {
     it('prettifies JSON string', () => {
+      // act
       const result = formatJson({ value: '{"b":2,"a":1}', sortKeys: true });
+      // assert
       expect(result).toBe('{\n  "a": 1,\n  "b": 2\n}');
     });
 
     it('returns original value when parsing fails', () => {
-      expect(formatJson({ value: 'not json' })).toBe('not json');
+      // act
+      const result = formatJson({ value: 'not json' });
+      // assert
+      expect(result).toBe('not json');
     });
   });
 
@@ -45,11 +62,17 @@ describe('json.utils', () => {
     const input = '{"b":2,"a":1}';
 
     it('prettifies with sorted keys', () => {
-      expect(prettifyJson(input)).toContain('"a": 1');
+      // act
+      const result = prettifyJson(input);
+      // assert
+      expect(result).toContain('"a": 1');
     });
 
     it('minifies with sorted keys', () => {
-      expect(minifyJson(input)).toBe('{"a":1,"b":2}');
+      // act
+      const result = minifyJson(input);
+      // assert
+      expect(result).toBe('{"a":1,"b":2}');
     });
   });
 
@@ -59,17 +82,26 @@ describe('json.utils', () => {
       ${'{"a":1}'} | ${true}
       ${'not json'}| ${false}
     `('returns $expected for "$value"', ({ value, expected }) => {
-      expect(isValidJson(value)).toBe(expected);
+      // act
+      const result = isValidJson(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
   describe('isMinifiedJson', () => {
     it('returns true for minified JSON', () => {
-      expect(isMinifiedJson('{"a":1}')).toBe(true);
+      // act
+      const result = isMinifiedJson('{"a":1}');
+      // assert
+      expect(result).toBe(true);
     });
 
     it('returns false for pretty JSON', () => {
-      expect(isMinifiedJson('{\n  "a": 1\n}')).toBe(false);
+      // act
+      const result = isMinifiedJson('{\n  "a": 1\n}');
+      // assert
+      expect(result).toBe(false);
     });
   });
 });

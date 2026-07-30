@@ -137,6 +137,7 @@ describe('MIME utilities', () => {
 
   describe('VALID_IMAGE_TYPES', () => {
     it('includes common image MIME types', () => {
+      // assert
       expect(VALID_IMAGE_TYPES).toContain('image/png');
       expect(VALID_IMAGE_TYPES).toContain('image/svg+xml');
     });
@@ -144,21 +145,33 @@ describe('MIME utilities', () => {
 
   describe('isValidImageFile', () => {
     it('returns true for a file with a valid image MIME type', () => {
-      expect(isValidImageFile({ type: 'image/png' })).toBe(true);
+      // act
+      const result = isValidImageFile({ type: 'image/png' });
+      // assert
+      expect(result).toBe(true);
     });
 
     it('returns false for a file with a non-image MIME type', () => {
-      expect(isValidImageFile({ type: 'application/pdf' })).toBe(false);
+      // act
+      const result = isValidImageFile({ type: 'application/pdf' });
+      // assert
+      expect(result).toBe(false);
     });
   });
 
   describe('getExtensionFromDataUri', () => {
     it('returns extension from a valid data URI', () => {
-      expect(getExtensionFromDataUri(PNG_DATA_URI)).toBe('png');
+      // act
+      const result = getExtensionFromDataUri(PNG_DATA_URI);
+      // assert
+      expect(result).toBe('png');
     });
 
     it('returns bin for invalid data URI', () => {
-      expect(getExtensionFromDataUri('not-a-data-uri')).toBe('bin');
+      // act
+      const result = getExtensionFromDataUri('not-a-data-uri');
+      // assert
+      expect(result).toBe('bin');
     });
   });
 
@@ -175,10 +188,15 @@ describe('MIME utilities', () => {
       ${'txt'}  | ${'text/plain'}
       ${'svg'}  | ${'image/svg+xml'}
     `('returns "$expected" for extension "$extension"', ({ extension, expected }) => {
-      expect(getMimeType(extension)).toBe(expected);
+      // act
+      const result = getMimeType(extension);
+      // assert
+      expect(result).toBe(expected);
     });
 
     it('throws when extension is unknown', () => {
+      // act
+      // assert
       expect(() => getMimeType('unknownxyz')).toThrow(/Mime type not found for extension/);
     });
   });

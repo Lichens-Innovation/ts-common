@@ -27,7 +27,10 @@ describe('Tests suite for string utilities', () => {
       ${'abc123!'}   | ${false}
       ${'Père Noël'} | ${false}
     `('should return $expected for "$value"', ({ value, expected }) => {
-      expect(isAlphanumeric(value)).toBe(expected);
+      // act
+      const result = isAlphanumeric(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -49,7 +52,10 @@ describe('Tests suite for string utilities', () => {
       ${''}                                           | ${''}
       ${'{{filename}}_{{{yyyy-MM-dd}}}_{{{HHmmss}}}'} | ${'{{filename}}_{{{yyyy-MM-dd}}}_{{{HHmmss}}}'}
     `('should return "$expected" for "$value"', ({ value, expected }) => {
-      expect(removeDiacriticalMarks(value)).toBe(expected);
+      // act
+      const result = removeDiacriticalMarks(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -66,7 +72,10 @@ describe('Tests suite for string utilities', () => {
       ${'hello  '} | ${false}
       ${'0'}       | ${false}
     `('should return $expected for "$value"', ({ value, expected }) => {
-      expect(isBlank(value)).toBe(expected);
+      // act
+      const result = isBlank(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -83,7 +92,10 @@ describe('Tests suite for string utilities', () => {
       ${'hello  '} | ${true}
       ${'0'}       | ${true}
     `('should return $expected for "$value"', ({ value, expected }) => {
-      expect(isNotBlank(value)).toBe(expected);
+      // act
+      const result = isNotBlank(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -100,7 +112,10 @@ describe('Tests suite for string utilities', () => {
       ${'123abc'}  | ${'123abc'}
       ${'éclair'}  | ${'Éclair'}
     `('should return "$expected" for "$value"', ({ value, expected }) => {
-      expect(capitalizeFirst(value)).toBe(expected);
+      // act
+      const result = capitalizeFirst(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -117,7 +132,10 @@ describe('Tests suite for string utilities', () => {
       ${undefined}                 | ${0}
       ${'hello\nworld\ttab'}       | ${3}
     `('should return $expected for "$text"', ({ text, expected }) => {
-      expect(countWords(text)).toBe(expected);
+      // act
+      const result = countWords(text);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -136,12 +154,18 @@ describe('Tests suite for string utilities', () => {
     `(
       'should return "$expected" for str="$str", maxLength=$maxLength, ellipsis="$ellipsis"',
       ({ str, maxLength, ellipsis, expected }) => {
-        expect(truncate(str, maxLength, ellipsis)).toBe(expected);
+        // act
+        const result = truncate(str, maxLength, ellipsis);
+        // assert
+        expect(result).toBe(expected);
       }
     );
 
     it('should use default ellipsis when not provided', () => {
-      expect(truncate('hello world', 8)).toBe('hello...');
+      // act
+      const result = truncate('hello world', 8);
+      // assert
+      expect(result).toBe('hello...');
     });
   });
 
@@ -160,7 +184,10 @@ describe('Tests suite for string utilities', () => {
       ${null}                    | ${''}
       ${undefined}               | ${''}
     `('should return "$expected" for "$value"', ({ value, expected }) => {
-      expect(toKebabCase(value)).toBe(expected);
+      // act
+      const result = toKebabCase(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -179,7 +206,10 @@ describe('Tests suite for string utilities', () => {
       ${null}                    | ${''}
       ${undefined}               | ${''}
     `('should return "$expected" for "$value"', ({ value, expected }) => {
-      expect(toCamelCase(value)).toBe(expected);
+      // act
+      const result = toCamelCase(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -200,7 +230,10 @@ describe('Tests suite for string utilities', () => {
       ${null}                     | ${''}
       ${undefined}                | ${''}
     `('should return "$expected" for "$value"', ({ value, expected }) => {
-      expect(slugify(value)).toBe(expected);
+      // act
+      const result = slugify(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -219,7 +252,10 @@ describe('Tests suite for string utilities', () => {
       ${',a,b,c,'}     | ${['a', 'b', 'c']}
       ${'  a  ,  b  '} | ${['a', 'b']}
     `('should return $expected for "$raw"', ({ raw, expected }) => {
-      expect(parseCommaSeparatedList(raw)).toEqual(expected);
+      // act
+      const result = parseCommaSeparatedList(raw);
+      // assert
+      expect(result).toEqual(expected);
     });
   });
 });

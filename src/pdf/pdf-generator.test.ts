@@ -10,10 +10,10 @@ vi.mock('jspdf-autotable', async () => {
 describe('PdfGenerator', () => {
   describe('constructor and getters', () => {
     it('uses default options when none provided', () => {
-      // Act
+      // act
       const gen = new PdfGenerator();
 
-      // Assert
+      // assert
       expect(gen.filename).toBe('report.pdf');
       expect(gen.margin).toBe(0.5);
       expect(gen.theme.fontSize.tiny).toBe(7);
@@ -21,23 +21,23 @@ describe('PdfGenerator', () => {
     });
 
     it('merges custom options with defaults', () => {
-      // Arrange
+      // arrange
       const options = { filename: 'custom.pdf', margin: 1, hasFooter: false };
 
-      // Act
+      // act
       const gen = new PdfGenerator(options);
 
-      // Assert
+      // assert
       expect(gen.filename).toBe('custom.pdf');
       expect(gen.margin).toBe(1);
       expect(gen.theme.fontSize.tiny).toBe(7);
     });
 
     it('exposes page dimensions', () => {
-      // Act
+      // act
       const gen = new PdfGenerator();
 
-      // Assert
+      // assert
       expect(gen.pageWidth).toBeGreaterThan(0);
       expect(gen.pageHeight).toBeGreaterThan(0);
       expect(gen.pageSize.width).toBe(gen.pageWidth);
@@ -45,143 +45,143 @@ describe('PdfGenerator', () => {
     });
 
     it('availableWidth is pageWidth minus twice margin', () => {
-      // Act
+      // act
       const gen = new PdfGenerator({ margin: 0.5 });
 
-      // Assert
+      // assert
       expect(gen.availableWidth).toBe(gen.pageWidth - 2 * 0.5);
     });
 
     it('availableHeight is pageHeight minus twice margin', () => {
-      // Act
+      // act
       const gen = new PdfGenerator({ margin: 0.5 });
 
-      // Assert
+      // assert
       expect(gen.availableHeight).toBe(gen.pageHeight - 2 * 0.5);
     });
 
     it('footerHeight is 0 when hasFooter is false', () => {
-      // Act
+      // act
       const gen = new PdfGenerator({ hasFooter: false });
 
-      // Assert
+      // assert
       expect(gen.footerHeight).toBe(0);
     });
 
     it('footerHeight is positive when hasFooter is true', () => {
-      // Act
+      // act
       const gen = new PdfGenerator({ hasFooter: true });
 
-      // Assert
+      // assert
       expect(gen.footerHeight).toBeGreaterThan(0);
     });
 
     it('footerFontSizePoints returns theme tiny fontSize', () => {
-      // Act
+      // act
       const gen = new PdfGenerator();
 
-      // Assert
+      // assert
       expect(gen.footerFontSizePoints).toBe(7);
     });
   });
 
   describe('currentY and layout', () => {
     it('currentY starts at margin', () => {
-      // Act
+      // act
       const gen = new PdfGenerator({ margin: 0.5 });
 
-      // Assert
+      // assert
       expect(gen.currentY).toBe(0.5);
     });
 
     it('setCurrentY updates currentY', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
 
-      // Act
+      // act
       gen.setCurrentY(2.5);
 
-      // Assert
+      // assert
       expect(gen.currentY).toBe(2.5);
     });
 
     it('addVerticalGap increases currentY', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const initial = gen.currentY;
 
-      // Act
+      // act
       gen.addVerticalGap(0.25);
 
-      // Assert
+      // assert
       expect(gen.currentY).toBe(initial + 0.25);
     });
   });
 
   describe('addTable', () => {
     it('returns startY and does not advance currentY when body is empty', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const startY = gen.currentY;
 
-      // Act
+      // act
       const result = gen.addTable({ body: [] });
 
-      // Assert
+      // assert
       expect(result).toBe(startY);
       expect(gen.currentY).toBe(startY);
     });
 
     it('advances currentY when body has rows', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const startY = gen.currentY;
 
-      // Act
+      // act
       gen.addTable({
         body: [['A', 'B'], ['1', '2']],
       });
 
-      // Assert
+      // assert
       expect(gen.currentY).toBeGreaterThan(startY);
     });
 
     it('accepts optional head row', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
 
-      // Act
+      // act
       gen.addTable({
         head: ['Col1', 'Col2'],
         body: [['a', 'b']],
       });
 
-      // Assert
+      // assert
       expect(gen.currentY).toBeGreaterThan(gen.margin);
     });
 
     describe('tableAlign', () => {
       it('defaults to left — margin.left/right both equal generator margin', () => {
-        // Arrange
+        // arrange
         const gen = new PdfGenerator();
 
-        // Act
+        // act
         gen.addTable({ body: [['a', 'b']] });
 
-        // Assert
+        // assert
         const lastCall = vi.mocked(autoTable).mock.calls.at(-1)?.[1];
         expect(lastCall?.margin).toEqual({ left: gen.margin, right: gen.margin });
       });
 
       it('centers a table narrower than availableWidth when tableAlign is center', () => {
-        // Arrange
+        // arrange
         const gen = new PdfGenerator();
         const columnWidths = [gen.availableWidth / 4, gen.availableWidth / 4];
 
-        // Act
+        // act
         gen.addTable({ body: [['a', 'b']], columnWidths, tableAlign: 'center' });
 
-        // Assert
+        // assert
         const tableWidth = columnWidths[0] + columnWidths[1];
         const halfLeftover = (gen.availableWidth - tableWidth) / 2;
         const lastCall = vi.mocked(autoTable).mock.calls.at(-1)?.[1];
@@ -189,14 +189,14 @@ describe('PdfGenerator', () => {
       });
 
       it('right-aligns a table narrower than availableWidth when tableAlign is right', () => {
-        // Arrange
+        // arrange
         const gen = new PdfGenerator();
         const columnWidths = [gen.availableWidth / 4, gen.availableWidth / 4];
 
-        // Act
+        // act
         gen.addTable({ body: [['a', 'b']], columnWidths, tableAlign: 'right' });
 
-        // Assert
+        // assert
         const tableWidth = columnWidths[0] + columnWidths[1];
         const leftover = gen.availableWidth - tableWidth;
         const lastCall = vi.mocked(autoTable).mock.calls.at(-1)?.[1];
@@ -204,14 +204,14 @@ describe('PdfGenerator', () => {
       });
 
       it('does not warn or throw when tableAlign is omitted and columnWidths spans full width', () => {
-        // Arrange
+        // arrange
         const gen = new PdfGenerator();
         const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-        // Act
+        // act
         const act = () => gen.addTable({ body: [['a', 'b']], tableAlign: 'center' });
 
-        // Assert
+        // assert
         expect(act).not.toThrow();
         expect(warn).not.toHaveBeenCalled();
         warn.mockRestore();
@@ -221,13 +221,13 @@ describe('PdfGenerator', () => {
 
   describe('addImage', () => {
     it('does not change currentY', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const doc = gen.getDoc();
       vi.spyOn(doc, 'addImage').mockImplementation(() => {});
       const before = gen.currentY;
 
-      // Act
+      // act
       gen.addImage({
         dataUri: 'data:image/png;base64,placeholder',
         x: gen.margin,
@@ -236,51 +236,51 @@ describe('PdfGenerator', () => {
         height: 1,
       });
 
-      // Assert
+      // assert
       expect(gen.currentY).toBe(before);
     });
   });
 
   describe('addFullPagePNG', () => {
     it('advances currentY after adding image', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const doc = gen.getDoc();
       vi.spyOn(doc, 'addImage').mockImplementation(() => {});
       const before = gen.currentY;
 
-      // Act
+      // act
       gen.addFullPagePNG('data:image/png;base64,placeholder', 16 / 9);
 
-      // Assert
+      // assert
       expect(gen.currentY).toBeGreaterThan(before);
     });
   });
 
   describe('addPage', () => {
     it('increases page count', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const doc = gen.getDoc();
       expect(doc.getNumberOfPages()).toBe(1);
 
-      // Act
+      // act
       gen.addPage();
 
-      // Assert
+      // assert
       expect(doc.getNumberOfPages()).toBe(2);
     });
   });
 
   describe('getDoc', () => {
     it('returns the jsPDF instance', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
 
-      // Act
+      // act
       const doc = gen.getDoc();
 
-      // Assert
+      // assert
       expect(doc).toBeDefined();
       expect(typeof doc.getNumberOfPages).toBe('function');
     });
@@ -288,27 +288,27 @@ describe('PdfGenerator', () => {
 
   describe('checkTableOverflow', () => {
     it('does not warn when column sum is within available width', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      // Act
+      // act
       gen.checkTableOverflow([gen.availableWidth / 2, gen.availableWidth / 2]);
 
-      // Assert
+      // assert
       expect(warn).not.toHaveBeenCalled();
       warn.mockRestore();
     });
 
     it('warns when column sum exceeds available width', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      // Act
+      // act
       gen.checkTableOverflow([gen.availableWidth, gen.availableWidth]);
 
-      // Assert
+      // assert
       expect(warn).toHaveBeenCalledWith(
         '[checkTableOverflow] table overflow',
         expect.objectContaining({
@@ -322,37 +322,38 @@ describe('PdfGenerator', () => {
 
   describe('renderFooters', () => {
     it('warns and returns early when hasFooter is false', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator({ hasFooter: false });
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      // Act
+      // act
       gen.renderFooters();
 
-      // Assert
+      // assert
       expect(warn).toHaveBeenCalledWith('[renderFooters] Footer is disabled');
       warn.mockRestore();
     });
 
     it('does not throw when hasFooter is true', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator({ hasFooter: true });
       const act = () => gen.renderFooters();
 
-      // Act & Assert
+      // act
+      // assert
       expect(act).not.toThrow();
     });
   });
 
   describe('font setter', () => {
     it('updates font', () => {
-      // Arrange
+      // arrange
       const gen = new PdfGenerator();
 
-      // Act
+      // act
       gen.font = 'times';
 
-      // Assert
+      // assert
       expect(gen.font).toBe('times');
     });
   });

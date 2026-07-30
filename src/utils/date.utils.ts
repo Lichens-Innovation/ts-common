@@ -73,3 +73,14 @@ export const isActiveTimestamp = (timestamp: number): boolean => {
   const now = getCurrentUnixTimestamp();
   return timestamp <= now;
 };
+
+
+export const dateToNumberRange = (range: [Date, Date]): [number, number] => {
+  const [start, end] = range;
+  return [start.getTime(), end.getTime()];
+};
+
+export const numberToDateRange = (range: [number, number]): [Date, Date] => {
+  const [start, end] = range;
+  return [new Date(start), new Date(end)];
+};

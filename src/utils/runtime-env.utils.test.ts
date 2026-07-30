@@ -8,43 +8,43 @@ describe('runtime-env utilities', () => {
 
   describe('isRuntimeEnvNodeJs', () => {
     it('returns true when running in Node.js (no window, process.versions.node present)', () => {
-      // Arrange & Act
+      // act
       const result = isRuntimeEnvNodeJs();
 
-      // Assert
+      // assert
       expect(result).toBe(true);
     });
 
     it('returns false when window is defined (browser-like env)', () => {
-      // Arrange
+      // arrange
       vi.stubGlobal('window', {});
 
-      // Act
+      // act
       const result = isRuntimeEnvNodeJs();
 
-      // Assert
+      // assert
       expect(result).toBe(false);
     });
 
     it('returns false when process is undefined', () => {
-      // Arrange
+      // arrange
       vi.stubGlobal('process', undefined);
 
-      // Act
+      // act
       const result = isRuntimeEnvNodeJs();
 
-      // Assert
+      // assert
       expect(result).toBe(false);
     });
 
     it('returns false when process.versions.node is nullish (e.g. Web Worker)', () => {
-      // Arrange
+      // arrange
       vi.stubGlobal('process', { versions: {} });
 
-      // Act
+      // act
       const result = isRuntimeEnvNodeJs();
 
-      // Assert
+      // assert
       expect(result).toBe(false);
     });
   });

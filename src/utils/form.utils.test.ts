@@ -24,7 +24,10 @@ describe('Tests suite for form utilities', () => {
       ${'12abc'} | ${null}
       ${'Infinity'} | ${null}
     `('should return $expected for "$value"', ({ value, expected }) => {
-      expect(parseOptionalFormNumber(value)).toBe(expected);
+      // act
+      const result = parseOptionalFormNumber(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -41,7 +44,10 @@ describe('Tests suite for form utilities', () => {
       ${Infinity} | ${''}
       ${-Infinity} | ${''}
     `('should return "$expected" for $n', ({ n, expected }) => {
-      expect(toFormString(n)).toBe(expected);
+      // act
+      const result = toFormString(n);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -60,7 +66,10 @@ describe('Tests suite for form utilities', () => {
       ${-1.5}                | ${'-1'}
       ${3700.0000000000005}  | ${'3700'}
     `('should return "$expected" for $n', ({ n, expected }) => {
-      expect(toFormStringInteger(n)).toBe(expected);
+      // act
+      const result = toFormStringInteger(n);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 });

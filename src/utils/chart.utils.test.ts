@@ -18,7 +18,10 @@ describe('chart.utils', () => {
       ${[]}              | ${[0, 0]}
       ${[0, 100]}        | ${[0, 100]}
     `('returns $expected for ticks $ticks', ({ ticks, expected }) => {
-      expect(getTickDomain(ticks)).toEqual(expected);
+      // act
+      const result = getTickDomain(ticks);
+      // assert
+      expect(result).toEqual(expected);
     });
   });
 
@@ -33,7 +36,10 @@ describe('chart.utils', () => {
       ${99.9} | ${'100'}
       ${1000} | ${'1000'}
     `('formats $value as $expected', ({ value, expected }) => {
-      expect(tickFormatter(value)).toBe(expected);
+      // act
+      const result = tickFormatter(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -46,7 +52,10 @@ describe('chart.utils', () => {
       ${0.5} | ${'±50%'}
       ${1}   | ${'±100%'}
     `('returns $expected for $value', ({ value, expected }) => {
-      expect(toToleranceLabel(value)).toBe(expected);
+      // act
+      const result = toToleranceLabel(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -60,7 +69,10 @@ describe('chart.utils', () => {
         ${10.126} | ${'10.13'}
         ${99.999} | ${'100.00'}
       `('formats $value as $expected', ({ value, expected }) => {
-        expect(tooltipValueFormatter(value)).toBe(expected);
+        // act
+        const result = tooltipValueFormatter(value);
+        // assert
+        expect(result).toBe(expected);
       });
     });
 
@@ -72,29 +84,48 @@ describe('chart.utils', () => {
         ${[5.5, 10.5]}    | ${'[5.50 … 10.50]'}
         ${[1.234, 5.678]} | ${'[1.23 … 5.68]'}
       `('formats range $range as $expected', ({ range, expected }) => {
-        expect(tooltipValueFormatter(range)).toBe(expected);
+        // act
+        const result = tooltipValueFormatter(range);
+        // assert
+        expect(result).toBe(expected);
       });
     });
 
     describe('fallback for non-numeric / invalid input', () => {
       it('returns string as-is for string input', () => {
-        expect(tooltipValueFormatter('hello')).toBe('hello');
-        expect(tooltipValueFormatter('42')).toBe('42');
+        // act
+        const helloResult = tooltipValueFormatter('hello');
+        const numericStringResult = tooltipValueFormatter('42');
+        // assert
+        expect(helloResult).toBe('hello');
+        expect(numericStringResult).toBe('42');
       });
 
       it('returns empty string for null and undefined', () => {
-        expect(tooltipValueFormatter(null)).toBe('');
-        expect(tooltipValueFormatter(undefined)).toBe('');
+        // act
+        const nullResult = tooltipValueFormatter(null);
+        const undefinedResult = tooltipValueFormatter(undefined);
+        // assert
+        expect(nullResult).toBe('');
+        expect(undefinedResult).toBe('');
       });
 
       it('returns string representation for object input', () => {
-        expect(tooltipValueFormatter({})).toBe('[object Object]');
-        expect(tooltipValueFormatter({ foo: 1 })).toBe('[object Object]');
+        // act
+        const emptyObjectResult = tooltipValueFormatter({});
+        const objectResult = tooltipValueFormatter({ foo: 1 });
+        // assert
+        expect(emptyObjectResult).toBe('[object Object]');
+        expect(objectResult).toBe('[object Object]');
       });
 
       it('returns string representation for array with non-numeric elements', () => {
-        expect(tooltipValueFormatter(['a', 'b'])).toBe('a,b');
-        expect(tooltipValueFormatter(['x'])).toBe('x');
+        // act
+        const multiElementResult = tooltipValueFormatter(['a', 'b']);
+        const singleElementResult = tooltipValueFormatter(['x']);
+        // assert
+        expect(multiElementResult).toBe('a,b');
+        expect(singleElementResult).toBe('x');
       });
     });
   });
@@ -107,7 +138,10 @@ describe('chart.utils', () => {
         ${-1}   | ${0}
         ${-100} | ${0}
       `('returns $expected for $value', ({ value, expected }) => {
-        expect(roundToNiceNumber(value)).toBe(expected);
+        // act
+        const result = roundToNiceNumber(value);
+        // assert
+        expect(result).toBe(expected);
       });
     });
 
@@ -120,7 +154,10 @@ describe('chart.utils', () => {
         ${0.7}  | ${1}
         ${0.9}  | ${1}
       `('rounds $value to $expected', ({ value, expected }) => {
-        expect(roundToNiceNumber(value)).toBe(expected);
+        // act
+        const result = roundToNiceNumber(value);
+        // assert
+        expect(result).toBe(expected);
       });
     });
 
@@ -138,7 +175,10 @@ describe('chart.utils', () => {
         ${6}   | ${10}
         ${8}   | ${10}
       `('rounds $value to $expected', ({ value, expected }) => {
-        expect(roundToNiceNumber(value)).toBe(expected);
+        // act
+        const result = roundToNiceNumber(value);
+        // assert
+        expect(result).toBe(expected);
       });
     });
 
@@ -153,7 +193,10 @@ describe('chart.utils', () => {
         ${60} | ${100}
         ${80} | ${100}
       `('rounds $value to $expected', ({ value, expected }) => {
-        expect(roundToNiceNumber(value)).toBe(expected);
+        // act
+        const result = roundToNiceNumber(value);
+        // assert
+        expect(result).toBe(expected);
       });
     });
 
@@ -166,7 +209,10 @@ describe('chart.utils', () => {
         ${1500} | ${2000}
         ${8000} | ${10000}
       `('rounds $value to $expected', ({ value, expected }) => {
-        expect(roundToNiceNumber(value)).toBe(expected);
+        // act
+        const result = roundToNiceNumber(value);
+        // assert
+        expect(result).toBe(expected);
       });
     });
   });
@@ -178,7 +224,10 @@ describe('chart.utils', () => {
         ${0}   | ${[0]}
         ${-10} | ${[0]}
       `('returns $expected for max=$max', ({ max, expected }) => {
-        expect(buildTicksForChart(max)).toEqual(expected);
+        // act
+        const result = buildTicksForChart(max);
+        // assert
+        expect(result).toEqual(expected);
       });
     });
 
@@ -192,8 +241,10 @@ describe('chart.utils', () => {
       `(
         'for max=$max: starts at $expectedFirst, ends at >= $expectedLast ($description)',
         ({ max, expectedFirst, expectedLast }) => {
+          // act
           const ticks = buildTicksForChart(max);
 
+          // assert
           expect(ticks[0]).toBe(expectedFirst);
           expect(ticks[ticks.length - 1]).toBeGreaterThanOrEqual(expectedLast);
         }
@@ -209,8 +260,10 @@ describe('chart.utils', () => {
       `(
         'for max=$max with target=$targetCount: produces between $minExpected and $maxExpected ticks',
         ({ max, targetCount, minExpected, maxExpected }) => {
+          // act
           const ticks = buildTicksForChart(max, targetCount);
 
+          // assert
           expect(ticks.length).toBeGreaterThanOrEqual(minExpected);
           expect(ticks.length).toBeLessThanOrEqual(maxExpected);
         }
@@ -225,8 +278,10 @@ describe('chart.utils', () => {
         ${250}
         ${1000}
       `('for max=$max: ticks are ascending from 0', ({ max }) => {
+        // act
         const ticks = buildTicksForChart(max);
 
+        // assert
         expect(ticks[0]).toBe(0);
         for (let i = 1; i < ticks.length; i++) {
           expect(ticks[i]).toBeGreaterThan(ticks[i - 1]);
@@ -236,9 +291,11 @@ describe('chart.utils', () => {
 
     describe('ticks are nice numbers', () => {
       it('all ticks should be divisible by the increment', () => {
+        // act
         const ticks = buildTicksForChart(100);
         const increment = ticks[1] - ticks[0];
 
+        // assert
         for (const tick of ticks) {
           expect(tick % increment).toBe(0);
         }

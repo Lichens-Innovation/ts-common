@@ -4,13 +4,13 @@ import { getErrorMessage, toError } from './errors.utils';
 describe('Tests suite for errors utilities', () => {
   describe('toError', () => {
     it('should return the same Error instance when given an Error', () => {
-      // Arrange
+      // arrange
       const err = new Error('Existing error');
 
-      // Act
+      // act
       const result = toError(err);
 
-      // Assert
+      // assert
       expect(result).toBe(err);
       expect(result.message).toBe('Existing error');
     });
@@ -30,10 +30,10 @@ describe('Tests suite for errors utilities', () => {
       ${{}}                                    | ${'{}'}
       ${{ key: 'value' }}                      | ${'{"key":"value"}'}
     `('should return a new Error with message "$expectedMessage" for error=$error', ({ error, expectedMessage }) => {
-      // Act
+      // act
       const result = toError(error);
 
-      // Assert
+      // assert
       expect(result).toBeInstanceOf(Error);
       expect(result.message).toBe(expectedMessage);
     });
@@ -58,7 +58,10 @@ describe('Tests suite for errors utilities', () => {
       ${42}                                    | ${'42'}
       ${true}                                  | ${'true'}
     `('should return "$expected" for error=$error', ({ error, expected }) => {
-      expect(getErrorMessage(error)).toBe(expected);
+      // act
+      const result = getErrorMessage(error);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 });

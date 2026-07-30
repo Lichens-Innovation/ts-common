@@ -19,7 +19,10 @@ describe('Tests suite for filename utilities', () => {
       ${'noextension'} | ${''}
       ${'file.'}      | ${''}
     `('should return "$expected" for "$filename"', ({ filename, expected }) => {
-      expect(getFileExtension(filename)).toBe(expected);
+      // act
+      const result = getFileExtension(filename);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 });

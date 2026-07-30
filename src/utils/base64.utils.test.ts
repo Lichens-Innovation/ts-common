@@ -11,16 +11,25 @@ describe('base64.utils', () => {
       ${'emoji: \uD83D\uDE00'}
       ${''}
     `('round-trips "$text"', ({ text }) => {
+      // act
       const encoded = encodeBase64(text);
-      expect(decodeBase64(encoded)).toBe(text);
+      const decoded = decodeBase64(encoded);
+      // assert
+      expect(decoded).toBe(text);
     });
 
     it('encodes ASCII to known base64', () => {
-      expect(encodeBase64('hello')).toBe('aGVsbG8=');
+      // act
+      const result = encodeBase64('hello');
+      // assert
+      expect(result).toBe('aGVsbG8=');
     });
 
     it('returns empty string on invalid decode input gracefully', () => {
-      expect(decodeBase64('!!!invalid!!!')).toBe('');
+      // act
+      const result = decodeBase64('!!!invalid!!!');
+      // assert
+      expect(result).toBe('');
     });
   });
 });

@@ -18,7 +18,10 @@ describe('ExcelJS utilities', () => {
       ${'a'.repeat(40)}       | ${'a'.repeat(31)}
       ${'Colon:Slash/Back\\\\'} | ${'ColonSlashBack'}
     `('returns "$expected" for "$title"', ({ title, expected }) => {
-      expect(sanitizeWorksheetTitle(title)).toBe(expected);
+      // act
+      const result = sanitizeWorksheetTitle(title);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -29,17 +32,22 @@ describe('ExcelJS utilities', () => {
     };
 
     it('returns a Blob with xlsx MIME type', async () => {
+      // arrange
       const data = [{ name: 'Alice', score: 100 }];
+      // act
       const blob = await generateExcelBlob({
         worksheetTitle: 'Scores',
         data,
         columnsMetadata,
       });
+      // assert
       expect(blob).toBeInstanceOf(Blob);
       expect(blob.type).toBe('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     });
 
     it('throws when data is empty', async () => {
+      // act
+      // assert
       await expect(
         generateExcelBlob({
           worksheetTitle: 'Empty',
@@ -50,12 +58,15 @@ describe('ExcelJS utilities', () => {
     });
 
     it('sanitizes worksheet title in output', async () => {
+      // arrange
       const data = [{ name: 'X', score: 1 }];
+      // act
       const blob = await generateExcelBlob({
         worksheetTitle: 'Report:Summary/2024',
         data,
         columnsMetadata,
       });
+      // assert
       expect(blob.size).toBeGreaterThan(0);
     });
   });

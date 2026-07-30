@@ -23,7 +23,10 @@ describe('Tests suite for units utilities', () => {
       ${null}    | ${0}
       ${undefined}| ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
-      expect(fromM3psToGPM(value)).toBeCloseTo(expected, 5);
+      // act
+      const result = fromM3psToGPM(value);
+      // assert
+      expect(result).toBeCloseTo(expected, 5);
     });
   });
 
@@ -37,7 +40,10 @@ describe('Tests suite for units utilities', () => {
       ${null}    | ${0}
       ${undefined}| ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
-      expect(fromPaToFt(value)).toBeCloseTo(expected, 10);
+      // act
+      const result = fromPaToFt(value);
+      // assert
+      expect(result).toBeCloseTo(expected, 10);
     });
   });
 
@@ -51,7 +57,10 @@ describe('Tests suite for units utilities', () => {
       ${null}    | ${0}
       ${undefined}| ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
-      expect(fromWToHp(value)).toBeCloseTo(expected, 10);
+      // act
+      const result = fromWToHp(value);
+      // assert
+      expect(result).toBeCloseTo(expected, 10);
     });
   });
 
@@ -65,7 +74,10 @@ describe('Tests suite for units utilities', () => {
       ${null}    | ${0}
       ${undefined}| ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
-      expect(fromMToInches(value)).toBeCloseTo(expected, 10);
+      // act
+      const result = fromMToInches(value);
+      // assert
+      expect(result).toBeCloseTo(expected, 10);
     });
   });
 
@@ -79,7 +91,10 @@ describe('Tests suite for units utilities', () => {
       ${null}    | ${0}
       ${undefined}| ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
-      expect(fromHzToRpm(value)).toBe(expected);
+      // act
+      const result = fromHzToRpm(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -92,8 +107,8 @@ describe('Tests suite for units utilities', () => {
       ${M_TO_INCHES}| ${39.3701}
       ${HZ_TO_RPM}  | ${60}
     `('should have correct value for $constant', ({ constant, expected }) => {
+      // assert
       expect(constant).toBe(expected);
     });
   });
 });
-
