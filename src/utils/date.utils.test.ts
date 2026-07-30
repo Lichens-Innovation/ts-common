@@ -3,6 +3,7 @@ import {
   dateAs_HHMMSS,
   dateAs_YYYYMMDD,
   dateAs_YYYYMMDD_HHMMSS,
+  dateToNumberRange,
   formatUnixTimestamp,
   getCurrentUnixTimestamp,
   isActiveTimestamp,
@@ -11,6 +12,7 @@ import {
   nowAsDateTime,
   nowAsDateTimeForFilename,
   nowAsTime,
+  numberToDateRange,
 } from './date.utils';
 
 describe('Tests suite for date utilities', () => {
@@ -187,6 +189,31 @@ describe('Tests suite for date utilities', () => {
     it('should return true for the current timestamp', () => {
       const currentTimestamp = 1710504000; // exactly mocked time
       expect(isActiveTimestamp(currentTimestamp)).toBe(true);
+    });
+  });
+
+  describe('dateToNumberRange', () => {
+    it('should convert a [Date, Date] range to a [number, number] range', () => {
+      const start = new Date('2024-03-15T00:00:00Z');
+      const end = new Date('2024-03-20T00:00:00Z');
+      expect(dateToNumberRange([start, end])).toEqual([start.getTime(), end.getTime()]);
+    });
+  });
+
+  describe('numberToDateRange', () => {
+    it('should convert a [number, number] range to a [Date, Date] range', () => {
+      const start = new Date('2024-03-15T00:00:00Z').getTime();
+      const end = new Date('2024-03-20T00:00:00Z').getTime();
+      expect(numberToDateRange([start, end])).toEqual([new Date(start), new Date(end)]);
+    });
+  });
+
+  describe('dateToNumberRange / numberToDateRange round-trip', () => {
+    it('should return an equivalent date range after converting back and forth', () => {
+      const start = new Date('2024-03-15T00:00:00Z');
+      const end = new Date('2024-03-20T00:00:00Z');
+      const roundTripped = numberToDateRange(dateToNumberRange([start, end]));
+      expect(roundTripped).toEqual([start, end]);
     });
   });
 });

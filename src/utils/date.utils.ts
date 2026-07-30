@@ -75,11 +75,6 @@ export const isActiveTimestamp = (timestamp: number): boolean => {
 };
 
 
-export const formatDate = (date?: Date | null): string | null => {
-  if (!date) return null;
-  return format(new Date(date), "yyyy-MM-dd HH:mm:ss");
-};
-
 export const dateToNumberRange = (range: [Date, Date]): [number, number] => {
   const [start, end] = range;
   return [start.getTime(), end.getTime()];
