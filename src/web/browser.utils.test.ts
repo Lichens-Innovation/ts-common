@@ -14,12 +14,19 @@ describe('Browser utilities', () => {
 
   describe('getCurrentUrl', () => {
     it('returns window.location.href when window is defined', () => {
-      expect(getCurrentUrl()).toBe('https://example.com/path');
+      // act
+      const result = getCurrentUrl();
+      // assert
+      expect(result).toBe('https://example.com/path');
     });
 
     it('returns empty string when window is undefined', () => {
+      // arrange
       vi.stubGlobal('window', undefined);
-      expect(getCurrentUrl()).toBe('');
+      // act
+      const result = getCurrentUrl();
+      // assert
+      expect(result).toBe('');
     });
   });
 });

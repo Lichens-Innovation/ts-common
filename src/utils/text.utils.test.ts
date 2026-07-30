@@ -13,7 +13,10 @@ describe('text.utils', () => {
       ${''}                              | ${''}
       ${'   '}                           | ${''}
     `('firstSentence("$input") → "$expected"', ({ input, expected }) => {
-      expect(firstSentence(input)).toBe(expected);
+      // act
+      const result = firstSentence(input);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -27,7 +30,9 @@ describe('text.utils', () => {
       ${''}                | ${'my-agent'} | ${'My Agent'}
       ${'three-part-name'} | ${undefined}  | ${'Three Part Name'}
     `('titleFromName("$name") → "$expected"', ({ name, fallback, expected }) => {
+      // act
       const result = fallback !== undefined ? titleFromName({ name, fallback }) : titleFromName({ name });
+      // assert
       expect(result).toBe(expected);
     });
   });
@@ -41,7 +46,10 @@ describe('text.utils', () => {
       ${['a', 'b', 'c']}      | ${'a, b or c'}
       ${['a', 'b', 'c', 'd']} | ${'a, b, c or d'}
     `('joinOxford($items) → "$expected"', ({ items, expected }) => {
-      expect(joinOxford(items)).toBe(expected);
+      // act
+      const result = joinOxford(items);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 });

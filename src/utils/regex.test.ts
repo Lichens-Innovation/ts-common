@@ -16,7 +16,10 @@ describe('Tests suite for known regexes', () => {
       ${'abc123!'}   | ${false}
       ${'Père Noël'} | ${false}
     `('should return $expected for "$value"', ({ value, expected }) => {
-      expect(REGEX_ALPHANUMERIC.test(value)).toBe(expected);
+      // act
+      const result = REGEX_ALPHANUMERIC.test(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -48,7 +51,10 @@ describe('Tests suite for known regexes', () => {
       ${'192..168.1.1'}    | ${false}
       ${'999.999.999.999'} | ${false}
     `('should return $expected for "$value"', ({ value, expected }) => {
-      expect(REGEX_IPV4.test(value)).toBe(expected);
+      // act
+      const result = REGEX_IPV4.test(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 });

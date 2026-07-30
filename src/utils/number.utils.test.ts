@@ -31,7 +31,10 @@ describe('Tests suite for number utilities', () => {
       ${null}      | ${0}
       ${undefined} | ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
-      expect(getOrderOfMagnitudeExponent(value)).toBe(expected);
+      // act
+      const result = getOrderOfMagnitudeExponent(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -45,7 +48,10 @@ describe('Tests suite for number utilities', () => {
       ${null}      | ${0}
       ${undefined} | ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
-      expect(roundUpToNearest10(value)).toBe(expected);
+      // act
+      const result = roundUpToNearest10(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
   describe('toFixed', () => {
@@ -69,10 +75,15 @@ describe('Tests suite for number utilities', () => {
       ${undefined} | ${2}         | ${0}
       ${3.14159}   | ${undefined} | ${3}
     `('should return $expected for value=$value and decimals=$decimals', ({ value, decimals, expected }) => {
-      expect(toFixed(value, decimals)).toBe(expected);
+      // act
+      const result = toFixed(value, decimals);
+      // assert
+      expect(result).toBe(expected);
     });
 
     it('should throw error when decimals is negative', () => {
+      // act
+      // assert
       expect(() => toFixed(3.14, -1)).toThrow('[toFixed] decimals must be >= 0');
     });
   });
@@ -92,7 +103,10 @@ describe('Tests suite for number utilities', () => {
       ${'NaN'}    | ${false}
       ${'1.2.3'}  | ${false}
     `('should return $expected for value="$value"', ({ value, expected }) => {
-      expect(isInputValidNumber(value)).toBe(expected);
+      // act
+      const result = isInputValidNumber(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -108,7 +122,10 @@ describe('Tests suite for number utilities', () => {
       ${'-7'}     | ${true}
       ${' 100 '}  | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
-      expect(isInputValidInteger(value)).toBe(expected);
+      // act
+      const result = isInputValidInteger(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -125,7 +142,10 @@ describe('Tests suite for number utilities', () => {
       ${'42'}     | ${true}
       ${' 100 '}  | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
-      expect(isInputValidPositiveInteger(value)).toBe(expected);
+      // act
+      const result = isInputValidPositiveInteger(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -142,7 +162,10 @@ describe('Tests suite for number utilities', () => {
       ${'-7'}     | ${true}
       ${' -100 '} | ${true}
     `('should return $expected for value="$value"', ({ value, expected }) => {
-      expect(isInputValidNegativeInteger(value)).toBe(expected);
+      // act
+      const result = isInputValidNegativeInteger(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -153,7 +176,10 @@ describe('Tests suite for number utilities', () => {
       ${1500}      | ${'1.5K'}
       ${2_500_000} | ${'2.5M'}
     `('should return $expected for count=$count', ({ count, expected }) => {
-      expect(formatCount(count)).toBe(expected);
+      // act
+      const result = formatCount(count);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -163,7 +189,10 @@ describe('Tests suite for number utilities', () => {
       ${150}  | ${'150ms'}
       ${2500} | ${'2.5s'}
     `('should return $expected for ms=$ms', ({ ms, expected }) => {
-      expect(formatDuration(ms)).toBe(expected);
+      // act
+      const result = formatDuration(ms);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -178,7 +207,10 @@ describe('Tests suite for number utilities', () => {
       ${null}      | ${'0'}
       ${undefined} | ${'0'}
     `('should return "$expected" for value=$value', ({ value, expected }) => {
-      expect(formatIntegerDisplay(value)).toBe(expected);
+      // act
+      const result = formatIntegerDisplay(value);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -193,24 +225,35 @@ describe('Tests suite for number utilities', () => {
       ${null}      | ${null}
       ${undefined} | ${null}
     `('round-trips $val through format→parse', ({ val, rawExpected }) => {
+      // act
       const formatted = formatWithSpaceSeparator(val);
+      // assert
       if (rawExpected === null) {
         expect(formatted).toBe('');
       } else {
-        expect(parseWithSpaceSeparator(formatted)).toBe(rawExpected);
+        const parsed = parseWithSpaceSeparator(formatted);
+        expect(parsed).toBe(rawExpected);
       }
     });
   });
 
   describe('parseWithSpaceSeparator', () => {
     it('returns NaN for undefined', () => {
-      expect(parseWithSpaceSeparator(undefined)).toBeNaN();
+      // act
+      const result = parseWithSpaceSeparator(undefined);
+      // assert
+      expect(result).toBeNaN();
     });
 
     it('round-trips numbers through format→parse', () => {
-      expect(parseWithSpaceSeparator(formatWithSpaceSeparator(1000))).toBe(1000);
-      expect(parseWithSpaceSeparator(formatWithSpaceSeparator(1000000))).toBe(1000000);
-      expect(parseWithSpaceSeparator(formatWithSpaceSeparator(999))).toBe(999);
+      // act
+      const roundTripped1000 = parseWithSpaceSeparator(formatWithSpaceSeparator(1000));
+      const roundTripped1000000 = parseWithSpaceSeparator(formatWithSpaceSeparator(1000000));
+      const roundTripped999 = parseWithSpaceSeparator(formatWithSpaceSeparator(999));
+      // assert
+      expect(roundTripped1000).toBe(1000);
+      expect(roundTripped1000000).toBe(1000000);
+      expect(roundTripped999).toBe(999);
     });
   });
 });

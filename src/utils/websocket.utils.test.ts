@@ -20,7 +20,10 @@ describe('Tests suite for websocket utilities', () => {
       ${'CLOSING state'}                 | ${createMockWebSocket(WebSocket.CLOSING)}     | ${false}
       ${'CLOSED state'}                  | ${createMockWebSocket(WebSocket.CLOSED)}      | ${false}
     `('should return $expected for $description', ({ ws, expected }) => {
-      expect(isWsClosable(ws)).toBe(expected);
+      // act
+      const result = isWsClosable(ws);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -34,48 +37,70 @@ describe('Tests suite for websocket utilities', () => {
       ${'CLOSING state'}                 | ${createMockWebSocket(WebSocket.CLOSING)}     | ${false}
       ${'CLOSED state'}                  | ${createMockWebSocket(WebSocket.CLOSED)}      | ${false}
     `('should return $expected for $description', ({ ws, expected }) => {
-      expect(isWsOpenOrConnecting(ws)).toBe(expected);
+      // act
+      const result = isWsOpenOrConnecting(ws);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
   describe('closeWebSocket', () => {
     it('should not throw for null', () => {
+      // act
+      // assert
       expect(() => closeWebSocket(null)).not.toThrow();
     });
 
     it('should not throw for undefined', () => {
+      // act
+      // assert
       expect(() => closeWebSocket(undefined)).not.toThrow();
     });
 
     it('should call close() on CONNECTING websocket', () => {
+      // arrange
       const mockWs = createMockWebSocket(WebSocket.CONNECTING);
+      // act
       closeWebSocket(mockWs);
+      // assert
       expect(mockWs.close).toHaveBeenCalledOnce();
     });
 
     it('should call close() on OPEN websocket', () => {
+      // arrange
       const mockWs = createMockWebSocket(WebSocket.OPEN);
+      // act
       closeWebSocket(mockWs);
+      // assert
       expect(mockWs.close).toHaveBeenCalledOnce();
     });
 
     it('should not call close() on CLOSING websocket', () => {
+      // arrange
       const mockWs = createMockWebSocket(WebSocket.CLOSING);
+      // act
       closeWebSocket(mockWs);
+      // assert
       expect(mockWs.close).not.toHaveBeenCalled();
     });
 
     it('should not call close() on CLOSED websocket', () => {
+      // arrange
       const mockWs = createMockWebSocket(WebSocket.CLOSED);
+      // act
       closeWebSocket(mockWs);
+      // assert
       expect(mockWs.close).not.toHaveBeenCalled();
     });
 
     it('should swallow errors thrown by close()', () => {
+      // arrange
       const mockWs = createMockWebSocket(WebSocket.OPEN);
       (mockWs.close as ReturnType<typeof vi.fn>).mockImplementation(() => {
         throw new Error('WebSocket close error');
       });
+      // act
+      // assert
       expect(() => closeWebSocket(mockWs)).not.toThrow();
     });
   });

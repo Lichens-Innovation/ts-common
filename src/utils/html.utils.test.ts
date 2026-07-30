@@ -12,42 +12,70 @@ describe('html.utils', () => {
       ${'&#39;'}  | ${"'"}
       ${'&#x27;'} | ${"'"}
     `('unescapes named and numeric entities ($input → $expected)', ({ input, expected }) => {
-      expect(unescapeHtml(input)).toBe(expected);
+      // act
+      const result = unescapeHtml(input);
+      // assert
+      expect(result).toBe(expected);
     });
 
     it('returns empty string for empty input', () => {
-      expect(unescapeHtml('')).toBe('');
+      // act
+      const result = unescapeHtml('');
+      // assert
+      expect(result).toBe('');
     });
 
     it('leaves plain text unchanged', () => {
-      expect(unescapeHtml('hello world')).toBe('hello world');
+      // act
+      const result = unescapeHtml('hello world');
+      // assert
+      expect(result).toBe('hello world');
     });
 
     it('unescapes multiple entities in one string', () => {
-      expect(unescapeHtml('a &amp; b &lt; c &gt; d')).toBe('a & b < c > d');
+      // act
+      const result = unescapeHtml('a &amp; b &lt; c &gt; d');
+      // assert
+      expect(result).toBe('a & b < c > d');
     });
 
     it('leaves entities not handled by the pattern unchanged', () => {
-      expect(unescapeHtml('&nbsp;')).toBe('&nbsp;');
+      // act
+      const result = unescapeHtml('&nbsp;');
+      // assert
+      expect(result).toBe('&nbsp;');
     });
 
     it('round-trips with escapeHtml for typical user content', () => {
+      // arrange
       const original = 'Label: <tag attr="v"> & \'mixed\'';
-      expect(unescapeHtml(escapeHtml(original))).toBe(original);
+      // act
+      const roundTripped = unescapeHtml(escapeHtml(original));
+      // assert
+      expect(roundTripped).toBe(original);
     });
   });
 
   describe('escapeHtml', () => {
     it('returns empty string for empty input', () => {
-      expect(escapeHtml('')).toBe('');
+      // act
+      const result = escapeHtml('');
+      // assert
+      expect(result).toBe('');
     });
 
     it('leaves plain text unchanged', () => {
-      expect(escapeHtml('hello world')).toBe('hello world');
+      // act
+      const result = escapeHtml('hello world');
+      // assert
+      expect(result).toBe('hello world');
     });
 
     it('escapes all special characters in one string', () => {
-      expect(escapeHtml('<a href="x">y & z\'s</a>')).toBe(
+      // act
+      const result = escapeHtml('<a href="x">y & z\'s</a>');
+      // assert
+      expect(result).toBe(
         '&lt;a href=&quot;x&quot;&gt;y &amp; z&#39;s&lt;/a&gt;',
       );
     });

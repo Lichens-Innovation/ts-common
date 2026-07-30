@@ -4,6 +4,7 @@ import { blobToDataUri, fetchUrlAsDataUri } from './fetch.utils';
 describe('Fetch utilities', () => {
   describe('blobToDataUri', () => {
     it('resolves with data URI when FileReader succeeds', async () => {
+      // arrange
       const dataUri = 'data:image/png;base64,iVBORw0KGgo=';
       const blob = new Blob(['fake'], { type: 'image/png' });
 
@@ -27,12 +28,15 @@ describe('Fetch utilities', () => {
         }
       );
 
+      // act
       const result = await blobToDataUri(blob);
+      // assert
       expect(result).toBe(dataUri);
       expect(readAsDataURL).toHaveBeenCalledWith(blob);
     });
 
     it('rejects when FileReader fails', async () => {
+      // arrange
       const blob = new Blob(['fake']);
       const err = new DOMException('read failed');
 
@@ -52,7 +56,10 @@ describe('Fetch utilities', () => {
         }
       );
 
-      await expect(blobToDataUri(blob)).rejects.toBe(err);
+      // act
+      const promise = blobToDataUri(blob);
+      // assert
+      await expect(promise).rejects.toBe(err);
     });
   });
 
@@ -82,6 +89,7 @@ describe('Fetch utilities', () => {
     });
 
     it('returns data URI when fetch succeeds and response is ok', async () => {
+      // arrange
       const blob = new Blob(['x'], { type: 'image/png' });
       vi.stubGlobal(
         'fetch',
@@ -93,11 +101,14 @@ describe('Fetch utilities', () => {
         )
       );
 
+      // act
       const result = await fetchUrlAsDataUri(mockUrl);
+      // assert
       expect(result).toBe('data:image/png;base64,abc');
     });
 
     it('returns null when response is not ok', async () => {
+      // arrange
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
       vi.stubGlobal(
         'fetch',
@@ -109,16 +120,21 @@ describe('Fetch utilities', () => {
         )
       );
 
+      // act
       const result = await fetchUrlAsDataUri(mockUrl);
+      // assert
       expect(result).toBeNull();
       warn.mockRestore();
     });
 
     it('returns null when fetch throws', async () => {
+      // arrange
       const error = vi.spyOn(console, 'error').mockImplementation(() => {});
       vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('Network error'))));
 
+      // act
       const result = await fetchUrlAsDataUri(mockUrl);
+      // assert
       expect(result).toBeNull();
       error.mockRestore();
     });

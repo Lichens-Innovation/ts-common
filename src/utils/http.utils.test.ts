@@ -22,7 +22,10 @@ describe('Tests suite for HTTP utilities', () => {
       ${0}       | ${false}
       ${100}     | ${false}
     `('should return $expected for status=$status', ({ status, expected }) => {
-      expect(isHttpSuccessStatus(status)).toBe(expected);
+      // act
+      const result = isHttpSuccessStatus(status);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -42,7 +45,10 @@ describe('Tests suite for HTTP utilities', () => {
       ${undefined}| ${false}
       ${0}       | ${false}
     `('should return $expected for status=$status', ({ status, expected }) => {
-      expect(isHttpClientErrorStatus(status)).toBe(expected);
+      // act
+      const result = isHttpClientErrorStatus(status);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -63,8 +69,10 @@ describe('Tests suite for HTTP utilities', () => {
       ${undefined}| ${false}
       ${0}       | ${false}
     `('should return $expected for status=$status', ({ status, expected }) => {
-      expect(isHttpServerErrorStatus(status)).toBe(expected);
+      // act
+      const result = isHttpServerErrorStatus(status);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 });
-

@@ -13,6 +13,7 @@ import {
 describe('Tests suite for URI utilities', () => {
   describe('SCHEME_PREFIXES', () => {
     it('should contain expected scheme prefixes', () => {
+      // assert
       expect(SCHEME_PREFIXES).toEqual({
         file: 'file',
         content: 'content',
@@ -49,7 +50,10 @@ describe('Tests suite for URI utilities', () => {
       ${null}                            | ${false} | ${'null value'}
       ${undefined}                       | ${false} | ${'undefined value'}
     `('should return $expected for $description', ({ uri, expected }) => {
-      expect(hasScheme(uri)).toBe(expected);
+      // act
+      const result = hasScheme(uri);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 
@@ -78,32 +82,46 @@ describe('Tests suite for URI utilities', () => {
 
   describe('encodeUrl and decodeUrl', () => {
     it('encodes and decodes URL components', () => {
+      // act
       const encoded = encodeUrl('hello world');
+      const decoded = decodeUrl(encoded);
+      // assert
       expect(encoded).toBe('hello%20world');
-      expect(decodeUrl(encoded)).toBe('hello world');
+      expect(decoded).toBe('hello world');
     });
 
     it('returns empty string for blank input', () => {
-      expect(encodeUrl()).toBe('');
-      expect(decodeUrl()).toBe('');
+      // act
+      const encoded = encodeUrl();
+      const decoded = decodeUrl();
+      // assert
+      expect(encoded).toBe('');
+      expect(decoded).toBe('');
     });
 
     it('returns original value when decode fails', () => {
-      expect(decodeUrl('%E0%A4%A')).toBe('%E0%A4%A');
+      // act
+      const result = decodeUrl('%E0%A4%A');
+      // assert
+      expect(result).toBe('%E0%A4%A');
     });
   });
 
   describe('formatDataUri', () => {
     it('builds a base64 data URI', () => {
-      expect(formatDataUri({ mimeType: 'image/png', base64: 'abc' })).toBe(
-        'data:image/png;base64,abc',
-      );
+      // act
+      const result = formatDataUri({ mimeType: 'image/png', base64: 'abc' });
+      // assert
+      expect(result).toBe('data:image/png;base64,abc');
     });
   });
 
   describe('getBase64ApproxSize', () => {
     it('estimates decoded byte size', () => {
-      expect(getBase64ApproxSize('abcd')).toBe(3);
+      // act
+      const result = getBase64ApproxSize('abcd');
+      // assert
+      expect(result).toBe(3);
     });
   });
 
@@ -117,7 +135,10 @@ describe('Tests suite for URI utilities', () => {
       ${''}                            | ${''}
       ${'data:,'}                      | ${''}
     `('should return "$expected" for dataUri "$dataUri"', ({ dataUri, expected }) => {
-      expect(extractBase64FromDataUri(dataUri)).toBe(expected);
+      // act
+      const result = extractBase64FromDataUri(dataUri);
+      // assert
+      expect(result).toBe(expected);
     });
   });
 });
