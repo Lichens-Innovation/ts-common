@@ -43,6 +43,9 @@ jobs:
       - name: Lint
         run: bun run lint
 
+      - name: Lint package.json
+        run: bun run lint:package
+
       - name: Typecheck
         run: bun run typecheck
 

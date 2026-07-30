@@ -10,3 +10,7 @@ echo "✅ Typecheck completed"
 echo "Running lint:fix to apply automatic fixes to the code..."
 bun run lint:fix
 echo "✅ Lint completed"
+
+echo "Running lint:package to enforce exact dependency versions..."
+bun run lint:package
+echo "✅ Package lint completed"
