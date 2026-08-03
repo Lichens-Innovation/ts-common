@@ -1,7 +1,162 @@
-import { describe, expect, it } from 'vitest';
-import { convertSvgToDataUri, resizeSvgXml } from './image.utils';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { convertSvgToDataUri, downscaleToJpegDataUrl, loadImage, resizeSvgXml } from './image.utils';
+
+interface FakeImageOptions {
+  behavior: 'load' | 'error';
+  naturalWidth?: number;
+  naturalHeight?: number;
+}
+
+const stubGlobalImage = ({ behavior, naturalWidth = 0, naturalHeight = 0 }: FakeImageOptions): void => {
+  class FakeImage {
+    onload: (() => void) | null = null;
+    onerror: (() => void) | null = null;
+    naturalWidth = naturalWidth;
+    naturalHeight = naturalHeight;
+
+    set src(_value: string) {
+      queueMicrotask(() => {
+        if (behavior === 'error') {
+          this.onerror?.();
+        } else {
+          this.onload?.();
+        }
+      });
+    }
+  }
+
+  vi.stubGlobal('Image', FakeImage);
+};
+
+const stubGlobalObjectUrl = (): { createObjectURL: ReturnType<typeof vi.fn>; revokeObjectURL: ReturnType<typeof vi.fn> } => {
+  const createObjectURL = vi.fn(() => 'blob:mock-url');
+  const revokeObjectURL = vi.fn();
+
+  vi.stubGlobal('URL', { createObjectURL, revokeObjectURL });
+  return { createObjectURL, revokeObjectURL };
+};
+
+interface FakeCanvasContext {
+  drawImage: ReturnType<typeof vi.fn>;
+}
+
+interface FakeCanvas {
+  width: number;
+  height: number;
+  getContext: ReturnType<typeof vi.fn>;
+  toDataURL: ReturnType<typeof vi.fn>;
+}
+
+const stubGlobalCanvasDocument = (hasContext = true): { canvas: FakeCanvas; ctx: FakeCanvasContext | null } => {
+  const ctx: FakeCanvasContext | null = hasContext ? { drawImage: vi.fn() } : null;
+  const canvas: FakeCanvas = {
+    width: 0,
+    height: 0,
+    getContext: vi.fn(() => ctx),
+    toDataURL: vi.fn((type: string, quality: number) => `data:${type};base64,mock-${quality}`),
+  };
+
+  vi.stubGlobal('document', { createElement: vi.fn(() => canvas) });
+  return { canvas, ctx };
+};
 
 describe('Image utilities', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  describe('loadImage', () => {
+    it('resolves with the decoded image and revokes the object URL', async () => {
+      // arrange
+      stubGlobalImage({ behavior: 'load', naturalWidth: 200, naturalHeight: 100 });
+      const { createObjectURL, revokeObjectURL } = stubGlobalObjectUrl();
+      const blob = new Blob(['data'], { type: 'image/png' });
+
+      // act
+      const result = await loadImage(blob);
+
+      // assert
+      expect(createObjectURL).toHaveBeenCalledWith(blob);
+      expect(revokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
+      expect(result.naturalWidth).toBe(200);
+      expect(result.naturalHeight).toBe(100);
+    });
+
+    it('rejects with the blob type and revokes the object URL on decode failure', async () => {
+      // arrange
+      stubGlobalImage({ behavior: 'error' });
+      const { revokeObjectURL } = stubGlobalObjectUrl();
+      const blob = new Blob(['data'], { type: 'image/heic' });
+
+      // act & assert
+      await expect(loadImage(blob)).rejects.toThrow('image decode failed for blob type: image/heic');
+      expect(revokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
+    });
+  });
+
+  describe('downscaleToJpegDataUrl', () => {
+    it('downscales an image larger than the default max dimension', async () => {
+      // arrange
+      stubGlobalImage({ behavior: 'load', naturalWidth: 3200, naturalHeight: 1600 });
+      stubGlobalObjectUrl();
+      const { canvas, ctx } = stubGlobalCanvasDocument();
+      const blob = new Blob(['data'], { type: 'image/png' });
+
+      // act
+      const result = await downscaleToJpegDataUrl({ blob });
+
+      // assert
+      expect(canvas.width).toBe(1600);
+      expect(canvas.height).toBe(800);
+      expect(ctx?.drawImage).toHaveBeenCalledWith(expect.anything(), 0, 0, 1600, 800);
+      expect(canvas.toDataURL).toHaveBeenCalledWith('image/jpeg', 0.85);
+      expect(result).toBe('data:image/jpeg;base64,mock-0.85');
+    });
+
+    it('does not upscale an image smaller than maxDimension', async () => {
+      // arrange
+      stubGlobalImage({ behavior: 'load', naturalWidth: 800, naturalHeight: 600 });
+      stubGlobalObjectUrl();
+      const { canvas } = stubGlobalCanvasDocument();
+      const blob = new Blob(['data'], { type: 'image/png' });
+
+      // act
+      await downscaleToJpegDataUrl({ blob });
+
+      // assert
+      expect(canvas.width).toBe(800);
+      expect(canvas.height).toBe(600);
+    });
+
+    it('applies custom maxDimension and quality overrides', async () => {
+      // arrange
+      stubGlobalImage({ behavior: 'load', naturalWidth: 400, naturalHeight: 200 });
+      stubGlobalObjectUrl();
+      const { canvas } = stubGlobalCanvasDocument();
+      const blob = new Blob(['data'], { type: 'image/png' });
+
+      // act
+      const result = await downscaleToJpegDataUrl({ blob, maxDimension: 100, quality: 0.5 });
+
+      // assert
+      expect(canvas.width).toBe(100);
+      expect(canvas.height).toBe(50);
+      expect(canvas.toDataURL).toHaveBeenCalledWith('image/jpeg', 0.5);
+      expect(result).toBe('data:image/jpeg;base64,mock-0.5');
+    });
+
+    it('throws when a 2d canvas context is unavailable', async () => {
+      // arrange
+      stubGlobalImage({ behavior: 'load', naturalWidth: 400, naturalHeight: 200 });
+      stubGlobalObjectUrl();
+      stubGlobalCanvasDocument(false);
+      const blob = new Blob(['data'], { type: 'image/png' });
+
+      // act & assert
+      await expect(downscaleToJpegDataUrl({ blob })).rejects.toThrow('canvas 2d context unavailable');
+    });
+  });
+
   describe('convertSvgToDataUri', () => {
     it('returns data URI with base64-encoded SVG', () => {
       // arrange

@@ -1,5 +1,59 @@
 import { getErrorMessage, type Dimensions } from "../utils";
 
+const DEFAULT_MAX_DIMENSION = 1600;
+const DEFAULT_JPEG_QUALITY = 0.85;
+
+export const loadImage = (blob: Blob): Promise<HTMLImageElement> =>
+  new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(blob);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(img);
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error(`image decode failed for blob type: ${blob.type}`));
+    };
+
+    img.src = objectUrl;
+  });
+
+export interface DownscaleToJpegDataUrlArgs {
+  blob: Blob;
+  maxDimension?: number;
+  quality?: number;
+}
+
+/**
+ * Decodes a blob via `<img>`, optionally downscales so the longest side is at
+ * most `maxDimension`, and re-encodes as a JPEG data URI. Useful when a
+ * consumer only accepts PNG/JPEG (e.g. pdfme image cells) and must not embed
+ * multi-MB camera photos at full resolution.
+ */
+export const downscaleToJpegDataUrl = async ({
+  blob,
+  maxDimension = DEFAULT_MAX_DIMENSION,
+  quality = DEFAULT_JPEG_QUALITY,
+}: DownscaleToJpegDataUrlArgs): Promise<string> => {
+  const img = await loadImage(blob);
+  const scale = Math.min(1, maxDimension / Math.max(img.naturalWidth, img.naturalHeight));
+  const width = Math.round(img.naturalWidth * scale);
+  const height = Math.round(img.naturalHeight * scale);
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('canvas 2d context unavailable');
+
+  ctx.drawImage(img, 0, 0, width, height);
+
+  return canvas.toDataURL('image/jpeg', quality);
+};
+
 export const hasRechartsElements = (svg: SVGSVGElement): boolean => {
   return (
     svg.querySelector("g.recharts-layer") !== null ||
