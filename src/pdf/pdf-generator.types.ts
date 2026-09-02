@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import type { jsPDF, jsPDFOptions } from 'jspdf';
+import type { ImageCompression, ImageFormat, jsPDF, jsPDFOptions } from 'jspdf';
 
 interface FontSize {
   title: number;
@@ -148,4 +148,8 @@ export interface AddImageArgs {
   y: number;
   width: number;
   height: number;
+  /** Image format passed to jsPDF (default 'PNG'). */
+  format?: ImageFormat;
+  /** jsPDF image stream compression level (default 'MEDIUM'). 'NONE' embeds raw uncompressed pixel data. */
+  compression?: ImageCompression;
 }

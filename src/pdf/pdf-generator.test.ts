@@ -239,6 +239,58 @@ describe('PdfGenerator', () => {
       // assert
       expect(gen.currentY).toBe(before);
     });
+
+    it('defaults to PNG format with MEDIUM compression to avoid embedding raw uncompressed pixels', () => {
+      // arrange
+      const gen = new PdfGenerator();
+      const doc = gen.getDoc();
+      const addImageSpy = vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
+
+      // act
+      gen.addImage({ dataUri: 'data:image/png;base64,placeholder', x: gen.margin, y: gen.margin, width: 1, height: 1 });
+
+      // assert
+      expect(addImageSpy).toHaveBeenCalledWith(
+        'data:image/png;base64,placeholder',
+        'PNG',
+        gen.margin,
+        gen.margin,
+        1,
+        1,
+        undefined,
+        'MEDIUM'
+      );
+    });
+
+    it('allows overriding format and compression', () => {
+      // arrange
+      const gen = new PdfGenerator();
+      const doc = gen.getDoc();
+      const addImageSpy = vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
+
+      // act
+      gen.addImage({
+        dataUri: 'data:image/jpeg;base64,placeholder',
+        x: gen.margin,
+        y: gen.margin,
+        width: 1,
+        height: 1,
+        format: 'JPEG',
+        compression: 'SLOW',
+      });
+
+      // assert
+      expect(addImageSpy).toHaveBeenCalledWith(
+        'data:image/jpeg;base64,placeholder',
+        'JPEG',
+        gen.margin,
+        gen.margin,
+        1,
+        1,
+        undefined,
+        'SLOW'
+      );
+    });
   });
 
   describe('addFullPagePNG', () => {
@@ -254,6 +306,50 @@ describe('PdfGenerator', () => {
 
       // assert
       expect(gen.currentY).toBeGreaterThan(before);
+    });
+
+    it('defaults to MEDIUM compression', () => {
+      // arrange
+      const gen = new PdfGenerator();
+      const doc = gen.getDoc();
+      const addImageSpy = vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
+
+      // act
+      gen.addFullPagePNG('data:image/png;base64,placeholder', 16 / 9);
+
+      // assert
+      expect(addImageSpy).toHaveBeenCalledWith(
+        'data:image/png;base64,placeholder',
+        'PNG',
+        gen.margin,
+        gen.margin,
+        expect.any(Number),
+        expect.any(Number),
+        undefined,
+        'MEDIUM'
+      );
+    });
+
+    it('allows overriding compression', () => {
+      // arrange
+      const gen = new PdfGenerator();
+      const doc = gen.getDoc();
+      const addImageSpy = vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
+
+      // act
+      gen.addFullPagePNG('data:image/png;base64,placeholder', 16 / 9, 'NONE');
+
+      // assert
+      expect(addImageSpy).toHaveBeenCalledWith(
+        'data:image/png;base64,placeholder',
+        'PNG',
+        gen.margin,
+        gen.margin,
+        expect.any(Number),
+        expect.any(Number),
+        undefined,
+        'NONE'
+      );
     });
   });
 
