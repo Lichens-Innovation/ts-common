@@ -167,10 +167,8 @@ export class PdfGenerator {
   /**
    * Add an image at the given position and size. Does not update currentY.
    */
-  public addImage({ dataUri, x, y, width, height }: AddImageArgs): void {
-    const imageFormat: ImageFormat = 'PNG';
-    const imageCompression: ImageCompression = 'NONE';
-    this.doc.addImage(dataUri, imageFormat, x, y, width, height, undefined, imageCompression);
+  public addImage({ dataUri, x, y, width, height, format = 'PNG', compression = 'MEDIUM' }: AddImageArgs): void {
+    this.doc.addImage(dataUri, format, x, y, width, height, undefined, compression);
   }
 
   /** Exposes the jsPDF document for custom drawing (e.g. header text, status badge, certification). */
@@ -182,16 +180,15 @@ export class PdfGenerator {
     this.doc.addPage();
   }
 
-  public addFullPagePNG(dataURI: string, aspectRatio: number): void {
+  public addFullPagePNG(dataURI: string, aspectRatio: number, compression: ImageCompression = 'MEDIUM'): void {
     const imageFormat: ImageFormat = 'PNG';
-    const imageCompression: ImageCompression = 'NONE';
 
     const alias = undefined;
     const x = this.margin;
     const y = this.margin;
     const { width, height } = this.calculateImageDimensions(aspectRatio);
 
-    this.doc.addImage(dataURI, imageFormat, x, y, width, height, alias, imageCompression);
+    this.doc.addImage(dataURI, imageFormat, x, y, width, height, alias, compression);
 
     this._currentY = this.margin + height + IMAGE_GAP;
   }
