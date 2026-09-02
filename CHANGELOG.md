@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.25.0...v1.26.0) (2026-09-02)
+
+
+### Features
+
+* **pdf:** image compression optional args ([#42](https://github.com/Lichens-Innovation/ts-common/issues/42)) ([e7093cd](https://github.com/Lichens-Innovation/ts-common/commit/e7093cd28bffdea070a43091c06c029ca7d6ff5f))
+
 # [1.25.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.24.0...v1.25.0) (2026-07-30)
 
 
