@@ -1,13 +1,13 @@
-import { isBlank } from "../../utils/string.utils";
-import { useTranslation } from "react-i18next";
-import type { LocalizedFormSchema, MetaFormSchema } from "./rjsf-i18n-types";
+import { isBlank } from '../../utils/string.utils';
+import { useTranslation } from 'react-i18next';
+import type { LocalizedFormSchema, MetaFormSchema } from './rjsf-i18n-types';
 
-const DEFAULT_LANGUAGE = "fr";
+const DEFAULT_LANGUAGE = 'fr';
 
 // i18n.language can be 'fr-CA', so we take the first part
 const parseSimplifiedLangCode = (language?: string): string => {
   if (isBlank(language)) return DEFAULT_LANGUAGE;
-  return language.split("-")[0];
+  return language.split('-')[0];
 };
 
 const getFallbackLanguage = (metaFormSchema: MetaFormSchema): string => {
@@ -23,10 +23,6 @@ export const useLocalizedForm = (metaFormSchema: MetaFormSchema): LocalizedFormS
   }
 
   const fallbackLanguage = getFallbackLanguage(metaFormSchema);
-  // eslint-disable-next-line no-console
-  console.warn(
-    `Language ${language} not found in metaFormSchema ${metaFormSchema.id}. Falling back to ${fallbackLanguage}.`
-  );
 
   return metaFormSchema.i18n[fallbackLanguage];
 };
