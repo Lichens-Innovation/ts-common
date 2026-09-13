@@ -1,3 +1,10 @@
+## [1.26.1](https://github.com/Lichens-Innovation/ts-common/compare/v1.26.0...v1.26.1) (2026-09-13)
+
+
+### Bug Fixes
+
+* widen optional peer dependency ranges ([d04bd7d](https://github.com/Lichens-Innovation/ts-common/commit/d04bd7df73dc07883b7d398c8ed99a6a1dcbf774))
+
 # [1.26.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.25.0...v1.26.0) (2026-09-02)
 
 
