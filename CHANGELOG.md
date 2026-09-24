@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.26.1...v1.27.0) (2026-09-24)
+
+
+### Features
+
+* added utils for time rjsf widget ([2e1a504](https://github.com/Lichens-Innovation/ts-common/commit/2e1a5041add2cde38210d1988a669458dedfa462))
+
 ## [1.26.1](https://github.com/Lichens-Innovation/ts-common/compare/v1.26.0...v1.26.1) (2026-09-13)
 
 
