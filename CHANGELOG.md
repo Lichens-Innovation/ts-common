@@ -1,3 +1,10 @@
+## [1.27.1](https://github.com/Lichens-Innovation/ts-common/compare/v1.27.0...v1.27.1) (2026-09-25)
+
+
+### Bug Fixes
+
+* unpin engines.node exact version, allow range instead ([#44](https://github.com/Lichens-Innovation/ts-common/issues/44)) ([19f4912](https://github.com/Lichens-Innovation/ts-common/commit/19f49126c8a74fe76061af6dfb5b6545536b9b0e))
+
 # [1.27.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.26.1...v1.27.0) (2026-09-24)
 
 
