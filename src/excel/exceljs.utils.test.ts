@@ -1,6 +1,15 @@
+import ExcelJS from 'exceljs';
 import { describe, expect, it } from 'vitest';
 import type { ColumnMetadata } from './excel-generator.types';
 import { generateExcelBlob, sanitizeWorksheetTitle } from './exceljs.utils';
+
+const loadWorksheet = async (blob: Blob): Promise<ExcelJS.Worksheet> => {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(await blob.arrayBuffer());
+  const worksheet = workbook.worksheets[0];
+  if (!worksheet) throw new Error('worksheet not found');
+  return worksheet;
+};
 
 describe('ExcelJS utilities', () => {
   describe('sanitizeWorksheetTitle', () => {
@@ -68,6 +77,57 @@ describe('ExcelJS utilities', () => {
       });
       // assert
       expect(blob.size).toBeGreaterThan(0);
+    });
+
+    it('coerces numeric strings to numbers for "number" columns', async () => {
+      // arrange
+      const data = [{ name: 'Alice', score: '42' }];
+      // act
+      const blob = await generateExcelBlob({ worksheetTitle: 'Scores', data, columnsMetadata });
+      const worksheet = await loadWorksheet(blob);
+      // assert
+      expect(worksheet.getRow(2).getCell(2).value).toBe(42);
+    });
+
+    it('keeps non-numeric strings as-is for "number" columns', async () => {
+      // arrange
+      const data = [{ name: 'Alice', score: 'n/a' }];
+      // act
+      const blob = await generateExcelBlob({ worksheetTitle: 'Scores', data, columnsMetadata });
+      const worksheet = await loadWorksheet(blob);
+      // assert
+      expect(worksheet.getRow(2).getCell(2).value).toBe('n/a');
+    });
+
+    it('applies "@" numFmt to "text" columns', async () => {
+      // arrange
+      const data = [{ name: '00123', score: 1 }];
+      // act
+      const blob = await generateExcelBlob({ worksheetTitle: 'Scores', data, columnsMetadata });
+      const worksheet = await loadWorksheet(blob);
+      // assert
+      expect(worksheet.getRow(2).getCell(1).numFmt).toBe('@');
+    });
+
+    it('defaults to empty string for nullish "auto"-typed values', async () => {
+      // arrange
+      const data = [{ name: null as unknown as string, score: 1 }];
+      // act
+      const blob = await generateExcelBlob({ worksheetTitle: 'Scores', data, columnsMetadata: { score: columnsMetadata.score! } });
+      const worksheet = await loadWorksheet(blob);
+      // assert: written as empty string, xlsx round-trip may normalize empty cells to null
+      expect(worksheet.getRow(2).getCell(1).value).toBeFalsy();
+    });
+
+    it('falls back to default width and "auto" type for columns without metadata', async () => {
+      // arrange
+      const data = [{ name: 'Alice', score: 1, extra: 'unmapped' }];
+      // act
+      const blob = await generateExcelBlob({ worksheetTitle: 'Scores', data, columnsMetadata });
+      const worksheet = await loadWorksheet(blob);
+      // assert
+      expect(worksheet.getRow(2).getCell(3).value).toBe('unmapped');
+      expect(worksheet.getRow(1).getCell(3).value).toBe('extra');
     });
   });
 });

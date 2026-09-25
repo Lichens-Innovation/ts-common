@@ -10,6 +10,8 @@ describe('base64.utils', () => {
       ${'你好'}
       ${'emoji: \uD83D\uDE00'}
       ${''}
+      ${'a'}
+      ${'\uD800X'}
     `('round-trips "$text"', ({ text }) => {
       // act
       const encoded = encodeBase64(text);
@@ -28,6 +30,13 @@ describe('base64.utils', () => {
     it('returns empty string on invalid decode input gracefully', () => {
       // act
       const result = decodeBase64('!!!invalid!!!');
+      // assert
+      expect(result).toBe('');
+    });
+
+    it('returns empty string when encoding throws', () => {
+      // act
+      const result = encodeBase64(null as unknown as string);
       // assert
       expect(result).toBe('');
     });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { sleep } from './thread.utils';
+import { sleep, yieldToMainThread } from './thread.utils';
 
 describe('Tests suite for thread utilities', () => {
   describe('sleep', () => {
@@ -29,6 +29,16 @@ describe('Tests suite for thread utilities', () => {
       const result = sleep(10);
       // assert
       expect(result).toBeInstanceOf(Promise);
+    });
+  });
+
+  describe('yieldToMainThread', () => {
+    it('should return a promise that resolves', async () => {
+      // act
+      const result = yieldToMainThread();
+      // assert
+      expect(result).toBeInstanceOf(Promise);
+      await expect(result).resolves.toBeUndefined();
     });
   });
 });
