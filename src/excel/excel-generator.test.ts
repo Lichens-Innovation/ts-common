@@ -102,6 +102,38 @@ describe('WorksheetBuilder', () => {
     expect(cell.numFmt).toBe('@');
   });
 
+  it('addCell defaults to empty string when value is nullish', () => {
+    // arrange
+    const sheet = createWorksheet();
+    const builder = new WorksheetBuilder(sheet);
+    // act
+    builder.addCell({ row: 0, col: 0, value: null });
+    builder.addCell({ row: 0, col: 1, value: undefined });
+    const ws = builder.getWorksheet();
+    // assert
+    expect(ws.getRow(1).getCell(1).value).toBe('');
+    expect(ws.getRow(1).getCell(2).value).toBe('');
+  });
+
+  it('applies fill, alignment, and border style when provided in addCell', () => {
+    // arrange
+    const sheet = createWorksheet();
+    const builder = new WorksheetBuilder(sheet);
+    const style: CellStyle = {
+      fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFF0000' } },
+      alignment: { horizontal: 'center' },
+      border: { top: { style: 'thin', color: { argb: 'FF000000' } } },
+    };
+    // act
+    builder.addCell({ row: 0, col: 0, value: 'Styled', style });
+    const ws = builder.getWorksheet();
+    const cell = ws.getRow(1).getCell(1);
+    // assert
+    expect(cell.fill).toEqual(style.fill);
+    expect(cell.alignment?.horizontal).toBe('center');
+    expect(cell.border?.top?.style).toBe('thin');
+  });
+
   it('applies row styles when provided in addRow', () => {
     // arrange
     const sheet = createWorksheet();

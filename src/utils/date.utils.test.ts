@@ -148,6 +148,13 @@ describe('Tests suite for date utilities', () => {
       expect(resultUndefined).toBe('N/A');
       expect(resultNull).toBe('N/A');
     });
+
+    it('should return "Invalid date" when formatting throws', () => {
+      // act
+      const result = formatUnixTimestamp(Infinity);
+      // assert
+      expect(result).toBe('Invalid date');
+    });
   });
 
   describe('getCurrentUnixTimestamp', () => {

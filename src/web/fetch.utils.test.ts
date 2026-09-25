@@ -35,6 +35,36 @@ describe('Fetch utilities', () => {
       expect(readAsDataURL).toHaveBeenCalledWith(blob);
     });
 
+    it('resolves with null when FileReader result is not a string', async () => {
+      // arrange
+      const blob = new Blob(['fake'], { type: 'image/png' });
+
+      const readAsDataURL = vi.fn(function (
+        this: { result: string | ArrayBuffer | null; onloadend: ((ev: ProgressEvent<FileReader>) => void) | null }
+      ) {
+        setTimeout(() => {
+          this.result = new ArrayBuffer(0);
+          this.onloadend?.({} as ProgressEvent<FileReader>);
+        }, 0);
+      });
+
+      vi.stubGlobal(
+        'FileReader',
+        class {
+          result: string | ArrayBuffer | null = null;
+          error: DOMException | null = null;
+          onloadend: ((ev: ProgressEvent<FileReader>) => void) | null = null;
+          onerror: (() => void) | null = null;
+          readAsDataURL = readAsDataURL;
+        }
+      );
+
+      // act
+      const result = await blobToDataUri(blob);
+      // assert
+      expect(result).toBeNull();
+    });
+
     it('rejects when FileReader fails', async () => {
       // arrange
       const blob = new Blob(['fake']);

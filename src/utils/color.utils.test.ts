@@ -302,5 +302,17 @@ describe('Tests suite for color utilities', () => {
       // assert
       expect(nearOne).toMatch(/^rgb\(\d+,255,0\)$/);
     });
+
+    it('should throw error when percent < 0', () => {
+      // act
+      // assert
+      expect(() => getColorForPercentage(-0.1)).toThrow('Percentage must be between 0 and 1');
+    });
+
+    it('should throw error when percent > 1', () => {
+      // act
+      // assert
+      expect(() => getColorForPercentage(1.1)).toThrow('Percentage must be between 0 and 1');
+    });
   });
 });

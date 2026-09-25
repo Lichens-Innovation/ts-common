@@ -289,6 +289,18 @@ describe('chart.utils', () => {
       });
     });
 
+    describe('extra tick when loop stops short of max', () => {
+      it('appends one more tick when the last generated tick is below max', () => {
+        // arrange: max=21 with default targetTickCount=10 yields niceIncrement=2.5,
+        // whose generated ticks stop at 20 (< 21), forcing the extra-tick branch
+        // act
+        const ticks = buildTicksForChart(21);
+        // assert
+        expect(ticks[ticks.length - 1]).toBe(22.5);
+        expect(ticks[ticks.length - 1]).toBeGreaterThanOrEqual(21);
+      });
+    });
+
     describe('ticks are nice numbers', () => {
       it('all ticks should be divisible by the increment', () => {
         // act

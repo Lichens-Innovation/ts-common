@@ -133,6 +133,17 @@ describe('MIME utilities', () => {
       // Assert
       expect(result).toBe('x-custom');
     });
+
+    it('should fall back to the whole input when it has no subtype (no "/")', () => {
+      // Arrange
+      const mimeType = 'not-a-mime-type';
+
+      // Act
+      const result = mimeToExt(mimeType);
+
+      // Assert
+      expect(result).toBe('not-a-mime-type');
+    });
   });
 
   describe('VALID_IMAGE_TYPES', () => {

@@ -40,6 +40,16 @@ describe('json.utils', () => {
       // assert
       expect(result).toBe('');
     });
+
+    it('returns empty string when stringify throws (circular reference)', () => {
+      // arrange
+      const circular: Record<string, unknown> = { a: 1 };
+      circular.self = circular;
+      // act
+      const result = safeJsonStringify(circular);
+      // assert
+      expect(result).toBe('');
+    });
   });
 
   describe('formatJson', () => {
@@ -55,6 +65,22 @@ describe('json.utils', () => {
       const result = formatJson({ value: 'not json' });
       // assert
       expect(result).toBe('not json');
+    });
+
+    it('prettifies without sorting keys by default', () => {
+      // act
+      const result = formatJson({ value: '{"b":2,"a":1}' });
+      // assert
+      expect(result).toBe('{\n  "b": 2,\n  "a": 1\n}');
+    });
+
+    it('returns empty string when value is empty/undefined', () => {
+      // act
+      const emptyResult = formatJson({ value: '' });
+      const undefinedResult = formatJson({});
+      // assert
+      expect(emptyResult).toBe('');
+      expect(undefinedResult).toBe('');
     });
   });
 
