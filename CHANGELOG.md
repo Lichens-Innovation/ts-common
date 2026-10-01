@@ -1,3 +1,11 @@
+## [1.27.2](https://github.com/Lichens-Innovation/ts-common/compare/v1.27.1...v1.27.2) (2026-10-01)
+
+
+### Bug Fixes
+
+* **ci:** upgrade bun to 1.4.2 ([#46](https://github.com/Lichens-Innovation/ts-common/issues/46)) ([5bf421c](https://github.com/Lichens-Innovation/ts-common/commit/5bf421ccb744aab05e3e23490f4cfb7871ef6591))
+* patch vulnerable dependencies (jspdf, brace-expansion, fast-uri, uuid) ([#45](https://github.com/Lichens-Innovation/ts-common/issues/45)) ([5f8639d](https://github.com/Lichens-Innovation/ts-common/commit/5f8639d0e107d7cd2243031aa77094272d096013))
+
 ## [1.27.1](https://github.com/Lichens-Innovation/ts-common/compare/v1.27.0...v1.27.1) (2026-09-25)
 
 
