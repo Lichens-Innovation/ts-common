@@ -1,3 +1,10 @@
+# [1.28.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.27.2...v1.28.0) (2026-10-14)
+
+
+### Features
+
+* add utils for date-display ([8c035cc](https://github.com/Lichens-Innovation/ts-common/commit/8c035cc2ec09184ad9f8760ce7ea2f078221b2ed))
+
 ## [1.27.2](https://github.com/Lichens-Innovation/ts-common/compare/v1.27.1...v1.27.2) (2026-10-01)
 
 
