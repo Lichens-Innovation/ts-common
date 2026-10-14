@@ -1,6 +1,7 @@
 export * from './base64.utils';
 export * from './chart.utils';
 export * from './color.utils';
+export * from './date-display.utils';
 export * from './date.utils';
 export * from './dimensions.utils';
 export * from './errors.utils';

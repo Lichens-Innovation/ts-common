@@ -1,4 +1,5 @@
 import type { WidgetProps } from '@rjsf/utils';
+import { formatDisplayDate, formatDisplayDateTime, formatDisplayTime, type DisplayLocale } from '../../utils/date-display.utils';
 import { isBlank } from '../../utils/string.utils';
 import { isNullish } from '../../utils/types.utils';
 
@@ -125,19 +126,27 @@ export const parseDateOnlyToLocalDate = (value?: string): Date | null => {
   return new Date(y, m - 1, d);
 };
 
-/** Extracts date-only YYYY-MM-DD for display from a full ISO or date-only string. */
-export const formatDateOnlyForDisplay = (value?: string): string => {
+/**
+ * The date of a full ISO or date-only string, for display. With a locale it reads `24 sept. 2026`;
+ * without one it stays the raw YYYY-MM-DD.
+ */
+export const formatDateOnlyForDisplay = (value?: string, locale?: DisplayLocale): string => {
   if (isBlank(value)) return '';
 
   const trimmed = String(value).trim();
   const dateOnly = trimmed.slice(0, 10);
-  return DATE_ONLY_REGEX.test(dateOnly) ? dateOnly : '';
+  if (!DATE_ONLY_REGEX.test(dateOnly)) return '';
+  return locale ? formatDisplayDate(parseDateOnlyToLocalDate(dateOnly), locale) : dateOnly;
 };
 
-/** Formats a full ISO or date string for date-time display (locale string). */
-export const formatDateTimeForDisplay = (value?: string): string => {
+/**
+ * A full ISO or date string for date-time display. With a locale it reads `24 sept. 2026, 13 h 31`;
+ * without one it falls back to the engine's `toLocaleString()`.
+ */
+export const formatDateTimeForDisplay = (value?: string, locale?: DisplayLocale): string => {
   const date = parseDateOrNull(value);
-  return date ? date.toLocaleString() : '';
+  if (!date) return '';
+  return locale ? formatDisplayDateTime(date, locale) : date.toLocaleString();
 };
 
 /**
@@ -179,12 +188,16 @@ export const parseTimeOnlyToLocalDate = (value?: string): Date | null => {
   return anchor;
 };
 
-/** Extracts HH:MM for display from a stored time-only string. Seconds are never shown. */
-export const formatTimeOnlyForDisplay = (value?: string): string => {
+/**
+ * A stored time-only string for display. Seconds are never shown. With a locale it reads `13 h 31` /
+ * `13:31`; without one it stays the raw HH:MM.
+ */
+export const formatTimeOnlyForDisplay = (value?: string, locale?: DisplayLocale): string => {
   if (isBlank(value)) return '';
 
   const trimmed = String(value).trim();
-  return TIME_ONLY_REGEX.test(trimmed) ? trimmed.slice(0, 5) : '';
+  if (!TIME_ONLY_REGEX.test(trimmed)) return '';
+  return locale ? formatDisplayTime(parseTimeOnlyToLocalDate(trimmed), locale) : trimmed.slice(0, 5);
 };
 
 type FormLayoutContext = {
