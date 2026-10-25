@@ -213,6 +213,10 @@ export class PdfGenerator {
     this.doc.save(this.filename);
   }
 
+  public toBlob(): Blob {
+    return this.doc.output('blob');
+  }
+
   private buildFooterColumnStyles() {
     const cellWidth = this.availableWidth / 3;
 

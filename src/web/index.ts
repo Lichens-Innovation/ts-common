@@ -5,4 +5,6 @@ export * from './clipboard.utils';
 export * from './download.utils';
 export * from './fetch.utils';
 export * from './file-reader.utils';
+export type * from './file-system-access.types';
 export * from './image.utils';
+export * from './save-file.utils';

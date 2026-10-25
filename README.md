@@ -56,18 +56,19 @@ Table of content
 
 ## Scripts
 
-| Command                 | Description                                                           |
-| ----------------------- | --------------------------------------------------------------------- |
-| `bun run prepare`       | Configures Husky (Git hooks). Runs automatically after `bun install`. |
-| `bun run build`         | Compiles the project with tsup (outputs to `dist/`).                  |
-| `bun run clean:node`    | Removes `node_modules` and `bun.lockb`.                               |
-| `bun run clean:dist`    | Removes the `dist` directory.                                         |
-| `bun run typecheck`     | Type-checks TypeScript without emitting files (`tsc --noEmit`).       |
-| `bun run lint`          | Runs ESLint on the project.                                           |
-| `bun run lint:fix`      | Runs ESLint and applies automatic fixes.                              |
-| `bun run test`          | Runs tests with Vitest and coverage report.                           |
-| `bun run test:watch`    | Runs tests in watch mode with Vitest.                                 |
-| `bun run test:coverage` | Runs tests with coverage report using Vitest.                         |
+| Command                  | Description                                                                                     |
+| ------------------------ | ----------------------------------------------------------------------------------------------- |
+| `bun run prepare`        | Configures Husky (Git hooks). Runs automatically after `bun install`.                           |
+| `bun run build`          | Compiles the project with tsup (outputs to `dist/`).                                            |
+| `bun run clean:node`     | Removes `node_modules` and `bun.lockb`.                                                         |
+| `bun run clean:dist`     | Removes the `dist` directory.                                                                   |
+| `bun run typecheck`      | Type-checks TypeScript without emitting files (`tsc --noEmit`).                                 |
+| `bun run lint`           | Runs ESLint on the project.                                                                     |
+| `bun run lint:fix`       | Runs ESLint and applies automatic fixes.                                                        |
+| `bun run security:check` | Audits deps for new CVEs vs `.cve-lite/baseline.json`, fails on high severity (`cve-lite-cli`). |
+| `bun run test`           | Runs tests with Vitest and coverage report.                                                     |
+| `bun run test:watch`     | Runs tests in watch mode with Vitest.                                                           |
+| `bun run test:coverage`  | Runs tests with coverage report using Vitest.                                                   |
 
 ## Optional modules
 
@@ -94,6 +95,35 @@ npm install jspdf jspdf-autotable
 ### Web (`@lichens-innovation/ts-common/web`)
 
 No external dependency required.
+
+#### Saving files (native save picker with download fallback)
+
+Uses the File System Access API (`showSaveFilePicker`) when available (Chromium browsers) and falls back to a classic download otherwise (Firefox, Safari, errors).
+
+The picker requires a recent user activation, so for slow generations (PDF with charts, images, ...) request the file handle **at click start** and write **after** generation:
+
+```ts
+import { requestSaveFileHandle, saveBlob } from '@lichens-innovation/ts-common/web';
+
+const onExportClick = async () => {
+  const result = await requestSaveFileHandle({ suggestedName: 'report.pdf' });
+  if (result.status === 'cancelled') return;
+  const handle = result.status === 'picked' ? result.handle : null;
+
+  const generator = await generateReport(); // slow work
+  const { method, fileName } = await saveBlob({ blob: generator.toBlob(), fileName: generator.filename, handle });
+};
+```
+
+When the blob is already available, use the one-shot helper (`null` when the user cancels):
+
+```ts
+import { saveBlobWithPicker } from '@lichens-innovation/ts-common/web';
+
+const result = await saveBlobWithPicker({ blob, fileName: 'data.csv' });
+```
+
+Picker file types default to the MIME type derived from the file extension; pass `types` to override.
 
 ### MIME (`@lichens-innovation/ts-common/mime`)
 

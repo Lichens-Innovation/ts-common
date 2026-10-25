@@ -453,4 +453,19 @@ describe('PdfGenerator', () => {
       expect(gen.font).toBe('times');
     });
   });
+
+  describe('toBlob', () => {
+    it('returns the document as a PDF blob', () => {
+      // arrange
+      const gen = new PdfGenerator();
+
+      // act
+      const blob = gen.toBlob();
+
+      // assert
+      expect(blob).toBeInstanceOf(Blob);
+      expect(blob.type).toBe('application/pdf');
+      expect(blob.size).toBeGreaterThan(0);
+    });
+  });
 });
