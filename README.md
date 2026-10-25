@@ -56,18 +56,19 @@ Table of content
 
 ## Scripts
 
-| Command                 | Description                                                           |
-| ----------------------- | --------------------------------------------------------------------- |
-| `bun run prepare`       | Configures Husky (Git hooks). Runs automatically after `bun install`. |
-| `bun run build`         | Compiles the project with tsup (outputs to `dist/`).                  |
-| `bun run clean:node`    | Removes `node_modules` and `bun.lockb`.                               |
-| `bun run clean:dist`    | Removes the `dist` directory.                                         |
-| `bun run typecheck`     | Type-checks TypeScript without emitting files (`tsc --noEmit`).       |
-| `bun run lint`          | Runs ESLint on the project.                                           |
-| `bun run lint:fix`      | Runs ESLint and applies automatic fixes.                              |
-| `bun run test`          | Runs tests with Vitest and coverage report.                           |
-| `bun run test:watch`    | Runs tests in watch mode with Vitest.                                 |
-| `bun run test:coverage` | Runs tests with coverage report using Vitest.                         |
+| Command                  | Description                                                                                     |
+| ------------------------ | ----------------------------------------------------------------------------------------------- |
+| `bun run prepare`        | Configures Husky (Git hooks). Runs automatically after `bun install`.                           |
+| `bun run build`          | Compiles the project with tsup (outputs to `dist/`).                                            |
+| `bun run clean:node`     | Removes `node_modules` and `bun.lockb`.                                                         |
+| `bun run clean:dist`     | Removes the `dist` directory.                                                                   |
+| `bun run typecheck`      | Type-checks TypeScript without emitting files (`tsc --noEmit`).                                 |
+| `bun run lint`           | Runs ESLint on the project.                                                                     |
+| `bun run lint:fix`       | Runs ESLint and applies automatic fixes.                                                        |
+| `bun run security:check` | Audits deps for new CVEs vs `.cve-lite/baseline.json`, fails on high severity (`cve-lite-cli`). |
+| `bun run test`           | Runs tests with Vitest and coverage report.                                                     |
+| `bun run test:watch`     | Runs tests in watch mode with Vitest.                                                           |
+| `bun run test:coverage`  | Runs tests with coverage report using Vitest.                                                   |
 
 ## Optional modules
 
