@@ -95,6 +95,35 @@ npm install jspdf jspdf-autotable
 
 No external dependency required.
 
+#### Saving files (native save picker with download fallback)
+
+Uses the File System Access API (`showSaveFilePicker`) when available (Chromium browsers) and falls back to a classic download otherwise (Firefox, Safari, errors).
+
+The picker requires a recent user activation, so for slow generations (PDF with charts, images, ...) request the file handle **at click start** and write **after** generation:
+
+```ts
+import { requestSaveFileHandle, saveBlob } from '@lichens-innovation/ts-common/web';
+
+const onExportClick = async () => {
+  const result = await requestSaveFileHandle({ suggestedName: 'report.pdf' });
+  if (result.status === 'cancelled') return;
+  const handle = result.status === 'picked' ? result.handle : null;
+
+  const generator = await generateReport(); // slow work
+  const { method, fileName } = await saveBlob({ blob: generator.toBlob(), fileName: generator.filename, handle });
+};
+```
+
+When the blob is already available, use the one-shot helper (`null` when the user cancels):
+
+```ts
+import { saveBlobWithPicker } from '@lichens-innovation/ts-common/web';
+
+const result = await saveBlobWithPicker({ blob, fileName: 'data.csv' });
+```
+
+Picker file types default to the MIME type derived from the file extension; pass `types` to override.
+
 ### MIME (`@lichens-innovation/ts-common/mime`)
 
 ```bash
