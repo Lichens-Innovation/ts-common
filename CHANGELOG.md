@@ -1,3 +1,10 @@
+# [1.29.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.28.0...v1.29.0) (2026-10-25)
+
+
+### Features
+
+* **web:** save file picker with download fallback + security:check ([#47](https://github.com/Lichens-Innovation/ts-common/issues/47)) ([ff33cec](https://github.com/Lichens-Innovation/ts-common/commit/ff33cecc880ff8e6a199b5260ccd4fe34862aad3))
+
 # [1.28.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.27.2...v1.28.0) (2026-10-14)
 
 
