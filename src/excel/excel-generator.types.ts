@@ -1,11 +1,11 @@
-import type { Font, Fill, Alignment } from "exceljs";
+import type { Font, Fill, Alignment } from 'exceljs';
 
 export type CellValue = string | number | null | undefined;
 
-export type VerticalAlignment = "top" | "middle" | "bottom";
-export type HorizontalAlignment = "left" | "center" | "right";
+export type VerticalAlignment = 'top' | 'middle' | 'bottom';
+export type HorizontalAlignment = 'left' | 'center' | 'right';
 
-export type ColumnValueType = "number" | "text" | "auto";
+export type ColumnValueType = 'number' | 'text' | 'auto';
 
 export interface ColumnMetadata {
   name: string;
@@ -14,7 +14,7 @@ export interface ColumnMetadata {
 }
 
 interface BorderSide {
-  style?: "thin" | "medium" | "thick" | "dotted" | "dashed" | "double";
+  style?: 'thin' | 'medium' | 'thick' | 'dotted' | 'dashed' | 'double';
   color?: { argb: string };
 }
 

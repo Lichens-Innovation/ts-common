@@ -9,12 +9,12 @@ This project uses **multi-entry bundling** with conditional exports in `package.
 The configuration creates multiple entry points that users can import selectively:
 
 ```typescript
-import { someUtil } from '@lichens-innovation/ts-common';        // Core only
+import { someUtil } from '@lichens-innovation/ts-common'; // Core only
 import { excelUtil } from '@lichens-innovation/ts-common/excel'; // + exceljs
-import { csvUtil } from '@lichens-innovation/ts-common/csv';     // + papaparse
-import { pdfUtil } from '@lichens-innovation/ts-common/pdf';     // + jspdf
-import { webUtil } from '@lichens-innovation/ts-common/web';     // Browser APIs
-import { mimeUtil } from '@lichens-innovation/ts-common/mime';   // + mime
+import { csvUtil } from '@lichens-innovation/ts-common/csv'; // + papaparse
+import { pdfUtil } from '@lichens-innovation/ts-common/pdf'; // + jspdf
+import { webUtil } from '@lichens-innovation/ts-common/web'; // Browser APIs
+import { mimeUtil } from '@lichens-innovation/ts-common/mime'; // + mime
 ```
 
 ## Architecture Components
@@ -39,6 +39,7 @@ export default defineConfig({
 ```
 
 This generates:
+
 - `dist/index.js` + `dist/index.cjs` + `dist/index.d.ts`
 - `dist/excel.js` + `dist/excel.cjs` + `dist/excel.d.ts`
 - And so on for each module...
@@ -71,7 +72,7 @@ This generates:
 {
   "peerDependencies": {
     "exceljs": "^4.4.0",
-    "papaparse": "^5.4.1",
+    "papaparse": "^5.4.1"
     // ...
   },
   "peerDependenciesMeta": {
@@ -89,6 +90,7 @@ Users only install what they need.
 ### 1. Optimal Tree-Shaking
 
 Users only import what they need:
+
 ```typescript
 // Only core utilities are bundled in the final application
 import { someUtil } from '@lichens-innovation/ts-common';
@@ -181,10 +183,10 @@ Some IDEs struggle with subpath imports:
 
 ```typescript
 // Sometimes auto-import suggests incorrectly:
-import { x } from '@lichens-innovation/ts-common/dist/excel'
+import { x } from '@lichens-innovation/ts-common/dist/excel';
 
 // Instead of the correct:
-import { x } from '@lichens-innovation/ts-common/excel'
+import { x } from '@lichens-innovation/ts-common/excel';
 ```
 
 May require manual correction or IDE configuration.
@@ -195,7 +197,7 @@ May require manual correction or IDE configuration.
 
 ```typescript
 // Single bundle, but with imports that load everything
-import '@lichens-innovation/ts-common/excel/register'
+import '@lichens-innovation/ts-common/excel/register';
 ```
 
 - ❌ Less elegant
@@ -218,7 +220,7 @@ import '@lichens-innovation/ts-common/excel/register'
 ### Alternative 3: Dynamic Imports
 
 ```typescript
-const excel = await import('@lichens-innovation/ts-common/excel')
+const excel = await import('@lichens-innovation/ts-common/excel');
 ```
 
 - ✅ Lazy loading
@@ -243,7 +245,7 @@ const excel = await import('@lichens-innovation/ts-common/excel')
 ```typescript
 // tsup.config.ts
 export default defineConfig({
-  splitting: true,  // Create common chunks
+  splitting: true, // Create common chunks
   // ...
 });
 ```
@@ -304,12 +306,14 @@ This multi-entry bundling approach is a **modern and professional solution** ✅
 **Primary trade-off**: Increased configuration complexity and maintenance overhead.
 
 The approach is well-suited for:
+
 - ✅ Utility libraries with optional features
 - ✅ Libraries targeting multiple environments (Node/Browser)
 - ✅ Projects with large optional dependencies
 - ✅ Teams comfortable with modern build tools
 
 It may not be ideal for:
+
 - ❌ Simple libraries with few dependencies
 - ❌ Projects requiring maximum simplicity over optimization
 - ❌ Teams new to modern bundling tools

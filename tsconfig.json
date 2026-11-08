@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "lib": ["ES2022","DOM"],
+    "lib": ["ES2022", "DOM"],
     "moduleResolution": "bundler",
     "outDir": "./dist",
     "rootDir": "./src",
@@ -21,9 +21,5 @@
     "sourceMap": true
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "**/*.test.ts",
-    "**/*.spec.ts",
-    "vitest.setup.ts"
-  ]
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "vitest.setup.ts"]
 }

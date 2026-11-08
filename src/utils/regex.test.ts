@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { REGEX_ALPHANUMERIC, REGEX_IPV4 } from './regex';
 
 describe('Tests suite for known regexes', () => {
-    describe('REGEX_ALPHANUMERIC', () => {
+  describe('REGEX_ALPHANUMERIC', () => {
     it.each`
       value          | expected
       ${''}          | ${false}

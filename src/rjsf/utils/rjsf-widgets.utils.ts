@@ -1,5 +1,10 @@
 import type { WidgetProps } from '@rjsf/utils';
-import { formatDisplayDate, formatDisplayDateTime, formatDisplayTime, type DisplayLocale } from '../../utils/date-display.utils';
+import {
+  formatDisplayDate,
+  formatDisplayDateTime,
+  formatDisplayTime,
+  type DisplayLocale,
+} from '../../utils/date-display.utils';
 import { isBlank } from '../../utils/string.utils';
 import { isNullish } from '../../utils/types.utils';
 

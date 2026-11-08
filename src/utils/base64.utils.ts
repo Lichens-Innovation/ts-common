@@ -29,7 +29,7 @@ const encodeUtf8ToBytes = (text: string): number[] => {
         0xf0 | (codePoint >> 18),
         0x80 | ((codePoint >> 12) & 0x3f),
         0x80 | ((codePoint >> 6) & 0x3f),
-        0x80 | (codePoint & 0x3f),
+        0x80 | (codePoint & 0x3f)
       );
     }
   }
@@ -56,10 +56,7 @@ const decodeUtf8FromBytes = (bytes: number[]): string => {
       i += 3;
     } else {
       codePoint =
-        ((b0 & 0x07) << 18) |
-        ((bytes[i + 1]! & 0x3f) << 12) |
-        ((bytes[i + 2]! & 0x3f) << 6) |
-        (bytes[i + 3]! & 0x3f);
+        ((b0 & 0x07) << 18) | ((bytes[i + 1]! & 0x3f) << 12) | ((bytes[i + 2]! & 0x3f) << 6) | (bytes[i + 3]! & 0x3f);
       i += 4;
     }
 

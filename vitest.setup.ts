@@ -24,4 +24,3 @@ class MockWebSocket {
 if (typeof globalThis.WebSocket === 'undefined') {
   (globalThis as unknown as { WebSocket: typeof MockWebSocket }).WebSocket = MockWebSocket;
 }
-

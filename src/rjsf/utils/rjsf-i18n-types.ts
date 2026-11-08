@@ -1,4 +1,4 @@
-import type { RJSFSchema, TranslatableString, UiSchema } from "@rjsf/utils";
+import type { RJSFSchema, TranslatableString, UiSchema } from '@rjsf/utils';
 
 export type Language = string;
 

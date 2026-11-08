@@ -4,20 +4,20 @@
  */
 const ticketRefRule = {
   meta: {
-    type: "suggestion",
+    type: 'suggestion',
     docs: {
-      description: "Require a ticket reference in the TODO comment",
+      description: 'Require a ticket reference in the TODO comment',
       recommended: false,
     },
     schema: [
       {
-        type: "object",
+        type: 'object',
         properties: {
-          pattern: { type: "string" },
-          terms: { type: "array", items: { type: "string" } },
-          commentPattern: { type: "string" },
-          description: { type: "string" },
-          comment: { type: "string" }, // ignored, kept for config compatibility
+          pattern: { type: 'string' },
+          terms: { type: 'array', items: { type: 'string' } },
+          commentPattern: { type: 'string' },
+          description: { type: 'string' },
+          comment: { type: 'string' }, // ignored, kept for config compatibility
         },
         additionalProperties: false,
       },
@@ -26,15 +26,14 @@ const ticketRefRule = {
       missingTicket: "{{ term }} comment doesn't reference a ticket number. Ticket pattern: {{ pattern }}",
       missingTicketWithCommentPattern:
         "{{ term }} comment doesn't reference a ticket number. Comment pattern: {{ commentPattern }}",
-      missingTicketWithDescription:
-        "{{ term }} comment doesn't reference a ticket number. {{ description }}",
+      missingTicketWithDescription: "{{ term }} comment doesn't reference a ticket number. {{ description }}",
     },
   },
   create(context) {
     const opts = context.options[0] ?? {};
     // Default pattern: PROJECT-NUM (e.g. JIRA-123) or PROJECT-SUB-NUM (e.g. LICHENS-RJSF-001)
-    const pattern = opts.pattern ?? "([A-Z]+(?:-[A-Z0-9]+)*-\\d+)";
-    const terms = opts.terms ?? ["TODO"];
+    const pattern = opts.pattern ?? '([A-Z]+(?:-[A-Z0-9]+)*-\\d+)';
+    const terms = opts.terms ?? ['TODO'];
     const commentPattern = opts.commentPattern;
     const description = opts.description;
 
@@ -44,14 +43,14 @@ const ticketRefRule = {
     const termSearchPatterns = {};
     for (const term of terms) {
       termSearchPatterns[term] = commentPattern
-        ? new RegExp(commentPattern, "i")
-        : new RegExp(`${term}\\s*[:(]\\s*${pattern}`, "i");
+        ? new RegExp(commentPattern, 'i')
+        : new RegExp(`${term}\\s*[:(]\\s*${pattern}`, 'i');
     }
 
     function getMessageId() {
-      if (description) return "missingTicketWithDescription";
-      if (commentPattern) return "missingTicketWithCommentPattern";
-      return "missingTicket";
+      if (description) return 'missingTicketWithDescription';
+      if (commentPattern) return 'missingTicketWithCommentPattern';
+      return 'missingTicket';
     }
 
     for (const comment of comments) {
@@ -75,6 +74,6 @@ const ticketRefRule = {
 /** Plugin object for flat config: use as plugins["todo-plz"] and rules["todo-plz/ticket-ref"] */
 export default {
   rules: {
-    "ticket-ref": ticketRefRule,
+    'ticket-ref': ticketRefRule,
   },
 };

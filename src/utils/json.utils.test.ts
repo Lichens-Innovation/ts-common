@@ -104,9 +104,9 @@ describe('json.utils', () => {
 
   describe('isValidJson', () => {
     it.each`
-      value        | expected
-      ${'{"a":1}'} | ${true}
-      ${'not json'}| ${false}
+      value         | expected
+      ${'{"a":1}'}  | ${true}
+      ${'not json'} | ${false}
     `('returns $expected for "$value"', ({ value, expected }) => {
       // act
       const result = isValidJson(value);

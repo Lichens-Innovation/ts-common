@@ -10,14 +10,14 @@ export interface RgbaColor extends RgbColor {
 
 export const rgbToHex = (r: number, g: number, b: number): string => {
   if (r > 255 || g > 255 || b > 255) {
-    throw new Error("Invalid color component");
+    throw new Error('Invalid color component');
   }
 
-  return ((r << 16) | (g << 8) | b).toString(16).padStart(6, "0");
+  return ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
 };
 
 export const hexToRgb = (hex: string): RgbColor => {
-  const cleanHex = hex.replace("#", "");
+  const cleanHex = hex.replace('#', '');
 
   const r = parseInt(cleanHex.substring(0, 2), 16);
   const g = parseInt(cleanHex.substring(2, 4), 16);
@@ -27,17 +27,17 @@ export const hexToRgb = (hex: string): RgbColor => {
 };
 
 export const rgbaToHex = (color: RgbaColor): string => {
-  return "#" + rgbToHex(color.r, color.g, color.b);
+  return '#' + rgbToHex(color.r, color.g, color.b);
 };
 
 export const getOpacityHexValue = (opacity: number): string => {
   if (opacity < 0 || opacity > 1) {
-    throw new Error("Invalid opacity value");
+    throw new Error('Invalid opacity value');
   }
 
   return Math.round(opacity * 255)
     .toString(16)
-    .padStart(2, "0");
+    .padStart(2, '0');
 };
 
 export const rgbaToHexWithAlpha = (color: RgbaColor): string => {
@@ -58,7 +58,7 @@ export const getLuminance = (r: number, g: number, b: number): number => {
 
 export const getContrastTextColor = (hexColor: string): string => {
   const { r, g, b } = hexToRgb(hexColor);
-  return getLuminance(r, g, b) > 0.5 ? "#000000" : "#ffffff";
+  return getLuminance(r, g, b) > 0.5 ? '#000000' : '#ffffff';
 };
 
 /**
@@ -131,5 +131,5 @@ export const getColorForPercentage = (percent: number): string => {
     b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper),
   };
 
-  return "rgb(" + [color.r, color.g, color.b].join(",") + ")";
+  return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
 };

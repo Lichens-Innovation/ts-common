@@ -51,7 +51,7 @@ export const dataUrlToPngBlob = (dataUrl: string): Promise<Blob> => {
           }
         },
         'image/png',
-        1,
+        1
       );
     };
     img.onerror = () => reject(new Error('Failed to load image'));

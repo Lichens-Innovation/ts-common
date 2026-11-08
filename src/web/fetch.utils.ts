@@ -1,4 +1,4 @@
-import { getErrorMessage } from "../utils";
+import { getErrorMessage } from '../utils';
 
 /**
  * Converts a Blob to a data URI string.
@@ -10,7 +10,7 @@ export const blobToDataUri = (blob: Blob): Promise<string | null> => {
     reader.onerror = () => reject(reader.error);
     reader.onloadend = () => {
       const { result } = reader;
-      resolve(typeof result === "string" ? result : null);
+      resolve(typeof result === 'string' ? result : null);
     };
 
     reader.readAsDataURL(blob);

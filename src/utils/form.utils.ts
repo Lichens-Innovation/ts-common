@@ -1,5 +1,5 @@
-import { isBlank } from "./string.utils";
-import { isNullish } from "./types.utils";
+import { isBlank } from './string.utils';
+import { isNullish } from './types.utils';
 
 export const parseOptionalFormNumber = (value?: string | null): number | null => {
   if (isBlank(value)) return null;
@@ -9,9 +9,9 @@ export const parseOptionalFormNumber = (value?: string | null): number | null =>
 };
 
 export const toFormString = (n?: number | null): string => {
-  if (isNullish(n)) return "";
+  if (isNullish(n)) return '';
 
-  return Number.isFinite(n) ? String(n) : "";
+  return Number.isFinite(n) ? String(n) : '';
 };
 
 /**
@@ -19,8 +19,8 @@ export const toFormString = (n?: number | null): string => {
  * Avoids floating-point display noise (e.g. 3700.0000000000005).
  */
 export const toFormStringInteger = (n?: number | null): string => {
-  if (isNullish(n)) return "";
-  if (!Number.isFinite(n)) return "";
+  if (isNullish(n)) return '';
+  if (!Number.isFinite(n)) return '';
 
   return String(Math.round(n));
 };

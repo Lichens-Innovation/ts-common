@@ -14,17 +14,17 @@ const loadWorksheet = async (blob: Blob): Promise<ExcelJS.Worksheet> => {
 describe('ExcelJS utilities', () => {
   describe('sanitizeWorksheetTitle', () => {
     it.each`
-      title                    | expected
-      ${'Sheet1'}              | ${'Sheet1'}
-      ${'My Worksheet'}       | ${'My Worksheet'}
-      ${'Data:Report'}        | ${'DataReport'}
-      ${'A/B'}                 | ${'AB'}
-      ${'Path\\To\\File'}     | ${'PathToFile'}
-      ${'What?'}               | ${'What'}
-      ${'Test*Report'}        | ${'TestReport'}
-      ${'Sheet[1]'}           | ${'Sheet1'}
-      ${'  Trimmed  '}        | ${'Trimmed'}
-      ${'a'.repeat(40)}       | ${'a'.repeat(31)}
+      title                     | expected
+      ${'Sheet1'}               | ${'Sheet1'}
+      ${'My Worksheet'}         | ${'My Worksheet'}
+      ${'Data:Report'}          | ${'DataReport'}
+      ${'A/B'}                  | ${'AB'}
+      ${'Path\\To\\File'}       | ${'PathToFile'}
+      ${'What?'}                | ${'What'}
+      ${'Test*Report'}          | ${'TestReport'}
+      ${'Sheet[1]'}             | ${'Sheet1'}
+      ${'  Trimmed  '}          | ${'Trimmed'}
+      ${'a'.repeat(40)}         | ${'a'.repeat(31)}
       ${'Colon:Slash/Back\\\\'} | ${'ColonSlashBack'}
     `('returns "$expected" for "$title"', ({ title, expected }) => {
       // act
@@ -113,7 +113,11 @@ describe('ExcelJS utilities', () => {
       // arrange
       const data = [{ name: null as unknown as string, score: 1 }];
       // act
-      const blob = await generateExcelBlob({ worksheetTitle: 'Scores', data, columnsMetadata: { score: columnsMetadata.score! } });
+      const blob = await generateExcelBlob({
+        worksheetTitle: 'Scores',
+        data,
+        columnsMetadata: { score: columnsMetadata.score! },
+      });
       const worksheet = await loadWorksheet(blob);
       // assert: written as empty string, xlsx round-trip may normalize empty cells to null
       expect(worksheet.getRow(2).getCell(1).value).toBeFalsy();

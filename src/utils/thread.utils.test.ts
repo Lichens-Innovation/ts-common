@@ -42,4 +42,3 @@ describe('Tests suite for thread utilities', () => {
     });
   });
 });
-

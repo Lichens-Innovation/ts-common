@@ -12,13 +12,13 @@ const createMockWebSocket = (readyState: number): WebSocket => {
 describe('Tests suite for websocket utilities', () => {
   describe('isWsClosable', () => {
     it.each`
-      description                        | ws                                            | expected
-      ${'null'}                          | ${null}                                       | ${false}
-      ${'undefined'}                     | ${undefined}                                  | ${false}
-      ${'CONNECTING state'}              | ${createMockWebSocket(WebSocket.CONNECTING)}  | ${true}
-      ${'OPEN state'}                    | ${createMockWebSocket(WebSocket.OPEN)}        | ${true}
-      ${'CLOSING state'}                 | ${createMockWebSocket(WebSocket.CLOSING)}     | ${false}
-      ${'CLOSED state'}                  | ${createMockWebSocket(WebSocket.CLOSED)}      | ${false}
+      description           | ws                                           | expected
+      ${'null'}             | ${null}                                      | ${false}
+      ${'undefined'}        | ${undefined}                                 | ${false}
+      ${'CONNECTING state'} | ${createMockWebSocket(WebSocket.CONNECTING)} | ${true}
+      ${'OPEN state'}       | ${createMockWebSocket(WebSocket.OPEN)}       | ${true}
+      ${'CLOSING state'}    | ${createMockWebSocket(WebSocket.CLOSING)}    | ${false}
+      ${'CLOSED state'}     | ${createMockWebSocket(WebSocket.CLOSED)}     | ${false}
     `('should return $expected for $description', ({ ws, expected }) => {
       // act
       const result = isWsClosable(ws);
@@ -29,13 +29,13 @@ describe('Tests suite for websocket utilities', () => {
 
   describe('isWsOpenOrConnecting', () => {
     it.each`
-      description                        | ws                                            | expected
-      ${'null'}                          | ${null}                                       | ${false}
-      ${'undefined'}                     | ${undefined}                                  | ${false}
-      ${'CONNECTING state'}              | ${createMockWebSocket(WebSocket.CONNECTING)}  | ${true}
-      ${'OPEN state'}                    | ${createMockWebSocket(WebSocket.OPEN)}        | ${true}
-      ${'CLOSING state'}                 | ${createMockWebSocket(WebSocket.CLOSING)}     | ${false}
-      ${'CLOSED state'}                  | ${createMockWebSocket(WebSocket.CLOSED)}      | ${false}
+      description           | ws                                           | expected
+      ${'null'}             | ${null}                                      | ${false}
+      ${'undefined'}        | ${undefined}                                 | ${false}
+      ${'CONNECTING state'} | ${createMockWebSocket(WebSocket.CONNECTING)} | ${true}
+      ${'OPEN state'}       | ${createMockWebSocket(WebSocket.OPEN)}       | ${true}
+      ${'CLOSING state'}    | ${createMockWebSocket(WebSocket.CLOSING)}    | ${false}
+      ${'CLOSED state'}     | ${createMockWebSocket(WebSocket.CLOSED)}     | ${false}
     `('should return $expected for $description', ({ ws, expected }) => {
       // act
       const result = isWsOpenOrConnecting(ws);
@@ -105,4 +105,3 @@ describe('Tests suite for websocket utilities', () => {
     });
   });
 });
-

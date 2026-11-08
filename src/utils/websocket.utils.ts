@@ -1,4 +1,4 @@
-import { isNullish } from "./types.utils";
+import { isNullish } from './types.utils';
 
 const WEBSOCKET_CONNECT_STATES: number[] = [WebSocket.CONNECTING, WebSocket.OPEN] as const;
 
