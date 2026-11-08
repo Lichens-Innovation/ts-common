@@ -139,7 +139,10 @@ describe('PdfGenerator', () => {
 
       // act
       gen.addTable({
-        body: [['A', 'B'], ['1', '2']],
+        body: [
+          ['A', 'B'],
+          ['1', '2'],
+        ],
       });
 
       // assert

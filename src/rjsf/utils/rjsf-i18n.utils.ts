@@ -1,20 +1,20 @@
-import { replaceStringParameters } from "@rjsf/utils";
-import { i18n } from "i18next";
-import { isBlank } from "../../utils/string.utils";
+import { replaceStringParameters } from '@rjsf/utils';
+import { i18n } from 'i18next';
+import { isBlank } from '../../utils/string.utils';
 
 /** Maps RJSF TranslatableString values to our i18n keys (rjsf namespace). */
 export const RJSF_STRING_TO_I18N_KEY: Record<string, string> = {
-  "Add Item": "rjsf:addItem",
-  Add: "rjsf:add",
-  Copy: "rjsf:copy",
-  "Move down": "rjsf:moveDown",
-  "Move up": "rjsf:moveUp",
-  Remove: "rjsf:remove",
-  "clear input": "rjsf:clear",
-  "%1 Key": "rjsf:keyLabel", // TODO: RJSF-001 find a way to dynamicaly resolve the rjsf-i18n.utils "%1 Key" pattern
-  Yes: "rjsf:yes",
-  No: "rjsf:no",
-  Errors: "rjsf:errors",
+  'Add Item': 'rjsf:addItem',
+  Add: 'rjsf:add',
+  Copy: 'rjsf:copy',
+  'Move down': 'rjsf:moveDown',
+  'Move up': 'rjsf:moveUp',
+  Remove: 'rjsf:remove',
+  'clear input': 'rjsf:clear',
+  '%1 Key': 'rjsf:keyLabel', // TODO: RJSF-001 find a way to dynamicaly resolve the rjsf-i18n.utils "%1 Key" pattern
+  Yes: 'rjsf:yes',
+  No: 'rjsf:no',
+  Errors: 'rjsf:errors',
 };
 
 interface TranslateStringArgs {

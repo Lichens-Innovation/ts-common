@@ -75,9 +75,7 @@ describe('html.utils', () => {
       // act
       const result = escapeHtml('<a href="x">y & z\'s</a>');
       // assert
-      expect(result).toBe(
-        '&lt;a href=&quot;x&quot;&gt;y &amp; z&#39;s&lt;/a&gt;',
-      );
+      expect(result).toBe('&lt;a href=&quot;x&quot;&gt;y &amp; z&#39;s&lt;/a&gt;');
     });
   });
 });

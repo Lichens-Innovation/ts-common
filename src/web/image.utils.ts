@@ -1,4 +1,4 @@
-import { getErrorMessage, type Dimensions } from "../utils";
+import { getErrorMessage, type Dimensions } from '../utils';
 
 const DEFAULT_MAX_DIMENSION = 1600;
 const DEFAULT_JPEG_QUALITY = 0.85;
@@ -56,10 +56,10 @@ export const downscaleToJpegDataUrl = async ({
 
 export const hasRechartsElements = (svg: SVGSVGElement): boolean => {
   return (
-    svg.querySelector("g.recharts-layer") !== null ||
-    svg.querySelector("g.recharts-cartesian-axis") !== null ||
-    svg.querySelector("g.recharts-cartesian-grid") !== null ||
-    svg.querySelector("path.recharts-curve") !== null
+    svg.querySelector('g.recharts-layer') !== null ||
+    svg.querySelector('g.recharts-cartesian-axis') !== null ||
+    svg.querySelector('g.recharts-cartesian-grid') !== null ||
+    svg.querySelector('path.recharts-curve') !== null
   );
 };
 
@@ -92,7 +92,7 @@ export const getRechartsSvgFromElement = ({
   chartElement,
   chartElementId,
 }: GetRechartsSvgFromElementArgs): SVGSVGElement | null => {
-  const allSvgs = chartElement.querySelectorAll<SVGSVGElement>("svg");
+  const allSvgs = chartElement.querySelectorAll<SVGSVGElement>('svg');
   if (allSvgs.length === 0) {
     console.info(`[getRechartsSvgFromElement] SVG element not found inside element with id "${chartElementId}"`);
     return null;
@@ -100,7 +100,9 @@ export const getRechartsSvgFromElement = ({
 
   const rechartSvg = findRechartsSvg(allSvgs);
   if (!rechartSvg) {
-    console.info(`[getRechartsSvgFromElement] No Recharts SVG element found inside element with id "${chartElementId}"`);
+    console.info(
+      `[getRechartsSvgFromElement] No Recharts SVG element found inside element with id "${chartElementId}"`
+    );
     return null;
   }
 
@@ -108,8 +110,8 @@ export const getRechartsSvgFromElement = ({
 };
 
 export const getSvgDimensions = (svgElement: SVGSVGElement): Dimensions => {
-  const width = svgElement.clientWidth ?? parseInt(svgElement.getAttribute("width") ?? "800", 10);
-  const height = svgElement.clientHeight ?? parseInt(svgElement.getAttribute("height") ?? "600", 10);
+  const width = svgElement.clientWidth ?? parseInt(svgElement.getAttribute('width') ?? '800', 10);
+  const height = svgElement.clientHeight ?? parseInt(svgElement.getAttribute('height') ?? '600', 10);
   return { width, height };
 };
 
@@ -139,11 +141,11 @@ export interface PrepareSvgCloneArgs {
 export const prepareSvgClone = ({ svgElement, dimensions }: PrepareSvgCloneArgs): SVGSVGElement => {
   const clonedSvg = svgElement.cloneNode(true) as SVGSVGElement;
 
-  if (!clonedSvg.hasAttribute("width")) {
-    clonedSvg.setAttribute("width", dimensions.width.toString());
+  if (!clonedSvg.hasAttribute('width')) {
+    clonedSvg.setAttribute('width', dimensions.width.toString());
   }
-  if (!clonedSvg.hasAttribute("height")) {
-    clonedSvg.setAttribute("height", dimensions.height.toString());
+  if (!clonedSvg.hasAttribute('height')) {
+    clonedSvg.setAttribute('height', dimensions.height.toString());
   }
 
   return clonedSvg;
@@ -152,7 +154,7 @@ export const prepareSvgClone = ({ svgElement, dimensions }: PrepareSvgCloneArgs)
 export const convertSvgToDataUri = (svgXml: string): string => {
   const encoder = new TextEncoder();
   const data = encoder.encode(svgXml);
-  let binaryString = "";
+  let binaryString = '';
   for (let i = 0; i < data.length; i++) {
     binaryString += String.fromCharCode(data[i]);
   }
@@ -223,7 +225,7 @@ export const getChartAsPngDataUri = async ({
   return svgToPngDataUri({
     svgDataUri,
     dimensions: { width, height },
-    backgroundColor: "white",
+    backgroundColor: 'white',
   });
 };
 
@@ -288,13 +290,13 @@ export const svgToPngDataUri = async ({
 
     img.onload = () => {
       try {
-        const canvas = document.createElement("canvas");
+        const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
 
-        const ctx = canvas.getContext("2d");
+        const ctx = canvas.getContext('2d');
         if (!ctx) {
-          reject(new Error("Failed to get canvas 2D context"));
+          reject(new Error('Failed to get canvas 2D context'));
           return;
         }
 
@@ -304,7 +306,7 @@ export const svgToPngDataUri = async ({
         }
 
         ctx.drawImage(img, 0, 0, width, height);
-        const pngDataUri = canvas.toDataURL("image/png");
+        const pngDataUri = canvas.toDataURL('image/png');
         resolve(pngDataUri);
       } catch (error) {
         reject(error);

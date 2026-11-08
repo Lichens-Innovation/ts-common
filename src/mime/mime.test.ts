@@ -12,8 +12,7 @@ import {
 
 const PNG_DATA_URI = 'data:image/png;base64,iVBORw0KGgo=';
 const JPEG_DATA_URI = 'data:image/jpeg;base64,/9j/4AAQ=';
-const SVG_DATA_URI =
-  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4=';
+const SVG_DATA_URI = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciLz4=';
 const TEXT_DATA_URI = 'data:text/plain;base64,SGVsbG8=';
 
 describe('MIME utilities', () => {
@@ -49,11 +48,11 @@ describe('MIME utilities', () => {
     });
 
     it.each`
-      input                        | description
-      ${'data:text/plain,hello'}   | ${'non-base64 data URI'}
-      ${'http://example.com'}      | ${'HTTP URL'}
-      ${''}                        | ${'empty string'}
-      ${'data:image/png;base64,'}  | ${'empty base64 payload'}
+      input                       | description
+      ${'data:text/plain,hello'}  | ${'non-base64 data URI'}
+      ${'http://example.com'}     | ${'HTTP URL'}
+      ${''}                       | ${'empty string'}
+      ${'data:image/png;base64,'} | ${'empty base64 payload'}
     `('should return null for $description', ({ input }) => {
       // Act
       const result = parseDataUri(input);
@@ -65,14 +64,14 @@ describe('MIME utilities', () => {
 
   describe('isImageMimeType', () => {
     it.each`
-      mimeType              | expected | description
-      ${'image/png'}        | ${true}  | ${'PNG'}
-      ${'image/jpeg'}       | ${true}  | ${'JPEG'}
-      ${'image/webp'}       | ${true}  | ${'WebP'}
-      ${'image/svg+xml'}    | ${true}  | ${'SVG'}
-      ${'text/plain'}       | ${false} | ${'plain text'}
-      ${'application/pdf'}  | ${false} | ${'PDF'}
-      ${'image/unknown'}    | ${false} | ${'unknown image type'}
+      mimeType             | expected | description
+      ${'image/png'}       | ${true}  | ${'PNG'}
+      ${'image/jpeg'}      | ${true}  | ${'JPEG'}
+      ${'image/webp'}      | ${true}  | ${'WebP'}
+      ${'image/svg+xml'}   | ${true}  | ${'SVG'}
+      ${'text/plain'}      | ${false} | ${'plain text'}
+      ${'application/pdf'} | ${false} | ${'PDF'}
+      ${'image/unknown'}   | ${false} | ${'unknown image type'}
     `('should return $expected for $description', ({ mimeType, expected }) => {
       // Act
       const result = isImageMimeType(mimeType);
@@ -95,10 +94,10 @@ describe('MIME utilities', () => {
     });
 
     it.each`
-      input              | description
-      ${TEXT_DATA_URI}   | ${'non-image data URI'}
+      input                                            | description
+      ${TEXT_DATA_URI}                                 | ${'non-image data URI'}
       ${JPEG_DATA_URI.replace('jpeg', 'octet-stream')} | ${'unsupported image MIME type'}
-      ${'not-a-data-uri'}| ${'invalid data URI'}
+      ${'not-a-data-uri'}                              | ${'invalid data URI'}
     `('should return null for $description', ({ input }) => {
       // Act
       const result = getImagePreviewSrc(input);
@@ -110,11 +109,11 @@ describe('MIME utilities', () => {
 
   describe('mimeToExt', () => {
     it.each`
-      mimeType              | expected | description
-      ${'image/png'}        | ${'png'} | ${'known PNG MIME type'}
-      ${'image/jpeg'}       | ${'jpg'} | ${'known JPEG MIME type'}
-      ${'image/svg+xml'}    | ${'svg'} | ${'known SVG MIME type'}
-      ${'application/pdf'}  | ${'pdf'} | ${'known PDF MIME type'}
+      mimeType             | expected | description
+      ${'image/png'}       | ${'png'} | ${'known PNG MIME type'}
+      ${'image/jpeg'}      | ${'jpg'} | ${'known JPEG MIME type'}
+      ${'image/svg+xml'}   | ${'svg'} | ${'known SVG MIME type'}
+      ${'application/pdf'} | ${'pdf'} | ${'known PDF MIME type'}
     `('should return "$expected" for $description', ({ mimeType, expected }) => {
       // Act
       const result = mimeToExt(mimeType);

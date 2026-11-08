@@ -1,4 +1,4 @@
-import { isBlank } from ".";
+import { isBlank } from '.';
 
 export const SCHEME_PREFIXES = {
   file: 'file',

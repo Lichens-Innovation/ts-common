@@ -28,7 +28,10 @@ const stubGlobalImage = ({ behavior, naturalWidth = 0, naturalHeight = 0 }: Fake
   vi.stubGlobal('Image', FakeImage);
 };
 
-const stubGlobalObjectUrl = (): { createObjectURL: ReturnType<typeof vi.fn>; revokeObjectURL: ReturnType<typeof vi.fn> } => {
+const stubGlobalObjectUrl = (): {
+  createObjectURL: ReturnType<typeof vi.fn>;
+  revokeObjectURL: ReturnType<typeof vi.fn>;
+} => {
   const createObjectURL = vi.fn(() => 'blob:mock-url');
   const revokeObjectURL = vi.fn();
 

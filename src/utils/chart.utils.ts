@@ -1,4 +1,4 @@
-import { isNullish } from "./types.utils";
+import { isNullish } from './types.utils';
 
 export interface ToleranceArea {
   flow: number;

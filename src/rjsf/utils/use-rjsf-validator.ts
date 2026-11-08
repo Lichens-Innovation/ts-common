@@ -1,8 +1,8 @@
-import { customizeValidator, type Localizer } from "@rjsf/validator-ajv8";
-import localizer from "ajv-i18n";
+import { customizeValidator, type Localizer } from '@rjsf/validator-ajv8';
+import localizer from 'ajv-i18n';
 
 const customFormats = {
-  "phone-america": /^\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/,
+  'phone-america': /^\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/,
 };
 
 type ValidationLanguages = keyof typeof localizer;

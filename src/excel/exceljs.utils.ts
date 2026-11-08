@@ -1,7 +1,7 @@
-import ExcelJS from "exceljs";
-import { getMimeType } from "../mime";
-import { isNullish } from "../utils";
-import type { CellValue, ColumnMetadata } from "./excel-generator.types";
+import ExcelJS from 'exceljs';
+import { getMimeType } from '../mime';
+import { isNullish } from '../utils';
+import type { CellValue, ColumnMetadata } from './excel-generator.types';
 
 /**
  * Sanitizes a worksheet title to comply with Excel's limitations.
@@ -26,21 +26,21 @@ export const sanitizeWorksheetTitle = (title: string): string => {
   const MAX_LENGTH = 31;
   const INVALID_CHARS = /[:/\\?*[\]]/g;
 
-  return title.trim().replace(INVALID_CHARS, "").slice(0, MAX_LENGTH);
+  return title.trim().replace(INVALID_CHARS, '').slice(0, MAX_LENGTH);
 };
 
 interface ToSafeCellValueArgs {
   value: CellValue;
-  valueType: ColumnMetadata["valueType"];
+  valueType: ColumnMetadata['valueType'];
 }
 
 const toSafeCellValue = ({ value, valueType }: ToSafeCellValueArgs): CellValue => {
-  if (!isNullish(value) && valueType === "number") {
-    const numValue = typeof value === "number" ? value : Number(value);
+  if (!isNullish(value) && valueType === 'number') {
+    const numValue = typeof value === 'number' ? value : Number(value);
     return isNaN(numValue) ? value : numValue;
   }
 
-  return value ?? "";
+  return value ?? '';
 };
 
 interface ToSafeCellValuesArgs {
@@ -53,7 +53,7 @@ const toSafeCellValues = ({ headers, rowData, columnsMetadata }: ToSafeCellValue
   return headers.map((header) => {
     const value = rowData[header];
     const metadata = columnsMetadata?.[header];
-    const valueType = metadata?.valueType ?? "auto";
+    const valueType = metadata?.valueType ?? 'auto';
     return toSafeCellValue({ value, valueType });
   });
 };
@@ -68,11 +68,11 @@ const applyTextFormatting = ({ row, headers, columnsMetadata }: ApplyTextFormatt
   for (let colIndex = 0; colIndex < headers.length; colIndex++) {
     const header = headers[colIndex];
     const metadata = columnsMetadata?.[header];
-    const valueType = metadata?.valueType ?? "auto";
+    const valueType = metadata?.valueType ?? 'auto';
 
-    if (valueType === "text") {
+    if (valueType === 'text') {
       const cell = row.getCell(colIndex + 1);
-      cell.numFmt = "@";
+      cell.numFmt = '@';
     }
   }
 };
@@ -80,11 +80,11 @@ const applyTextFormatting = ({ row, headers, columnsMetadata }: ApplyTextFormatt
 const applyHeaderStyles = (headerRow: ExcelJS.Row): void => {
   headerRow.font = { bold: true };
   headerRow.fill = {
-    type: "pattern",
-    pattern: "solid",
-    fgColor: { argb: "FFE0E0E0" },
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FFE0E0E0' },
   };
-  headerRow.alignment = { wrapText: true, vertical: "top" };
+  headerRow.alignment = { wrapText: true, vertical: 'top' };
 };
 
 interface SetupHeaderFrozenRowArgs {
@@ -95,7 +95,7 @@ interface SetupHeaderFrozenRowArgs {
 const setupHeaderFrozenRow = ({ worksheet, headers }: SetupHeaderFrozenRowArgs): void => {
   const headerRow = worksheet.addRow(headers);
   applyHeaderStyles(headerRow);
-  worksheet.views = [{ state: "frozen", ySplit: 1 }];
+  worksheet.views = [{ state: 'frozen', ySplit: 1 }];
 };
 
 interface ApplyDataRowStylesArgs {
@@ -107,7 +107,7 @@ interface ApplyDataRowStylesArgs {
 const applyDataRowStyles = ({ worksheet, startRowIndex, endRowIndex }: ApplyDataRowStylesArgs): void => {
   for (let rowIndex = startRowIndex; rowIndex <= endRowIndex; rowIndex++) {
     const row = worksheet.getRow(rowIndex);
-    row.alignment = { wrapText: false, vertical: "top" };
+    row.alignment = { wrapText: false, vertical: 'top' };
   }
 };
 
@@ -155,7 +155,7 @@ export const generateExcelBlob = async (args: GenerateExcelBlobArgs): Promise<Bl
   const { data, columnsMetadata, worksheetTitle } = args;
 
   if (data.length === 0) {
-    throw new Error("No data to export");
+    throw new Error('No data to export');
   }
 
   const headers = Object.keys(data[0]);
@@ -167,5 +167,5 @@ export const generateExcelBlob = async (args: GenerateExcelBlobArgs): Promise<Bl
   setColumnWidths({ worksheet, headers, columnsMetadata });
 
   const buffer = await workbook.xlsx.writeBuffer();
-  return new Blob([buffer], { type: getMimeType("xlsx") });
+  return new Blob([buffer], { type: getMimeType('xlsx') });
 };

@@ -16,19 +16,19 @@ describe('Tests suite for errors utilities', () => {
     });
 
     it.each`
-      error                                    | expectedMessage
-      ${'Simple error message'}                | ${'Simple error message'}
-      ${''}                                    | ${''}
-      ${{ message: 'Object with message' }}    | ${'Object with message'}
-      ${{ message: '' }}                       | ${''}
-      ${null}                                  | ${''}
-      ${undefined}                             | ${''}
-      ${false}                                 | ${''}
-      ${0}                                     | ${''}
-      ${42}                                    | ${'42'}
-      ${true}                                  | ${'true'}
-      ${{}}                                    | ${'{}'}
-      ${{ key: 'value' }}                      | ${'{"key":"value"}'}
+      error                                 | expectedMessage
+      ${'Simple error message'}             | ${'Simple error message'}
+      ${''}                                 | ${''}
+      ${{ message: 'Object with message' }} | ${'Object with message'}
+      ${{ message: '' }}                    | ${''}
+      ${null}                               | ${''}
+      ${undefined}                          | ${''}
+      ${false}                              | ${''}
+      ${0}                                  | ${''}
+      ${42}                                 | ${'42'}
+      ${true}                               | ${'true'}
+      ${{}}                                 | ${'{}'}
+      ${{ key: 'value' }}                   | ${'{"key":"value"}'}
     `('should return a new Error with message "$expectedMessage" for error=$error', ({ error, expectedMessage }) => {
       // act
       const result = toError(error);
@@ -41,22 +41,22 @@ describe('Tests suite for errors utilities', () => {
 
   describe('getErrorMessage', () => {
     it.each`
-      error                                    | expected
-      ${'Simple error message'}                | ${'Simple error message'}
-      ${''}                                    | ${''}
-      ${new Error('Error object message')}     | ${'Error object message'}
-      ${{ message: 'Object with message' }}    | ${'Object with message'}
-      ${{ message: '' }}                       | ${''}
-      ${null}                                  | ${''}
-      ${undefined}                             | ${''}
-      ${false}                                 | ${''}
-      ${0}                                     | ${''}
-      ${{}}                                    | ${'{}'}
-      ${{ key: 'value' }}                      | ${'{"key":"value"}'}
-      ${[]}                                    | ${'[]'}
-      ${[1, 2, 3]}                             | ${'[1,2,3]'}
-      ${42}                                    | ${'42'}
-      ${true}                                  | ${'true'}
+      error                                 | expected
+      ${'Simple error message'}             | ${'Simple error message'}
+      ${''}                                 | ${''}
+      ${new Error('Error object message')}  | ${'Error object message'}
+      ${{ message: 'Object with message' }} | ${'Object with message'}
+      ${{ message: '' }}                    | ${''}
+      ${null}                               | ${''}
+      ${undefined}                          | ${''}
+      ${false}                              | ${''}
+      ${0}                                  | ${''}
+      ${{}}                                 | ${'{}'}
+      ${{ key: 'value' }}                   | ${'{"key":"value"}'}
+      ${[]}                                 | ${'[]'}
+      ${[1, 2, 3]}                          | ${'[1,2,3]'}
+      ${42}                                 | ${'42'}
+      ${true}                               | ${'true'}
     `('should return "$expected" for error=$error', ({ error, expected }) => {
       // act
       const result = getErrorMessage(error);
@@ -65,4 +65,3 @@ describe('Tests suite for errors utilities', () => {
     });
   });
 });
-

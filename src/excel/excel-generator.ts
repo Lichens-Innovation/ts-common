@@ -1,5 +1,5 @@
-import ExcelJS from "exceljs";
-import type { CellStyle, CellValue } from "./excel-generator.types";
+import ExcelJS from 'exceljs';
+import type { CellStyle, CellValue } from './excel-generator.types';
 
 interface AddCellArgs {
   row: number;
@@ -31,7 +31,7 @@ export class WorksheetBuilder {
 
   addCell({ row, col, value, style }: AddCellArgs): void {
     const cell = this.worksheet.getCell(row + 1, col + 1); // Convert to 1-based
-    cell.value = value ?? "";
+    cell.value = value ?? '';
 
     if (style) {
       this.applyStyle(cell, style);

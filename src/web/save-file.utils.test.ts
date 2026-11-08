@@ -185,7 +185,10 @@ describe('Save file utilities', () => {
     it('rethrows when createWritable fails', async () => {
       // arrange
       const error = new Error('denied');
-      const handle = { name: 'x.pdf', createWritable: vi.fn().mockRejectedValue(error) } as unknown as FileSystemFileHandle;
+      const handle = {
+        name: 'x.pdf',
+        createWritable: vi.fn().mockRejectedValue(error),
+      } as unknown as FileSystemFileHandle;
 
       // act & assert
       await expect(writeBlobToFileHandle({ handle, blob })).rejects.toBe(error);

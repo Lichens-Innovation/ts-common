@@ -8,9 +8,10 @@ describe('Fetch utilities', () => {
       const dataUri = 'data:image/png;base64,iVBORw0KGgo=';
       const blob = new Blob(['fake'], { type: 'image/png' });
 
-      const readAsDataURL = vi.fn(function (
-        this: { result: string | null; onloadend: ((ev: ProgressEvent<FileReader>) => void) | null }
-      ) {
+      const readAsDataURL = vi.fn(function (this: {
+        result: string | null;
+        onloadend: ((ev: ProgressEvent<FileReader>) => void) | null;
+      }) {
         setTimeout(() => {
           this.result = dataUri;
           this.onloadend?.({} as ProgressEvent<FileReader>);
@@ -39,9 +40,10 @@ describe('Fetch utilities', () => {
       // arrange
       const blob = new Blob(['fake'], { type: 'image/png' });
 
-      const readAsDataURL = vi.fn(function (
-        this: { result: string | ArrayBuffer | null; onloadend: ((ev: ProgressEvent<FileReader>) => void) | null }
-      ) {
+      const readAsDataURL = vi.fn(function (this: {
+        result: string | ArrayBuffer | null;
+        onloadend: ((ev: ProgressEvent<FileReader>) => void) | null;
+      }) {
         setTimeout(() => {
           this.result = new ArrayBuffer(0);
           this.onloadend?.({} as ProgressEvent<FileReader>);
@@ -160,7 +162,10 @@ describe('Fetch utilities', () => {
     it('returns null when fetch throws', async () => {
       // arrange
       const error = vi.spyOn(console, 'error').mockImplementation(() => {});
-      vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('Network error'))));
+      vi.stubGlobal(
+        'fetch',
+        vi.fn(() => Promise.reject(new Error('Network error')))
+      );
 
       // act
       const result = await fetchUrlAsDataUri(mockUrl);

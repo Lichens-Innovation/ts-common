@@ -1,6 +1,6 @@
-import mime from "mime";
+import mime from 'mime';
 
-import { DATA_URI_PATTERN, isValidDataUri } from "~/utils/uri.utils";
+import { DATA_URI_PATTERN, isValidDataUri } from '~/utils/uri.utils';
 import { VALID_IMAGE_TYPES } from './mime.utils';
 
 export { VALID_IMAGE_TYPES } from './mime.utils';
@@ -50,8 +50,8 @@ export const mimeToExt = (mimeType: string): string => {
   const ext = mime.getExtension(mimeType);
   if (ext) return ext;
 
-  const subtype = mimeType.split("/")[1] ?? mimeType;
-  return subtype.split("+")[0] ?? subtype;
+  const subtype = mimeType.split('/')[1] ?? mimeType;
+  return subtype.split('+')[0] ?? subtype;
 };
 
 export const getMimeType = (extension: string): string => {
@@ -62,4 +62,3 @@ export const getMimeType = (extension: string): string => {
 
   return mimeType;
 };
-

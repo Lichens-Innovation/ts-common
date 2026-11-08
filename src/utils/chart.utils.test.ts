@@ -45,12 +45,12 @@ describe('chart.utils', () => {
 
   describe('toToleranceLabel', () => {
     it.each`
-      value  | expected
-      ${0}   | ${'±0%'}
-      ${0.1} | ${'±10%'}
-      ${0.15}| ${'±15%'}
-      ${0.5} | ${'±50%'}
-      ${1}   | ${'±100%'}
+      value   | expected
+      ${0}    | ${'±0%'}
+      ${0.1}  | ${'±10%'}
+      ${0.15} | ${'±15%'}
+      ${0.5}  | ${'±50%'}
+      ${1}    | ${'±100%'}
     `('returns $expected for $value', ({ value, expected }) => {
       // act
       const result = toToleranceLabel(value);

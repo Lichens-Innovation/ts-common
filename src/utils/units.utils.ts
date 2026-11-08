@@ -1,4 +1,4 @@
-import { isNullish } from "./types.utils";
+import { isNullish } from './types.utils';
 
 /** m³/s to gallons per minute */
 export const M3PS_TO_GPM = 15850.3;

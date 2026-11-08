@@ -75,12 +75,12 @@ describe('Tests suite for color utilities', () => {
 
   describe('rgbaToHex', () => {
     it.each`
-      color                                    | expected
-      ${{ r: 0, g: 0, b: 0, a: 1 }}            | ${'#000000'}
-      ${{ r: 255, g: 255, b: 255, a: 1 }}      | ${'#ffffff'}
-      ${{ r: 255, g: 0, b: 0, a: 0.5 }}        | ${'#ff0000'}
-      ${{ r: 0, g: 255, b: 0, a: 0 }}          | ${'#00ff00'}
-      ${{ r: 128, g: 64, b: 32, a: 0.75 }}     | ${'#804020'}
+      color                                | expected
+      ${{ r: 0, g: 0, b: 0, a: 1 }}        | ${'#000000'}
+      ${{ r: 255, g: 255, b: 255, a: 1 }}  | ${'#ffffff'}
+      ${{ r: 255, g: 0, b: 0, a: 0.5 }}    | ${'#ff0000'}
+      ${{ r: 0, g: 255, b: 0, a: 0 }}      | ${'#00ff00'}
+      ${{ r: 128, g: 64, b: 32, a: 0.75 }} | ${'#804020'}
     `('should return "$expected" for color=$color', ({ color, expected }) => {
       // act
       const result = rgbaToHex(color);
@@ -119,12 +119,12 @@ describe('Tests suite for color utilities', () => {
 
   describe('rgbaToHexWithAlpha', () => {
     it.each`
-      color                                    | expected
-      ${{ r: 0, g: 0, b: 0, a: 1 }}            | ${'#000000ff'}
-      ${{ r: 255, g: 255, b: 255, a: 0 }}      | ${'#ffffff00'}
-      ${{ r: 255, g: 0, b: 0, a: 0.5 }}        | ${'#ff000080'}
-      ${{ r: 0, g: 255, b: 0, a: 0.25 }}       | ${'#00ff0040'}
-      ${{ r: 128, g: 64, b: 32, a: 0.75 }}     | ${'#804020bf'}
+      color                                | expected
+      ${{ r: 0, g: 0, b: 0, a: 1 }}        | ${'#000000ff'}
+      ${{ r: 255, g: 255, b: 255, a: 0 }}  | ${'#ffffff00'}
+      ${{ r: 255, g: 0, b: 0, a: 0.5 }}    | ${'#ff000080'}
+      ${{ r: 0, g: 255, b: 0, a: 0.25 }}   | ${'#00ff0040'}
+      ${{ r: 128, g: 64, b: 32, a: 0.75 }} | ${'#804020bf'}
     `('should return "$expected" for color=$color', ({ color, expected }) => {
       // act
       const result = rgbaToHexWithAlpha(color);
@@ -135,11 +135,11 @@ describe('Tests suite for color utilities', () => {
 
   describe('rgbToString', () => {
     it.each`
-      color                                    | expected
-      ${{ r: 0, g: 0, b: 0, a: 1 }}            | ${'rgb(0, 0, 0)'}
-      ${{ r: 255, g: 255, b: 255, a: 1 }}      | ${'rgb(255, 255, 255)'}
-      ${{ r: 255, g: 0, b: 0, a: 0.5 }}        | ${'rgb(255, 0, 0)'}
-      ${{ r: 128, g: 64, b: 32, a: 0.75 }}     | ${'rgb(128, 64, 32)'}
+      color                                | expected
+      ${{ r: 0, g: 0, b: 0, a: 1 }}        | ${'rgb(0, 0, 0)'}
+      ${{ r: 255, g: 255, b: 255, a: 1 }}  | ${'rgb(255, 255, 255)'}
+      ${{ r: 255, g: 0, b: 0, a: 0.5 }}    | ${'rgb(255, 0, 0)'}
+      ${{ r: 128, g: 64, b: 32, a: 0.75 }} | ${'rgb(128, 64, 32)'}
     `('should return "$expected" for color=$color', ({ color, expected }) => {
       // act
       const result = rgbToString(color);
@@ -150,11 +150,11 @@ describe('Tests suite for color utilities', () => {
 
   describe('rgbaToString', () => {
     it.each`
-      color                                    | expected
-      ${{ r: 0, g: 0, b: 0, a: 1 }}            | ${'rgba(0, 0, 0, 1)'}
-      ${{ r: 255, g: 255, b: 255, a: 0 }}      | ${'rgba(255, 255, 255, 0)'}
-      ${{ r: 255, g: 0, b: 0, a: 0.5 }}        | ${'rgba(255, 0, 0, 0.5)'}
-      ${{ r: 128, g: 64, b: 32, a: 0.75 }}     | ${'rgba(128, 64, 32, 0.75)'}
+      color                                | expected
+      ${{ r: 0, g: 0, b: 0, a: 1 }}        | ${'rgba(0, 0, 0, 1)'}
+      ${{ r: 255, g: 255, b: 255, a: 0 }}  | ${'rgba(255, 255, 255, 0)'}
+      ${{ r: 255, g: 0, b: 0, a: 0.5 }}    | ${'rgba(255, 0, 0, 0.5)'}
+      ${{ r: 128, g: 64, b: 32, a: 0.75 }} | ${'rgba(128, 64, 32, 0.75)'}
     `('should return "$expected" for color=$color', ({ color, expected }) => {
       // act
       const result = rgbaToString(color);

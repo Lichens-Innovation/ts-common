@@ -15,13 +15,13 @@ import {
 describe('Tests suite for units utilities', () => {
   describe('fromM3psToGPM', () => {
     it.each`
-      value      | expected
-      ${1}       | ${15850.3}
-      ${0}       | ${0}
-      ${0.5}     | ${7925.15}
-      ${2}       | ${31700.6}
-      ${null}    | ${0}
-      ${undefined}| ${0}
+      value        | expected
+      ${1}         | ${15850.3}
+      ${0}         | ${0}
+      ${0.5}       | ${7925.15}
+      ${2}         | ${31700.6}
+      ${null}      | ${0}
+      ${undefined} | ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
       // act
       const result = fromM3psToGPM(value);
@@ -32,13 +32,13 @@ describe('Tests suite for units utilities', () => {
 
   describe('fromPaToFt', () => {
     it.each`
-      value      | expected
-      ${1000}    | ${0.334553}
-      ${0}       | ${0}
-      ${5000}    | ${1.672765}
-      ${10000}   | ${3.34553}
-      ${null}    | ${0}
-      ${undefined}| ${0}
+      value        | expected
+      ${1000}      | ${0.334553}
+      ${0}         | ${0}
+      ${5000}      | ${1.672765}
+      ${10000}     | ${3.34553}
+      ${null}      | ${0}
+      ${undefined} | ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
       // act
       const result = fromPaToFt(value);
@@ -49,13 +49,13 @@ describe('Tests suite for units utilities', () => {
 
   describe('fromWToHp', () => {
     it.each`
-      value      | expected
-      ${1000}    | ${1.34102}
-      ${0}       | ${0}
-      ${500}     | ${0.67051}
-      ${746}     | ${1.00040092}
-      ${null}    | ${0}
-      ${undefined}| ${0}
+      value        | expected
+      ${1000}      | ${1.34102}
+      ${0}         | ${0}
+      ${500}       | ${0.67051}
+      ${746}       | ${1.00040092}
+      ${null}      | ${0}
+      ${undefined} | ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
       // act
       const result = fromWToHp(value);
@@ -66,13 +66,13 @@ describe('Tests suite for units utilities', () => {
 
   describe('fromMToInches', () => {
     it.each`
-      value      | expected
-      ${1}       | ${39.3701}
-      ${0}       | ${0}
-      ${0.5}     | ${19.68505}
-      ${2}       | ${78.7402}
-      ${null}    | ${0}
-      ${undefined}| ${0}
+      value        | expected
+      ${1}         | ${39.3701}
+      ${0}         | ${0}
+      ${0.5}       | ${19.68505}
+      ${2}         | ${78.7402}
+      ${null}      | ${0}
+      ${undefined} | ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
       // act
       const result = fromMToInches(value);
@@ -83,13 +83,13 @@ describe('Tests suite for units utilities', () => {
 
   describe('fromHzToRpm', () => {
     it.each`
-      value      | expected
-      ${1}       | ${60}
-      ${0}       | ${0}
-      ${50}      | ${3000}
-      ${60}      | ${3600}
-      ${null}    | ${0}
-      ${undefined}| ${0}
+      value        | expected
+      ${1}         | ${60}
+      ${0}         | ${0}
+      ${50}        | ${3000}
+      ${60}        | ${3600}
+      ${null}      | ${0}
+      ${undefined} | ${0}
     `('should return $expected for value=$value', ({ value, expected }) => {
       // act
       const result = fromHzToRpm(value);
@@ -100,12 +100,12 @@ describe('Tests suite for units utilities', () => {
 
   describe('Constants', () => {
     it.each`
-      constant      | expected
-      ${M3PS_TO_GPM}| ${15850.3}
-      ${PA_TO_FT}   | ${0.000334553}
-      ${W_TO_HP}    | ${0.00134102}
-      ${M_TO_INCHES}| ${39.3701}
-      ${HZ_TO_RPM}  | ${60}
+      constant       | expected
+      ${M3PS_TO_GPM} | ${15850.3}
+      ${PA_TO_FT}    | ${0.000334553}
+      ${W_TO_HP}     | ${0.00134102}
+      ${M_TO_INCHES} | ${39.3701}
+      ${HZ_TO_RPM}   | ${60}
     `('should have correct value for $constant', ({ constant, expected }) => {
       // assert
       expect(constant).toBe(expected);

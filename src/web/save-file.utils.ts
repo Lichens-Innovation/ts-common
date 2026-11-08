@@ -3,17 +3,14 @@ import { downloadBlob } from './download.utils';
 import type { SaveFilePickerAcceptType, WindowWithSaveFilePicker } from './file-system-access.types';
 
 export type SaveFileHandleResult =
-  | { status: 'picked'; handle: FileSystemFileHandle }
-  | { status: 'cancelled' }
-  | { status: 'unsupported' };
+  { status: 'picked'; handle: FileSystemFileHandle } | { status: 'cancelled' } | { status: 'unsupported' };
 
 export interface SaveBlobResult {
   method: 'picker' | 'download';
   fileName: string;
 }
 
-export const isSaveFilePickerSupported = (): boolean =>
-  typeof window !== 'undefined' && 'showSaveFilePicker' in window;
+export const isSaveFilePickerSupported = (): boolean => typeof window !== 'undefined' && 'showSaveFilePicker' in window;
 
 const getDefaultFileTypes = (fileName: string): SaveFilePickerAcceptType[] | undefined => {
   const dotIndex = fileName.lastIndexOf('.');

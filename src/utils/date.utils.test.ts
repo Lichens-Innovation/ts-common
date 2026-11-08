@@ -18,12 +18,12 @@ import {
 describe('Tests suite for date utilities', () => {
   describe('dateAs_HHMMSS', () => {
     it.each`
-      value                                | expected
-      ${new Date('2024-03-15T14:30:45Z')}  | ${'14:30:45'}
-      ${'2024-03-15T14:30:45Z'}            | ${'14:30:45'}
-      ${1647352245000}                     | ${'14:30:45'}
-      ${null}                              | ${''}
-      ${undefined}                         | ${''}
+      value                               | expected
+      ${new Date('2024-03-15T14:30:45Z')} | ${'14:30:45'}
+      ${'2024-03-15T14:30:45Z'}           | ${'14:30:45'}
+      ${1647352245000}                    | ${'14:30:45'}
+      ${null}                             | ${''}
+      ${undefined}                        | ${''}
     `('should return "$expected" for $value', ({ value, expected }) => {
       // act
       const result = dateAs_HHMMSS(value);
@@ -39,12 +39,12 @@ describe('Tests suite for date utilities', () => {
 
   describe('dateAs_YYYYMMDD', () => {
     it.each`
-      value                                | expected
-      ${new Date('2024-03-15T14:30:45Z')}  | ${'2024-03-15'}
-      ${'2024-03-15T14:30:45Z'}            | ${'2024-03-15'}
-      ${1647352245000}                     | ${'2024-03-15'}
-      ${null}                              | ${''}
-      ${undefined}                         | ${''}
+      value                               | expected
+      ${new Date('2024-03-15T14:30:45Z')} | ${'2024-03-15'}
+      ${'2024-03-15T14:30:45Z'}           | ${'2024-03-15'}
+      ${1647352245000}                    | ${'2024-03-15'}
+      ${null}                             | ${''}
+      ${undefined}                        | ${''}
     `('should return "$expected" for $value', ({ value, expected }) => {
       // act
       const result = dateAs_YYYYMMDD(value);
@@ -59,12 +59,12 @@ describe('Tests suite for date utilities', () => {
 
   describe('dateAs_YYYYMMDD_HHMMSS', () => {
     it.each`
-      value                                | expected
-      ${new Date('2024-03-15T14:30:45Z')}  | ${'2024-03-15 14:30:45'}
-      ${'2024-03-15T14:30:45Z'}            | ${'2024-03-15 14:30:45'}
-      ${1647352245000}                     | ${'2024-03-15 14:30:45'}
-      ${null}                              | ${''}
-      ${undefined}                         | ${''}
+      value                               | expected
+      ${new Date('2024-03-15T14:30:45Z')} | ${'2024-03-15 14:30:45'}
+      ${'2024-03-15T14:30:45Z'}           | ${'2024-03-15 14:30:45'}
+      ${1647352245000}                    | ${'2024-03-15 14:30:45'}
+      ${null}                             | ${''}
+      ${undefined}                        | ${''}
     `('should return "$expected" for $value', ({ value, expected }) => {
       // act
       const result = dateAs_YYYYMMDD_HHMMSS(value);
@@ -291,4 +291,3 @@ describe('Tests suite for date utilities', () => {
     });
   });
 });
-
