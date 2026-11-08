@@ -15,12 +15,21 @@ bunx npm-check-updates
 
 ncu groups output under `Patch`, `Minor`, `Major`. Patch + Minor = safe set; Major = skip set.
 
-Done when: every listed package is sorted into one of the two sets.
+Plain ncu only reports each package's latest version, so a package with a new major hides any in-range minor/patch bump. Catch those too:
+
+```bash
+bunx npm-check-updates --target minor
+```
+
+Anything listed here that's in the skip set → its in-major bump joins the safe set.
+
+Done when: every listed package is sorted into one of the two sets, and in-major bumps of skipped majors are in the safe set.
 
 ## 2. Apply the safe set
 
 ```bash
 bunx npm-check-updates -u -x <comma-separated-major-pkgs>
+bunx npm-check-updates -u --target minor
 bun install
 ```
 
