@@ -1,7 +1,12 @@
 import ExcelJS from 'exceljs';
 import { describe, expect, it } from 'vitest';
 import type { ColumnMetadata } from './excel-generator.types';
-import { generateExcelBlob, sanitizeWorksheetTitle } from './exceljs.utils';
+import {
+  generateExcelBlob,
+  generateExcelWorkbookBlob,
+  sanitizeWorksheetTitle,
+  uniqueWorksheetTitles,
+} from './exceljs.utils';
 
 const loadWorksheet = async (blob: Blob): Promise<ExcelJS.Worksheet> => {
   const workbook = new ExcelJS.Workbook();
@@ -132,6 +137,61 @@ describe('ExcelJS utilities', () => {
       // assert
       expect(worksheet.getRow(2).getCell(3).value).toBe('unmapped');
       expect(worksheet.getRow(1).getCell(3).value).toBe('extra');
+    });
+
+    it('writes a hyperlink cell as a link Excel opens', async () => {
+      // arrange
+      const link = { text: 'https://example.com/r.pdf', hyperlink: 'https://example.com/r.pdf' };
+      const data = [{ name: 'Alice', report: link }];
+      // act
+      const blob = await generateExcelBlob({ worksheetTitle: 'Scores', data, columnsMetadata });
+      const worksheet = await loadWorksheet(blob);
+      // assert
+      const cell = worksheet.getRow(2).getCell(2);
+      expect(cell.value).toEqual(link);
+      expect(cell.font?.underline).toBe(true);
+    });
+  });
+
+  describe('uniqueWorksheetTitles', () => {
+    it.each`
+      titles                               | expected
+      ${['A', 'B']}                        | ${['A', 'B']}
+      ${['Forages', 'forages', 'Forages']} | ${['Forages', 'forages (2)', 'Forages (3)']}
+      ${['a'.repeat(40), 'a'.repeat(35)]}  | ${['a'.repeat(31), `${'a'.repeat(27)} (2)`]}
+      ${['', '?']}                         | ${['Sheet1', 'Sheet2']}
+    `('returns $expected for $titles', ({ titles, expected }) => {
+      // act
+      const result = uniqueWorksheetTitles(titles);
+      // assert
+      expect(result).toEqual(expected);
+    });
+  });
+
+  describe('generateExcelWorkbookBlob', () => {
+    it('writes one worksheet per sheet, in order, with unique titles', async () => {
+      // arrange
+      const sheets = [
+        { worksheetTitle: 'Forages', data: [{ name: 'F-1' }], columnsMetadata: {} },
+        { worksheetTitle: 'Forages', data: [{ name: 'F-2' }, { name: 'F-3' }], columnsMetadata: {} },
+      ];
+      // act
+      const blob = await generateExcelWorkbookBlob({ sheets });
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(await blob.arrayBuffer());
+      // assert
+      expect(workbook.worksheets.map((sheet) => sheet.name)).toEqual(['Forages', 'Forages (2)']);
+      expect(workbook.worksheets[1]?.getRow(3).getCell(1).value).toBe('F-3');
+    });
+
+    it.each`
+      case                | sheets
+      ${'no sheets'}      | ${[]}
+      ${'an empty sheet'} | ${[{ worksheetTitle: 'A', data: [], columnsMetadata: {} }]}
+    `('throws given $case', async ({ sheets }) => {
+      // act
+      // assert
+      await expect(generateExcelWorkbookBlob({ sheets })).rejects.toThrow('No data to export');
     });
   });
 });

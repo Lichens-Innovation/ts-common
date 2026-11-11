@@ -1,6 +1,12 @@
 import type { Font, Fill, Alignment } from 'exceljs';
 
-export type CellValue = string | number | null | undefined;
+/** A cell showing `text` that opens `hyperlink` when clicked in Excel. */
+export interface CellHyperlink {
+  text: string;
+  hyperlink: string;
+}
+
+export type CellValue = string | number | CellHyperlink | null | undefined;
 
 export type VerticalAlignment = 'top' | 'middle' | 'bottom';
 export type HorizontalAlignment = 'left' | 'center' | 'right';
