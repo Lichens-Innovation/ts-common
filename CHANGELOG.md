@@ -1,3 +1,10 @@
+# [1.30.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.29.0...v1.30.0) (2026-11-18)
+
+
+### Features
+
+* clickable links and multi-sheet workbooks in Excel exports ([347cacc](https://github.com/Lichens-Innovation/ts-common/commit/347caccdf8038ec78182834b8fad9e8b55749bcd))
+
 # [1.29.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.28.0...v1.29.0) (2026-10-25)
 
 
