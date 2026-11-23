@@ -137,7 +137,8 @@
     "habit:hooks": "coding-guide check --branch main",
     "habit:hooks:full": "coding-guide check",
     "habit:snoozed": "coding-guide snooze --list",
-    "lint:exports": "publint"
+    "lint:exports": "publint",
+    "lint:types": "attw --pack . --profile node16"
   },
   "dependencies": {
     "date-fns": "4.4.0"
@@ -203,6 +204,7 @@
     "uuid": "11.1.1"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
     "@commitlint/cli": "21.2.4",
     "@commitlint/config-conventional": "21.2.4",
     "@eslint/js": "10.0.1",
