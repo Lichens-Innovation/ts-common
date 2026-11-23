@@ -1,4 +1,4 @@
-import { getExtensionFromDataUri } from '../mime';
+import { getExtensionFromDataUri } from '../mime/mime.utils';
 
 interface DownloadBlobArgs {
   blob: Blob;

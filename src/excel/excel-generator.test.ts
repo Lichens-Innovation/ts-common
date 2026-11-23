@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { WorksheetBuilder } from './excel-generator';
 import type { CellStyle } from './excel-generator.types';
 
-function createWorksheet(): ExcelJS.Worksheet {
+const createWorksheet = (): ExcelJS.Worksheet => {
   const workbook = new ExcelJS.Workbook();
   return workbook.addWorksheet('Test');
-}
+};
 
 describe('WorksheetBuilder', () => {
   it('starts with rowCount 1', () => {

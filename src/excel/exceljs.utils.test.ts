@@ -121,7 +121,7 @@ describe('ExcelJS utilities', () => {
       const blob = await generateExcelBlob({
         worksheetTitle: 'Scores',
         data,
-        columnsMetadata: { score: columnsMetadata.score! },
+        columnsMetadata: { score: { name: 'Score', width: 10, valueType: 'number' } },
       });
       const worksheet = await loadWorksheet(blob);
       // assert: written as empty string, xlsx round-trip may normalize empty cells to null
@@ -160,6 +160,7 @@ describe('ExcelJS utilities', () => {
       ${['Forages', 'forages', 'Forages']} | ${['Forages', 'forages (2)', 'Forages (3)']}
       ${['a'.repeat(40), 'a'.repeat(35)]}  | ${['a'.repeat(31), `${'a'.repeat(27)} (2)`]}
       ${['', '?']}                         | ${['Sheet1', 'Sheet2']}
+      ${[': :']}                           | ${['Sheet1']}
     `('returns $expected for $titles', ({ titles, expected }) => {
       // act
       const result = uniqueWorksheetTitles(titles);

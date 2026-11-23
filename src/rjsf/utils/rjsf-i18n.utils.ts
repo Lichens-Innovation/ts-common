@@ -1,8 +1,7 @@
 import { replaceStringParameters } from '@rjsf/utils';
 import { i18n } from 'i18next';
-import { isBlank } from '../../utils/string.utils';
+import { isBlank } from '../../utils/string/string.utils';
 
-/** Maps RJSF TranslatableString values to our i18n keys (rjsf namespace). */
 export const RJSF_STRING_TO_I18N_KEY: Record<string, string> = {
   'Add Item': 'rjsf:addItem',
   Add: 'rjsf:add',

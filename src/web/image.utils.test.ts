@@ -1,5 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { convertSvgToDataUri, downscaleToJpegDataUrl, loadImage, resizeSvgXml } from './image.utils';
+import {
+  convertSvgToDataUri,
+  downscaleToJpegDataUrl,
+  getChartAsPngDataUri,
+  getRechartSvgXml,
+  loadImage,
+  resizeSvgXml,
+  svgToPngDataUri,
+} from './image.utils';
 
 interface FakeImageOptions {
   behavior: 'load' | 'error';
@@ -28,10 +36,12 @@ const stubGlobalImage = ({ behavior, naturalWidth = 0, naturalHeight = 0 }: Fake
   vi.stubGlobal('Image', FakeImage);
 };
 
-const stubGlobalObjectUrl = (): {
+interface ObjectUrlStubs {
   createObjectURL: ReturnType<typeof vi.fn>;
   revokeObjectURL: ReturnType<typeof vi.fn>;
-} => {
+}
+
+const stubGlobalObjectUrl = (): ObjectUrlStubs => {
   const createObjectURL = vi.fn(() => 'blob:mock-url');
   const revokeObjectURL = vi.fn();
 
@@ -50,7 +60,12 @@ interface FakeCanvas {
   toDataURL: ReturnType<typeof vi.fn>;
 }
 
-const stubGlobalCanvasDocument = (hasContext = true): { canvas: FakeCanvas; ctx: FakeCanvasContext | null } => {
+interface CanvasDocumentStubs {
+  canvas: FakeCanvas;
+  ctx: FakeCanvasContext | null;
+}
+
+const stubGlobalCanvasDocument = (hasContext = true): CanvasDocumentStubs => {
   const ctx: FakeCanvasContext | null = hasContext ? { drawImage: vi.fn() } : null;
   const canvas: FakeCanvas = {
     width: 0,
@@ -157,6 +172,52 @@ describe('Image utilities', () => {
 
       // act & assert
       await expect(downscaleToJpegDataUrl({ blob })).rejects.toThrow('canvas 2d context unavailable');
+    });
+  });
+
+  describe('svgToPngDataUri', () => {
+    it.each(['', '   ', null, undefined])(
+      'returns null without loading an image for blank uri %j',
+      async (svgDataUri) => {
+        // arrange
+        const imageConstructor = vi.fn();
+        vi.stubGlobal('Image', imageConstructor);
+
+        // act
+        const result = await svgToPngDataUri({ svgDataUri, dimensions: { width: 10, height: 10 } });
+
+        // assert
+        expect(result).toBeNull();
+        expect(imageConstructor).not.toHaveBeenCalled();
+      }
+    );
+  });
+
+  describe('blank chart element id', () => {
+    it.each(['', '   '])('getRechartSvgXml returns null without a DOM lookup for %j', (chartElementId) => {
+      // arrange
+      const getElementById = vi.fn();
+      vi.stubGlobal('document', { getElementById });
+
+      // act
+      const result = getRechartSvgXml(chartElementId);
+
+      // assert
+      expect(result).toBeNull();
+      expect(getElementById).not.toHaveBeenCalled();
+    });
+
+    it.each(['', '   '])('getChartAsPngDataUri returns null without a DOM lookup for %j', async (chartElementId) => {
+      // arrange
+      const getElementById = vi.fn();
+      vi.stubGlobal('document', { getElementById });
+
+      // act
+      const result = await getChartAsPngDataUri({ chartElementId, width: 10, height: 10 });
+
+      // assert
+      expect(result).toBeNull();
+      expect(getElementById).not.toHaveBeenCalled();
     });
   });
 

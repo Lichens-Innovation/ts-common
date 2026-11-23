@@ -1,4 +1,5 @@
-import { extractBase64FromDataUri } from '../utils/uri.utils';
+import { isBlank } from '../utils/string/string.utils';
+import { extractBase64FromDataUri } from '../utils/string/uri.utils';
 
 export const readFileAsDataUrl = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -27,7 +28,7 @@ export const readFileAsBase64 = (file: File): Promise<Base64FileResult> => {
     reader.onload = () => {
       const result = reader.result as string;
       const base64 = extractBase64FromDataUri(result);
-      const mimeType = file.type || 'application/octet-stream';
+      const mimeType = isBlank(file.type) ? 'application/octet-stream' : file.type;
       resolve({ base64, mimeType });
     };
     reader.onerror = () => reject(new Error('Failed to read file'));

@@ -90,13 +90,13 @@ export type TableCellValign = 'top' | 'middle' | 'bottom';
 export type FontStyle = 'normal' | 'bold';
 export type FillColorRgbTuple = [number, number, number];
 
-export type CellStyle = {
+export interface CellStyle {
   cellWidth?: number;
   halign?: TableCellHalign;
   valign?: TableCellValign;
   fontStyle?: FontStyle;
   fillColor?: FillColorRgbTuple;
-};
+}
 
 export interface ComputeTableMarginsArgs {
   tableWidth: number;
@@ -105,7 +105,6 @@ export interface ComputeTableMarginsArgs {
 
 export type CellValue = string | number;
 
-/** Cell with rowSpan/colSpan for merged cells (passed through to autoTable). */
 export interface TableCellDef {
   content: string | string[] | number;
   rowSpan?: number;
@@ -114,31 +113,28 @@ export interface TableCellDef {
 
 export type TableCellInput = CellValue | TableCellDef;
 
-/** Parameters for adding a table (generic API, no jspdf-autotable leak). */
 export interface AddTableArgs {
-  /** Each row is an array of cell values or cell defs (with rowSpan/colSpan). */
   body: TableCellInput[][];
-  /** Optional header row (single row of cell values). */
   head?: CellValue[];
-  /** Y position to start the table (uses generator currentY if omitted). */
+  /** Defaults to the generator's currentY. habit-hooks-disable non-essential-comment */
   startY?: number;
 
-  /** Optional column widths (in same units as doc, e.g. inches). Sum should match available width. */
+  /** In doc units (inches); defaults to equal columns spanning the available width. habit-hooks-disable non-essential-comment */
   columnWidths?: number[];
-  /** Optional per-column styles (e.g. halign, fontStyle). Merged with auto-generated cellWidth. */
+  /** Merged over the generated `cellWidth` of each column. habit-hooks-disable non-essential-comment */
   columnStyles?: Record<number, CellStyle>;
 
-  /** Whether to draw the table outer border (default true). */
+  /** Outer table border (default true). habit-hooks-disable non-essential-comment */
   drawLineForTable?: boolean;
-  /** Whether to draw cell borders (default true). */
+  /** Cell borders (default true). habit-hooks-disable non-essential-comment */
   drawLineForCells?: boolean;
-  /** Table border line width (default 0.005). */
+  /** In doc units (inches) (default 0.005). habit-hooks-disable non-essential-comment */
   lineWidth?: number;
-  /** Table border color as a grayscale value: 0 = black, 200 = light gray, 255 = white (default 0). */
+  /** Grayscale: 0 = black, 200 = light gray, 255 = white (default 0). habit-hooks-disable non-essential-comment */
   lineColor?: number;
-  /** Cell padding in doc units (inches) (default 0.05). */
+  /** In doc units (inches) (default 0.05). habit-hooks-disable non-essential-comment */
   cellPadding?: number;
-  /** Horizontal placement of the table within the available width (default 'left'). */
+  /** Placement within the available width (default 'left'). habit-hooks-disable non-essential-comment */
   tableAlign?: TableCellHalign;
 }
 
@@ -148,8 +144,8 @@ export interface AddImageArgs {
   y: number;
   width: number;
   height: number;
-  /** Image format passed to jsPDF (default 'PNG'). */
+  /** Default 'PNG'. habit-hooks-disable non-essential-comment */
   format?: ImageFormat;
-  /** jsPDF image stream compression level (default 'MEDIUM'). 'NONE' embeds raw uncompressed pixel data. */
+  /** Default 'MEDIUM'; 'NONE' embeds raw uncompressed pixel data. habit-hooks-disable non-essential-comment */
   compression?: ImageCompression;
 }

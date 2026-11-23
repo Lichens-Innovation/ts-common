@@ -1,6 +1,7 @@
 import { jsPDF, type ImageCompression, type ImageFormat } from 'jspdf';
-import { autoTable, type MarginPaddingInput } from 'jspdf-autotable';
-import { isNullish, type Dimensions } from '../utils';
+import { autoTable, type MarginPaddingInput, type UserOptions } from 'jspdf-autotable';
+import { isNullish } from '../utils/runtime/types.utils';
+import { type Dimensions } from '../utils/number/dimensions.utils';
 import {
   DEFAULT_FOOTER_CELL_BUILDER,
   DEFAULT_OPTIONS,
@@ -14,6 +15,22 @@ import {
   type TableCellHalign,
   type ThemeConfig,
 } from './pdf-generator.types';
+
+interface LastAutoTable {
+  finalY: number;
+}
+
+interface JsPdfWithLastAutoTable {
+  lastAutoTable?: LastAutoTable;
+}
+
+const buildColumnStyles = (widths: number[], columnStyles?: Record<number, CellStyle>): Record<number, CellStyle> => {
+  const styles: Record<number, CellStyle> = {};
+  widths.forEach((cellWidth, i) => {
+    styles[i] = { cellWidth, ...columnStyles?.[i] };
+  });
+  return styles;
+};
 
 export class PdfGenerator {
   private doc: jsPDF;
@@ -81,12 +98,10 @@ export class PdfGenerator {
     return this.theme.fontSize.tiny;
   }
 
-  /** Current Y position (in doc units) for layout. */
   get currentY(): number {
     return this._currentY;
   }
 
-  /** Set current Y position (e.g. after custom content like header or chart). */
   public setCurrentY(y: number): void {
     this._currentY = y;
   }
@@ -104,6 +119,7 @@ export class PdfGenerator {
       computedSum,
       columnWidths: JSON.stringify(columnWidths),
     };
+    // eslint-disable-next-line no-console -- this public check exists only to report overflow to the caller
     console.warn('[checkTableOverflow] table overflow', infos);
   }
 
@@ -114,7 +130,14 @@ export class PdfGenerator {
     return { left: this.margin + offset, right: this.margin + (leftover - offset) };
   }
 
-  public addTable(addTableArgs: AddTableArgs) {
+  private resolveColumnWidths({ body, columnWidths }: AddTableArgs): number[] {
+    if (columnWidths) return columnWidths;
+
+    const colCount = Math.max(...body.map((row) => row.length), 0);
+    return Array(colCount).fill(this.availableWidth / colCount);
+  }
+
+  private buildAutoTableOptions(addTableArgs: AddTableArgs, startY: number): UserOptions {
     const {
       lineWidth = 0.005,
       lineColor = 0,
@@ -122,56 +145,47 @@ export class PdfGenerator {
       drawLineForCells = true,
       head,
       body,
-      startY = this._currentY,
-      columnWidths,
       cellPadding = 0.05,
       tableAlign = 'left',
     } = addTableArgs;
+
+    const widths = this.resolveColumnWidths(addTableArgs);
+    const tableWidth = widths.reduce((sum, width) => sum + width, 0);
+    const cellLineWidth = drawLineForCells ? lineWidth : 0;
+    const fontSize = this.theme.fontSize.small;
+    const cellStyles = { fontSize, font: this.font, cellPadding, lineWidth: cellLineWidth, lineColor };
+
+    return {
+      startY,
+      head: isNullish(head) ? undefined : [head],
+      body,
+      theme: 'grid',
+      tableLineWidth: drawLineForTable ? lineWidth : 0,
+      tableLineColor: lineColor,
+      margin: this.computeTableMargins({ tableWidth, tableAlign }),
+      bodyStyles: cellStyles,
+      headStyles: { ...cellStyles },
+      columnStyles: buildColumnStyles(widths, addTableArgs.columnStyles),
+    };
+  }
+
+  public addTable(addTableArgs: AddTableArgs) {
+    const { body, startY = this._currentY } = addTableArgs;
 
     if (body.length === 0) {
       this._currentY = startY;
       return startY;
     }
 
-    const fontSize = this.theme.fontSize.small;
-    const colCount = columnWidths?.length ?? Math.max(...body.map((row) => row.length), 0);
-    const widths = columnWidths ?? Array(colCount).fill(this.availableWidth / colCount);
-    const columnStyles: Record<number, CellStyle> = {};
-    widths.forEach((cellWidth, i) => {
-      columnStyles[i] = { cellWidth, ...addTableArgs.columnStyles?.[i] };
-    });
-
-    const tableLineWidth = drawLineForTable ? lineWidth : 0;
-    const cellLineWidth = drawLineForCells ? lineWidth : 0;
-
-    const tableWidth = widths.reduce((sum, width) => sum + width, 0);
-    const margin: MarginPaddingInput = this.computeTableMargins({ tableWidth, tableAlign });
-
-    autoTable(this.doc, {
-      startY,
-      head: !isNullish(head) ? [head] : undefined,
-      body,
-      theme: 'grid',
-      tableLineWidth,
-      tableLineColor: lineColor,
-      margin,
-      bodyStyles: { fontSize, font: this.font, cellPadding, lineWidth: cellLineWidth, lineColor },
-      headStyles: { fontSize, font: this.font, cellPadding, lineWidth: cellLineWidth, lineColor },
-      columnStyles,
-    });
-
-    const finalY = (this.doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable?.finalY ?? startY;
-    this._currentY = finalY;
+    autoTable(this.doc, this.buildAutoTableOptions(addTableArgs, startY));
+    this._currentY = (this.doc as unknown as JsPdfWithLastAutoTable).lastAutoTable?.finalY ?? startY;
   }
 
-  /**
-   * Add an image at the given position and size. Does not update currentY.
-   */
+  /** Does not update currentY. habit-hooks-disable non-essential-comment */
   public addImage({ dataUri, x, y, width, height, format = 'PNG', compression = 'MEDIUM' }: AddImageArgs): void {
     this.doc.addImage(dataUri, format, x, y, width, height, undefined, compression);
   }
 
-  /** Exposes the jsPDF document for custom drawing (e.g. header text, status badge, certification). */
   public getDoc(): jsPDF {
     return this.doc;
   }
@@ -195,15 +209,8 @@ export class PdfGenerator {
 
   private calculateImageDimensions(aspectRatio: number): Dimensions {
     const width = this.availableWidth;
-
-    // Calculate height based on canvas aspect ratio to maintain proper proportions
     const height = width / aspectRatio;
-
-    // Ensure the image doesn't exceed available space (accounting for footer)
-    const maxHeight = this.availableHeight - this.footerHeight - IMAGE_GAP;
-    const finalHeight = Math.min(height, maxHeight);
-
-    // If image is reduced, adjust width to maintain aspect ratio
+    const finalHeight = Math.min(height, this.fullImageHeight);
     const finalWidth = finalHeight < height ? finalHeight * aspectRatio : width;
 
     return { width: finalWidth, height: finalHeight };
@@ -228,10 +235,7 @@ export class PdfGenerator {
   }
 
   public renderFooters(): void {
-    if (!this.options.hasFooter) {
-      console.warn('[renderFooters] Footer is disabled');
-      return;
-    }
+    if (!this.options.hasFooter) return;
 
     const totalPages = this.doc.getNumberOfPages();
     const columnStyles = this.buildFooterColumnStyles();
@@ -257,7 +261,6 @@ export class PdfGenerator {
     }
   }
 
-  /** Footer is a single line; height derived from font size and table padding. */
   get footerHeight(): number {
     if (!this.options.hasFooter) {
       return 0;
@@ -273,7 +276,6 @@ export class PdfGenerator {
       return;
     }
 
-    // Save current style state
     const currentDrawColor = this.doc.getDrawColor();
     const currentLineWidth = this.doc.getLineWidth();
 
@@ -288,9 +290,9 @@ export class PdfGenerator {
         'S' // Stroke only, no fill
       );
     } catch (error) {
+      // eslint-disable-next-line no-console -- debug-only overlay: a drawing failure must not abort the export
       console.error('[drawAvailableAreaRectangle] Error drawing available area rect', error);
     } finally {
-      // Restore previous state
       this.doc.setDrawColor(currentDrawColor);
       this.doc.setLineWidth(currentLineWidth);
     }

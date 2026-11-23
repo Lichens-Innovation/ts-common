@@ -2,14 +2,14 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig({
   entry: {
-    index: 'src/index.ts',
-    excel: 'src/excel/index.ts',
-    csv: 'src/csv/index.ts',
-    pdf: 'src/pdf/index.ts',
-    web: 'src/web/index.ts',
-    mime: 'src/mime/index.ts',
-    logger: 'src/logger/index.ts',
-    rjsf: 'src/rjsf/index.ts',
+    index: 'src/ts-common.index.ts',
+    excel: 'src/excel/excel.index.ts',
+    csv: 'src/csv/csv.index.ts',
+    pdf: 'src/pdf/pdf.index.ts',
+    web: 'src/web/web.index.ts',
+    mime: 'src/mime/mime.index.ts',
+    logger: 'src/logger/logger.index.ts',
+    rjsf: 'src/rjsf/rjsf.index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,

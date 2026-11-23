@@ -1,8 +1,9 @@
+/* eslint-disable no-console -- this module bridges pino to the browser/Node console: console output is its purpose */
 import { mkdirSync } from 'node:fs';
 import path from 'node:path';
 import pino from 'pino';
-import { isRuntimeEnvNodeJs } from '../utils/runtime-env.utils';
-import { isNullish } from '../utils/types.utils';
+import { isRuntimeEnvNodeJs } from '../utils/runtime/runtime-env.utils';
+import { isNullish } from '../utils/runtime/types.utils';
 
 const LEVEL_LABELS: Record<number, string> = {
   10: 'trace',
@@ -24,7 +25,11 @@ const LEVEL_COLORS: Record<string, string> = {
 
 const MESSAGE_KEY = 'msg';
 
-type LogObject = Record<string, unknown> & { level?: number; time?: string; [MESSAGE_KEY]?: string };
+interface LogObject extends Record<string, unknown> {
+  level?: number;
+  time?: string;
+  [MESSAGE_KEY]?: string;
+}
 
 const getLevelLabel = (levelNum: number): string => LEVEL_LABELS[levelNum] ?? 'info';
 
@@ -47,14 +52,14 @@ const getRestPayload = (obj: LogObject): Record<string, unknown> =>
       return acc;
     }, {});
 
-type BuildMainArgsParams = {
+interface BuildMainArgsParams {
   timestamp: string;
   label: string;
   color: string;
   msg: unknown;
   extraArgs: unknown[];
   rest: Record<string, unknown>;
-};
+}
 
 const buildMainArgs = ({ timestamp, label, color, msg, extraArgs, rest }: BuildMainArgsParams): unknown[] => {
   const prefix = `[${timestamp}]`;
@@ -118,10 +123,10 @@ const createPinoLogger = (): pino.Logger => {
   return pino(browserOptions);
 };
 
-export type CreateLoggerOptions = {
+export interface CreateLoggerOptions {
   logFile?: string;
   console?: boolean;
-};
+}
 
 const createFileDestination = (logFile: string): pino.DestinationStream => {
   mkdirSync(path.dirname(logFile), { recursive: true });
@@ -139,18 +144,19 @@ const createNodePinoWithOptions = ({ logFile, console: useConsole = true }: Crea
     streams.push({ stream: createPrettyTransport() });
   }
 
-  if (streams.length === 0) {
+  const [firstStream, ...otherStreams] = streams;
+  if (isNullish(firstStream)) {
     return pino(baseOptions);
   }
 
-  if (streams.length === 1) {
-    return pino(baseOptions, streams[0]!.stream);
+  if (otherStreams.length === 0) {
+    return pino(baseOptions, firstStream.stream);
   }
 
   return pino(baseOptions, pino.multistream(streams));
 };
 
-export type Logger = {
+export interface Logger {
   trace: (message: string, payload?: Record<string, unknown>) => void;
   debug: (message: string, payload?: Record<string, unknown>) => void;
   info: (message: string, payload?: Record<string, unknown>) => void;
@@ -158,29 +164,29 @@ export type Logger = {
   error: (message: string, payload?: Record<string, unknown>) => void;
   fatal: (message: string, payload?: Record<string, unknown>) => void;
   log: (message: string, payload?: Record<string, unknown>) => void;
-};
+}
 
-const buildLoggerApi = (pinoInstance: pino.Logger): Logger => {
-  const consoleMethodToPinoMethod =
-    (level: Level) =>
-    (message: string, payload?: Record<string, unknown>): void => {
-      if (isNullish(payload)) {
-        pinoInstance[level](message);
-      } else {
-        pinoInstance[level](payload, message);
-      }
-    };
+type LogMethod = Logger['info'];
 
-  return {
-    trace: consoleMethodToPinoMethod('trace'),
-    debug: consoleMethodToPinoMethod('debug'),
-    info: consoleMethodToPinoMethod('info'),
-    warn: consoleMethodToPinoMethod('warn'),
-    error: consoleMethodToPinoMethod('error'),
-    fatal: consoleMethodToPinoMethod('fatal'),
-    log: consoleMethodToPinoMethod('info'),
+const toPinoMethod =
+  (pinoInstance: pino.Logger, level: Level): LogMethod =>
+  (message, payload) => {
+    if (isNullish(payload)) {
+      pinoInstance[level](message);
+    } else {
+      pinoInstance[level](payload, message);
+    }
   };
-};
+
+const buildLoggerApi = (pinoInstance: pino.Logger): Logger => ({
+  trace: toPinoMethod(pinoInstance, 'trace'),
+  debug: toPinoMethod(pinoInstance, 'debug'),
+  info: toPinoMethod(pinoInstance, 'info'),
+  warn: toPinoMethod(pinoInstance, 'warn'),
+  error: toPinoMethod(pinoInstance, 'error'),
+  fatal: toPinoMethod(pinoInstance, 'fatal'),
+  log: toPinoMethod(pinoInstance, 'info'),
+});
 
 export const createLogger = (options?: CreateLoggerOptions): Logger => {
   if (!isRuntimeEnvNodeJs()) {

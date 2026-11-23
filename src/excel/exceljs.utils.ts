@@ -1,26 +1,12 @@
 import ExcelJS from 'exceljs';
-import { getMimeType } from '../mime';
-import { isNullish } from '../utils';
+import { getMimeType } from '../mime/mime.utils';
+import { isNullish } from '../utils/runtime/types.utils';
+import { isBlank } from '../utils/string/string.utils';
 import type { CellHyperlink, CellValue, ColumnMetadata } from './excel-generator.types';
 
-/**
- * Sanitizes a worksheet title to comply with Excel's limitations.
- *
- * Excel enforces strict rules for worksheet names:
- * - Maximum length of 31 characters (legacy limitation from older Excel versions)
- * - Certain characters are reserved for special purposes and cannot be used:
- *   - `:` (colon) - used in cell range references (e.g., A1:B2)
- *   - `/` (forward slash) - used in file paths
- *   - `\` (backslash) - used in file paths and escape sequences
- *   - `?` (question mark) - used as wildcard in formulas
- *   - `*` (asterisk) - used as wildcard in formulas
- *   - `[` and `]` (square brackets) - used in external references (e.g., [Book1.xlsx]Sheet1!A1)
- *
- * This function removes invalid characters and truncates the title to 31 characters
- * to ensure compatibility with Excel's file format specifications.
- *
- * @param title - The original worksheet title to sanitize
- * @returns A sanitized title that complies with Excel's naming rules
+/** habit-hooks-disable non-essential-comment
+ * Excel rejects worksheet names longer than 31 characters or containing any of `: / \ ? * [ ]`
+ * (reserved for range references, paths, wildcards and external references).
  */
 export const sanitizeWorksheetTitle = (title: string): string => {
   const MAX_LENGTH = 31;
@@ -134,7 +120,7 @@ interface AddDataRowsArgs {
 export const isCellHyperlink = (value: CellValue): value is CellHyperlink =>
   typeof value === 'object' && value !== null && typeof value.hyperlink === 'string';
 
-// The colour and underline Excel gives a link it creates itself.
+// The colour and underline Excel gives a link it creates itself. habit-hooks-disable non-essential-comment
 const HYPERLINK_FONT: Partial<ExcelJS.Font> = { color: { argb: 'FF0563C1' }, underline: true };
 
 const applyHyperlinkStyles = (row: ExcelJS.Row, values: CellValue[]): void => {
@@ -154,7 +140,7 @@ const addDataRows = ({ worksheet, headers, columnsMetadata, data }: AddDataRowsA
   applyDataRowStyles({ worksheet, startRowIndex: 2, endRowIndex: data.length + 1 });
 };
 
-/**
+/** habit-hooks-disable non-essential-comment
  * Sanitized worksheet titles, made unique the way Excel compares them (ignoring case): a workbook
  * holding two sheets of the same name is refused when opened. A repeat gets a ` (n)` suffix, the
  * title shortened so the suffix still fits in Excel's 31 characters.
@@ -164,7 +150,8 @@ export const uniqueWorksheetTitles = (titles: string[]): string[] => {
   const taken = new Set<string>();
 
   return titles.map((title, index) => {
-    const base = sanitizeWorksheetTitle(title) || `Sheet${index + 1}`;
+    const sanitized = sanitizeWorksheetTitle(title);
+    const base = isBlank(sanitized) ? `Sheet${index + 1}` : sanitized;
     let candidate = base;
     for (let n = 2; taken.has(candidate.toLowerCase()); n++) {
       const suffix = ` (${n})`;
@@ -178,9 +165,9 @@ export const uniqueWorksheetTitles = (titles: string[]): string[] => {
 export interface ExcelSheetArgs {
   worksheetTitle: string;
   data: Record<string, CellValue>[];
-  /**
-   * Metadata for columns, keyed by column name (translated header name).
-   * If not provided, columns will use default width and auto-detect value types.
+  /** habit-hooks-disable non-essential-comment
+   * Keyed by column name (the translated header). Columns without an entry keep the default width
+   * and the 'auto' value type.
    */
   columnsMetadata: Record<string, ColumnMetadata>;
 }
@@ -188,7 +175,6 @@ export interface ExcelSheetArgs {
 type GenerateExcelBlobArgs = ExcelSheetArgs;
 
 interface GenerateExcelWorkbookBlobArgs {
-  /** One worksheet each, in this order. */
   sheets: ExcelSheetArgs[];
 }
 

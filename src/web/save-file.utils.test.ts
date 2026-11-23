@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest';
 import { downloadBlob } from './download.utils';
 import {
   isSaveFilePickerSupported,
@@ -16,6 +16,12 @@ const createWritable = () => ({
   abort: vi.fn().mockResolvedValue(undefined),
 });
 
+const createFailingWritable = () => {
+  const writable = createWritable();
+  writable.write.mockRejectedValue(new Error('disk full'));
+  return writable;
+};
+
 const createHandle = (writable = createWritable(), name = 'picked.pdf') =>
   ({
     name,
@@ -28,9 +34,10 @@ const stubPicker = (showSaveFilePicker: ReturnType<typeof vi.fn>) => {
 
 describe('Save file utilities', () => {
   const blob = new Blob(['content'], { type: 'application/pdf' });
+  let warnSpy: MockInstance;
 
   beforeEach(() => {
-    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
@@ -139,7 +146,7 @@ describe('Save file utilities', () => {
 
       // assert
       expect(result).toEqual({ status: 'unsupported' });
-      expect(console.warn).toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalled();
     });
 
     it('returns unsupported when the API is missing', async () => {
@@ -171,13 +178,11 @@ describe('Save file utilities', () => {
 
     it('aborts the writable and rethrows on write error', async () => {
       // arrange
-      const writable = createWritable();
-      const error = new Error('disk full');
-      writable.write.mockRejectedValue(error);
+      const writable = createFailingWritable();
       const handle = createHandle(writable);
 
       // act & assert
-      await expect(writeBlobToFileHandle({ handle, blob })).rejects.toBe(error);
+      await expect(writeBlobToFileHandle({ handle, blob })).rejects.toThrow('disk full');
       expect(writable.abort).toHaveBeenCalled();
       expect(writable.close).not.toHaveBeenCalled();
     });
@@ -208,21 +213,14 @@ describe('Save file utilities', () => {
       expect(downloadBlob).not.toHaveBeenCalled();
     });
 
-    it('falls back to download when writing fails', async () => {
+    it.each([
+      { label: 'writing to the handle fails', buildHandle: () => createHandle(createFailingWritable()) },
+      { label: 'handle is undefined', buildHandle: () => undefined },
+      { label: 'handle is null', buildHandle: () => null },
+    ])('falls back to download when $label', async ({ buildHandle }) => {
       // arrange
-      const writable = createWritable();
-      writable.write.mockRejectedValue(new Error('disk full'));
-      const handle = createHandle(writable);
+      const handle = buildHandle();
 
-      // act
-      const result = await saveBlob({ blob, fileName: 'report.pdf', handle });
-
-      // assert
-      expect(result).toEqual({ method: 'download', fileName: 'report.pdf' });
-      expect(downloadBlob).toHaveBeenCalledWith({ blob, fileName: 'report.pdf' });
-    });
-
-    it.each([undefined, null])('downloads when handle is %s', async (handle) => {
       // act
       const result = await saveBlob({ blob, fileName: 'report.pdf', handle });
 

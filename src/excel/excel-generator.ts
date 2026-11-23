@@ -24,7 +24,7 @@ export class WorksheetBuilder {
     this.defaultRowStyles = [];
   }
 
-  /** Returns the current row index (1-based). */
+  /** Current row index, 1-based like ExcelJS. habit-hooks-disable non-essential-comment */
   get rowCount(): number {
     return this.currentRow;
   }
@@ -42,7 +42,6 @@ export class WorksheetBuilder {
     const stylesToUse = styles ?? this.defaultRowStyles;
     const row = this.worksheet.addRow(values);
 
-    // Apply styles to each cell in the row
     for (let col = 0; col < values.length; col++) {
       const style = stylesToUse[col];
       if (style) {

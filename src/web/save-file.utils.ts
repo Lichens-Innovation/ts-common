@@ -1,4 +1,4 @@
-import { getMimeType } from '../mime';
+import { getMimeType } from '../mime/mime.utils';
 import { downloadBlob } from './download.utils';
 import type { SaveFilePickerAcceptType, WindowWithSaveFilePicker } from './file-system-access.types';
 
@@ -31,7 +31,7 @@ interface RequestSaveFileHandleArgs {
   types?: SaveFilePickerAcceptType[];
 }
 
-/**
+/** habit-hooks-disable non-essential-comment
  * Opens the native save file picker. Must be called while the user activation is still valid
  * (i.e. right at the start of a click handler, before any slow work).
  */
@@ -47,6 +47,7 @@ export const requestSaveFileHandle = async ({
   } catch (error: unknown) {
     if (isAbortError(error)) return { status: 'cancelled' };
 
+    // eslint-disable-next-line no-console -- diagnostic for a swallowed picker failure: the caller only sees 'unsupported'
     console.warn('[requestSaveFileHandle] Save file picker failed, falling back', error);
     return { status: 'unsupported' };
   }
@@ -82,6 +83,7 @@ export const saveBlob = async ({ blob, fileName, handle }: SaveBlobArgs): Promis
       await writeBlobToFileHandle({ handle, blob });
       return { method: 'picker', fileName: handle.name };
     } catch (error: unknown) {
+      // eslint-disable-next-line no-console -- diagnostic for a swallowed write failure before the download fallback
       console.warn('[saveBlob] Writing to file handle failed, falling back to download', error);
     }
   }
@@ -96,7 +98,7 @@ interface SaveBlobWithPickerArgs {
   types?: SaveFilePickerAcceptType[];
 }
 
-/**
+/** habit-hooks-disable non-essential-comment
  * One-shot save: picker then write. Only suitable when the blob is already available
  * (user activation must still be valid). Returns null when the user cancels the picker.
  */
