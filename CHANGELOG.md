@@ -1,3 +1,10 @@
+## [1.30.1](https://github.com/Lichens-Innovation/ts-common/compare/v1.30.0...v1.30.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* adopt coding-guide standard ([#67](https://github.com/Lichens-Innovation/ts-common/issues/67)) ([d40a18c](https://github.com/Lichens-Innovation/ts-common/commit/d40a18c3eabadebdfdceb9d3baaae89ce41b8ee7))
+
 # [1.30.0](https://github.com/Lichens-Innovation/ts-common/compare/v1.29.0...v1.30.0) (2026-11-18)
 
 
