@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { CellValue } from './index';
-import { convertToCsvRow, generateCsvBlob } from './index';
+import { type CellValue, convertToCsvRow, generateCsvBlob } from './csv.utils';
 
 describe('CSV utilities', () => {
   describe('convertToCsvRow', () => {

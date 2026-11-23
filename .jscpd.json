@@ -1,0 +1,5 @@
+{
+  "path": ["src"],
+  "minLines": 5,
+  "minTokens": 50
+}

@@ -20,10 +20,10 @@ export const addResourceBundleForRjsf = (instance: i18n): void => {
   instance.addResourceBundle('en', RJSF_NAMESPACE, en.rjsf, isDeep, isOverwrite);
   instance.addResourceBundle('fr', RJSF_NAMESPACE, fr.rjsf, isDeep, isOverwrite);
 
-  // Note: if ever we get duplicated instances of react-i18next, we will need to register the
-  // instance provided by this ts-common package like so:
-  // import { initReactI18next } from 'react-i18next'
-  // instance.use(initReactI18next);
+  /* habit-hooks-disable non-essential-comment
+   * If consumers ever end up with duplicated react-i18next instances, register this package's
+   * instance here with `instance.use(initReactI18next)` (from 'react-i18next').
+   */
 
   // eslint-disable-next-line no-console
   console.info('[addResourceBundleForRjsf] RJSF i18n initialized');

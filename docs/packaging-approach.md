@@ -15,6 +15,8 @@ import { csvUtil } from '@lichens-innovation/ts-common/csv'; // + papaparse
 import { pdfUtil } from '@lichens-innovation/ts-common/pdf'; // + jspdf
 import { webUtil } from '@lichens-innovation/ts-common/web'; // Browser APIs
 import { mimeUtil } from '@lichens-innovation/ts-common/mime'; // + mime
+import { loggerUtil } from '@lichens-innovation/ts-common/logger'; // + pino
+import { rjsfUtil } from '@lichens-innovation/ts-common/rjsf'; // + @rjsf/*, i18next
 ```
 
 ## Architecture Components
@@ -24,12 +26,14 @@ import { mimeUtil } from '@lichens-innovation/ts-common/mime'; // + mime
 ```typescript
 export default defineConfig({
   entry: {
-    index: 'src/index.ts',
-    excel: 'src/excel/index.ts',
-    csv: 'src/csv/index.ts',
-    pdf: 'src/pdf/index.ts',
-    web: 'src/web/index.ts',
-    mime: 'src/mime/index.ts',
+    index: 'src/ts-common.index.ts',
+    excel: 'src/excel/excel.index.ts',
+    csv: 'src/csv/csv.index.ts',
+    pdf: 'src/pdf/pdf.index.ts',
+    web: 'src/web/web.index.ts',
+    mime: 'src/mime/mime.index.ts',
+    logger: 'src/logger/logger.index.ts',
+    rjsf: 'src/rjsf/rjsf.index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -44,27 +48,24 @@ This generates:
 - `dist/excel.js` + `dist/excel.cjs` + `dist/excel.d.ts`
 - And so on for each module...
 
+The entry **keys** (`index`, `excel`, ...) name the files in `dist/`; the source barrel names (`<domain>.index.ts`, required by the coding-guide `filename-convention-by-export-shape` rule) are never visible to consumers. Barrels only define the published entry points: inside `src`, modules import from the defining file, never from a barrel.
+
 ### 2. Package.json Exports
 
 ```json
 {
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
+      "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+      "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" },
       "default": "./dist/index.js"
-    },
-    "./excel": {
-      "types": "./dist/excel.d.ts",
-      "import": "./dist/excel.js",
-      "require": "./dist/excel.cjs",
-      "default": "./dist/excel.js"
     }
-    // ... other subpaths
+    // ... same shape for every subpath
   }
 }
 ```
+
+Each condition carries its own `types`: ESM consumers get the `.d.ts`, CommonJS consumers the `.d.cts` emitted by tsup. A single top-level `types` would be interpreted as ESM for `require`, breaking TypeScript CommonJS consumers (`moduleResolution: node16/nodenext`). `bun run lint:exports` (publint, also run in CI) guards this shape.
 
 ### 3. Peer Dependencies Strategy
 
@@ -162,9 +163,9 @@ With `splitting: false`, no common chunks are created. This increases the npm pa
 
 ### 3. NPM Package Size
 
-- 6 bundles × 2 formats = 12 files + type definitions
+- 8 bundles × 2 formats = 16 files + type definitions
 - The npm package becomes larger (but end users benefit from smaller bundles)
-- More files to download during `npm install`
+- More files to download at install time
 
 ### 4. Documentation Required
 
@@ -172,7 +173,7 @@ Users need to know they must manually install peer dependencies:
 
 ```bash
 # Must be documented clearly
-npm install exceljs mime
+bun add exceljs mime
 ```
 
 Your README documents this well, but it's still a friction point for new users.
@@ -237,65 +238,6 @@ const excel = await import('@lichens-innovation/ts-common/excel');
 - `unplugin-*` with framework-specific builds
 - `@babel/*` packages
 - `@types/*` packages
-
-### Recommended Improvements
-
-#### 1. Enable Splitting for Shared Code
-
-```typescript
-// tsup.config.ts
-export default defineConfig({
-  splitting: true, // Create common chunks
-  // ...
-});
-```
-
-This would reduce duplication but increase output complexity.
-
-#### 2. Add Export Validation Script
-
-```bash
-npm install -D publint
-```
-
-```json
-{
-  "scripts": {
-    "validate:exports": "publint"
-  }
-}
-```
-
-Validates that your exports are correctly configured and accessible.
-
-#### 3. Consider Watch Mode for Development
-
-```json
-{
-  "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup"
-  }
-}
-```
-
-Enables faster iteration during development.
-
-#### 4. Add Package Size Monitoring
-
-```bash
-npm install -D @packagephobia/cli
-```
-
-```json
-{
-  "scripts": {
-    "size": "packagephobia ."
-  }
-}
-```
-
-Track package size changes over time.
 
 ## Summary
 

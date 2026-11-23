@@ -7,7 +7,7 @@ const customFormats = {
 
 type ValidationLanguages = keyof typeof localizer;
 
-/**
+/** habit-hooks-disable non-essential-comment
  * Builds an AJV validator for the given language. Pure (no React) so the caller
  * can memoize it. Prefer this + `useMemo` in the React layer: RJSF rebuilds its
  * `schemaUtils`/`retrieveSchema` cache from the validator identity, so a fresh
@@ -21,9 +21,10 @@ export const createRjsfValidator = (language: string) => {
   return customizeValidator({ customFormats }, localizerFn);
 };
 
-/**
+/** habit-hooks-disable non-essential-comment
  * Backward-compatible wrapper around {@link createRjsfValidator}. Not memoized —
  * returns a new validator on every call. Prefer `createRjsfValidator` memoized in
  * the React layer.
  */
+// eslint-disable-next-line coding-guide/no-non-hook-use-prefix -- public API name kept for backward compatibility
 export const useRjsfValidator = (language: string) => createRjsfValidator(language);

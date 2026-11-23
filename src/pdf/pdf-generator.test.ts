@@ -227,7 +227,7 @@ describe('PdfGenerator', () => {
       // arrange
       const gen = new PdfGenerator();
       const doc = gen.getDoc();
-      vi.spyOn(doc, 'addImage').mockImplementation(() => {});
+      vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
       const before = gen.currentY;
 
       // act
@@ -301,7 +301,7 @@ describe('PdfGenerator', () => {
       // arrange
       const gen = new PdfGenerator();
       const doc = gen.getDoc();
-      vi.spyOn(doc, 'addImage').mockImplementation(() => {});
+      vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
       const before = gen.currentY;
 
       // act
@@ -311,14 +311,18 @@ describe('PdfGenerator', () => {
       expect(gen.currentY).toBeGreaterThan(before);
     });
 
-    it('defaults to MEDIUM compression', () => {
+    it.each`
+      compression  | expected
+      ${undefined} | ${'MEDIUM'}
+      ${'NONE'}    | ${'NONE'}
+    `('passes $expected compression when given $compression', ({ compression, expected }) => {
       // arrange
       const gen = new PdfGenerator();
       const doc = gen.getDoc();
       const addImageSpy = vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
 
       // act
-      gen.addFullPagePNG('data:image/png;base64,placeholder', 16 / 9);
+      gen.addFullPagePNG('data:image/png;base64,placeholder', 16 / 9, compression);
 
       // assert
       expect(addImageSpy).toHaveBeenCalledWith(
@@ -329,29 +333,7 @@ describe('PdfGenerator', () => {
         expect.any(Number),
         expect.any(Number),
         undefined,
-        'MEDIUM'
-      );
-    });
-
-    it('allows overriding compression', () => {
-      // arrange
-      const gen = new PdfGenerator();
-      const doc = gen.getDoc();
-      const addImageSpy = vi.spyOn(doc, 'addImage').mockImplementation(() => doc);
-
-      // act
-      gen.addFullPagePNG('data:image/png;base64,placeholder', 16 / 9, 'NONE');
-
-      // assert
-      expect(addImageSpy).toHaveBeenCalledWith(
-        'data:image/png;base64,placeholder',
-        'PNG',
-        gen.margin,
-        gen.margin,
-        expect.any(Number),
-        expect.any(Number),
-        undefined,
-        'NONE'
+        expected
       );
     });
   });
@@ -420,16 +402,18 @@ describe('PdfGenerator', () => {
   });
 
   describe('renderFooters', () => {
-    it('warns and returns early when hasFooter is false', () => {
+    it('returns early without drawing or warning when hasFooter is false', () => {
       // arrange
       const gen = new PdfGenerator({ hasFooter: false });
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      vi.mocked(autoTable).mockClear();
 
       // act
       gen.renderFooters();
 
       // assert
-      expect(warn).toHaveBeenCalledWith('[renderFooters] Footer is disabled');
+      expect(autoTable).not.toHaveBeenCalled();
+      expect(warn).not.toHaveBeenCalled();
       warn.mockRestore();
     });
 

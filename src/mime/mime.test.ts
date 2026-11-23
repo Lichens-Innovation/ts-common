@@ -7,8 +7,8 @@ import {
   isValidImageFile,
   mimeToExt,
   parseDataUri,
-  VALID_IMAGE_TYPES,
-} from './index';
+} from './mime.utils';
+import { VALID_IMAGE_TYPES } from './mime.constants';
 
 const PNG_DATA_URI = 'data:image/png;base64,iVBORw0KGgo=';
 const JPEG_DATA_URI = 'data:image/jpeg;base64,/9j/4AAQ=';
@@ -48,11 +48,12 @@ describe('MIME utilities', () => {
     });
 
     it.each`
-      input                       | description
-      ${'data:text/plain,hello'}  | ${'non-base64 data URI'}
-      ${'http://example.com'}     | ${'HTTP URL'}
-      ${''}                       | ${'empty string'}
-      ${'data:image/png;base64,'} | ${'empty base64 payload'}
+      input                        | description
+      ${'data:text/plain,hello'}   | ${'non-base64 data URI'}
+      ${'http://example.com'}      | ${'HTTP URL'}
+      ${''}                        | ${'empty string'}
+      ${'data:image/png;base64,'}  | ${'empty base64 payload'}
+      ${'data:image/png;base64, '} | ${'whitespace-only base64 payload'}
     `('should return null for $description', ({ input }) => {
       // Act
       const result = parseDataUri(input);

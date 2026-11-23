@@ -1,4 +1,6 @@
-import { getErrorMessage, type Dimensions } from '../utils';
+import { getErrorMessage } from '../utils/runtime/errors.utils';
+import { isBlank } from '../utils/string/string.utils';
+import { type Dimensions } from '../utils/number/dimensions.utils';
 
 const DEFAULT_MAX_DIMENSION = 1600;
 const DEFAULT_JPEG_QUALITY = 0.85;
@@ -27,7 +29,7 @@ export interface DownscaleToJpegDataUrlArgs {
   quality?: number;
 }
 
-/**
+/** habit-hooks-disable non-essential-comment
  * Decodes a blob via `<img>`, optionally downscales so the longest side is at
  * most `maxDimension`, and re-encodes as a JPEG data URI. Useful when a
  * consumer only accepts PNG/JPEG (e.g. pdfme image cells) and must not embed
@@ -76,6 +78,7 @@ export const findRechartsSvg = (svgs: NodeListOf<SVGSVGElement> | SVGSVGElement[
 export const getElement = (id: string): HTMLElement | null => {
   const element = document?.getElementById(id);
   if (!element) {
+    // eslint-disable-next-line no-console -- diagnostic: callers only receive null and cannot tell why
     console.info(`[getElement] Element with id "${id}" not found`);
     return null;
   }
@@ -94,12 +97,14 @@ export const getRechartsSvgFromElement = ({
 }: GetRechartsSvgFromElementArgs): SVGSVGElement | null => {
   const allSvgs = chartElement.querySelectorAll<SVGSVGElement>('svg');
   if (allSvgs.length === 0) {
+    // eslint-disable-next-line no-console -- diagnostic: callers only receive null and cannot tell why
     console.info(`[getRechartsSvgFromElement] SVG element not found inside element with id "${chartElementId}"`);
     return null;
   }
 
   const rechartSvg = findRechartsSvg(allSvgs);
   if (!rechartSvg) {
+    // eslint-disable-next-line no-console -- diagnostic: callers only receive null and cannot tell why
     console.info(
       `[getRechartsSvgFromElement] No Recharts SVG element found inside element with id "${chartElementId}"`
     );
@@ -120,23 +125,10 @@ export interface PrepareSvgCloneArgs {
   dimensions: Dimensions;
 }
 
-/**
- * Clones an SVG element and ensures it has the required width and height attributes.
- *
- * This function is necessary for two main reasons:
- *
- * 1. **Defensive cloning**: Cloning prevents modifying the original SVG element in the DOM.
- *    Although `XMLSerializer.serializeToString()` does not modify the element, cloning ensures
- *    that no accidental modifications are made to the source element.
- *
- * 2. **Required width/height attributes**: When converting SVG → PNG via `svgToPngDataUri`,
- *    the HTML Image element requires the SVG to have explicit intrinsic dimensions.
- *    Without width/height attributes, the SVG may not render correctly on the canvas,
- *    resulting in an incorrect or empty PNG image.
- *
- * @param svgElement - The original SVG element to clone
- * @param dimensions - The dimensions to apply to the cloned SVG if attributes are missing
- * @returns A new cloned SVG element with guaranteed width/height attributes
+/** habit-hooks-disable non-essential-comment
+ * Works on a clone so the SVG in the DOM is never touched. Explicit width/height are required:
+ * an `<img>` loading an SVG without intrinsic dimensions may draw nothing on the canvas in
+ * `svgToPngDataUri`, giving an empty PNG.
  */
 export const prepareSvgClone = ({ svgElement, dimensions }: PrepareSvgCloneArgs): SVGSVGElement => {
   const clonedSvg = svgElement.cloneNode(true) as SVGSVGElement;
@@ -168,10 +160,6 @@ export interface ResizeSvgXmlArgs {
   targetHeight: number;
 }
 
-/**
- * Modifies SVG XML to set the root <svg> width and height attributes.
- * Used to resize the SVG before converting to PNG at target dimensions (e.g. from PDF layout).
- */
 export const resizeSvgXml = ({ svgXml, targetWidth, targetHeight }: ResizeSvgXmlArgs): string => {
   const widthAttr = `width="${targetWidth}"`;
   const heightAttr = `height="${targetHeight}"`;
@@ -195,28 +183,25 @@ export interface GetChartAsPngDataUriArgs {
   height: number;
 }
 
-/**
- * Gets the Recharts chart as a PNG data URI at the given dimensions (e.g. from PDF zone).
- * Resizes the SVG via resizeSvgXml before conversion; does not use the SVG's intrinsic dimensions.
+const findRechartsSvgById = (chartElementId: string): SVGSVGElement | null => {
+  if (isBlank(chartElementId)) return null;
+
+  const chartElement = getElement(chartElementId);
+  if (!chartElement) return null;
+
+  return getRechartsSvgFromElement({ chartElement, chartElementId });
+};
+
+/** habit-hooks-disable non-essential-comment
+ * Renders at the requested size (e.g. a PDF zone), ignoring the SVG's intrinsic dimensions.
  */
 export const getChartAsPngDataUri = async ({
   chartElementId,
   width,
   height,
 }: GetChartAsPngDataUriArgs): Promise<string | null> => {
-  if (!chartElementId) {
-    return null;
-  }
-
-  const chartElement: HTMLElement | null = getElement(chartElementId);
-  if (!chartElement) {
-    return null;
-  }
-
-  const svgElement: SVGSVGElement | null = getRechartsSvgFromElement({ chartElement, chartElementId });
-  if (!svgElement) {
-    return null;
-  }
+  const svgElement = findRechartsSvgById(chartElementId);
+  if (!svgElement) return null;
 
   const svgXml: string = new XMLSerializer().serializeToString(svgElement);
   const resizedXml: string = resizeSvgXml({ svgXml, targetWidth: width, targetHeight: height });
@@ -229,37 +214,16 @@ export const getChartAsPngDataUri = async ({
   });
 };
 
-/**
- * Retrieves the SVG from a Recharts chart element and converts it to SVG base64
- * @param chartElementId - The ID of the element containing the chart
- * @returns The SVG encoded in base64 with data URI prefix (data:image/svg+xml;base64,...), or null if an error occurs
- */
 export const getSvgAsBase64DataUri = (chartElementId: string): string | null => {
   const svgXml = getRechartSvgXml(chartElementId);
-  if (!svgXml) {
-    return null;
-  }
+  if (isBlank(svgXml)) return null;
 
   return convertSvgToDataUri(svgXml);
 };
 
 export const getRechartSvgXml = (chartElementId: string): string | null => {
-  if (!chartElementId) {
-    console.info(`[getRechartSvgXml] No chart element id provided`);
-    return null;
-  }
-
-  const chartElement: HTMLElement | null = getElement(chartElementId);
-  if (!chartElement) {
-    console.info(`[getRechartSvgXml] Element with id "${chartElementId}" not found`);
-    return null;
-  }
-
-  const svgElement: SVGSVGElement | null = getRechartsSvgFromElement({ chartElement, chartElementId });
-  if (!svgElement) {
-    console.info(`[getRechartSvgXml] No SVG element found inside element with id "${chartElementId}"`);
-    return null;
-  }
+  const svgElement = findRechartsSvgById(chartElementId);
+  if (!svgElement) return null;
 
   const dimensions = getSvgDimensions(svgElement);
   const clonedSvg: SVGSVGElement = prepareSvgClone({ svgElement, dimensions });
@@ -274,40 +238,43 @@ export interface SvgToPngArgs {
   backgroundColor?: string;
 }
 
+interface DrawImageToPngArgs {
+  img: HTMLImageElement;
+  dimensions: Dimensions;
+  backgroundColor?: string;
+}
+
+const drawImageToPngDataUri = ({ img, dimensions, backgroundColor }: DrawImageToPngArgs): string => {
+  const { width, height } = dimensions;
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Failed to get canvas 2D context');
+
+  if (backgroundColor) {
+    ctx.fillStyle = backgroundColor;
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  ctx.drawImage(img, 0, 0, width, height);
+  return canvas.toDataURL('image/png');
+};
+
 export const svgToPngDataUri = async ({
   svgDataUri,
   dimensions,
   backgroundColor,
 }: SvgToPngArgs): Promise<string | null> => {
-  if (!svgDataUri) {
-    return null;
-  }
-
-  const { width, height } = dimensions;
+  if (isBlank(svgDataUri)) return null;
 
   return new Promise((resolve, reject) => {
     const img = new Image();
 
     img.onload = () => {
       try {
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          reject(new Error('Failed to get canvas 2D context'));
-          return;
-        }
-
-        if (backgroundColor) {
-          ctx.fillStyle = backgroundColor;
-          ctx.fillRect(0, 0, width, height);
-        }
-
-        ctx.drawImage(img, 0, 0, width, height);
-        const pngDataUri = canvas.toDataURL('image/png');
-        resolve(pngDataUri);
+        resolve(drawImageToPngDataUri({ img, dimensions, backgroundColor }));
       } catch (error) {
         reject(error);
       }

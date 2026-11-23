@@ -1,5 +1,7 @@
-// Minimal File System Access API declarations (not yet in TS DOM lib).
-// Kept local on purpose: no global augmentation leaking to consumers.
+/* habit-hooks-disable non-essential-comment
+ * Minimal File System Access API declarations (not yet in TS DOM lib).
+ * Kept local on purpose: no global augmentation leaking to consumers.
+ */
 
 export interface SaveFilePickerAcceptType {
   description?: string;

@@ -1,4 +1,4 @@
-import type { RgbaColor } from '../utils/color.utils';
+import type { RgbaColor } from '../utils/number/color.utils';
 
 export const fileToImageData = (file: File): Promise<ImageData> => {
   return new Promise((resolve, reject) => {

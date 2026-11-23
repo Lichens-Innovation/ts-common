@@ -4,16 +4,10 @@ import {
   formatDisplayDateTime,
   formatDisplayTime,
   type DisplayLocale,
-} from '../../utils/date-display.utils';
-import { isBlank } from '../../utils/string.utils';
-import { isNullish } from '../../utils/types.utils';
+} from '../../utils/date/date-display.utils';
+import { isBlank } from '../../utils/string/string.utils';
+import { isNullish } from '../../utils/runtime/types.utils';
 
-/**
- * Returns true when the widget has at least one validation error from RJSF.
- *
- * @param rawErrors - The rawErrors from WidgetProps (often `unknown`).
- * @returns true if rawErrors is a non-empty array.
- */
 export const hasRjsfErrors = (rawErrors: unknown): boolean => Array.isArray(rawErrors) && rawErrors.length > 0;
 
 export interface GetRjsfDisplayLabelArgs {
@@ -22,16 +16,6 @@ export interface GetRjsfDisplayLabelArgs {
   hideLabel?: boolean;
 }
 
-/**
- * Returns the label to display for an RJSF widget, with optional required asterisk and
- * hideLabel support.
- *
- * @param label - The label to display for the widget.
- * @param required - Whether the field is required.
- * @param hideLabel - Whether to hide the label.
- *
- * @returns The label to display for the widget.
- */
 export const getRjsfDisplayLabel = ({ label, required, hideLabel }: GetRjsfDisplayLabelArgs): string | undefined => {
   if (hideLabel) return undefined;
   if (isBlank(label)) return undefined;
@@ -42,11 +26,9 @@ export const getRjsfDisplayLabel = ({ label, required, hideLabel }: GetRjsfDispl
 
 const HEX_COLOR_PATTERN = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
-/**
- * Reads the `labelColor` from a widget/field `ui:options` object.
- *
- * @param options - The `ui:options` object (e.g. WidgetProps.options or uiSchema["ui:options"]).
- * @returns A validated hex color string (#RGB or #RRGGBB), or undefined when missing/invalid (default color).
+/** habit-hooks-disable non-essential-comment
+ * Reads `labelColor` from `ui:options`. Only #RGB / #RRGGBB hex is accepted; anything else yields
+ * undefined so the widget keeps its default color.
  */
 export const getRjsfLabelColor = (options?: Record<string, unknown> | null): string | undefined => {
   const color = options?.labelColor;
@@ -60,7 +42,10 @@ interface EnumOption {
   label: string;
 }
 
-export type EnumOptionDisplay = { label: string; value: string };
+export interface EnumOptionDisplay {
+  label: string;
+  value: string;
+}
 
 const toEnumOptionDisplay = (o: EnumOption): EnumOptionDisplay => ({
   label: o?.label ?? String(o?.value ?? ''),
@@ -73,14 +58,8 @@ export const mapEnumOptions = (options: WidgetProps['options']): EnumOptionDispl
   return enumOptions.map(toEnumOptionDisplay);
 };
 
-/**
- * Converts a value to display string, or empty string when null/undefined.
- */
 export const toStringOrEmpty = (value: unknown): string => (isNullish(value) ? '' : String(value));
 
-/**
- * Converts a value to display string, or undefined when null/undefined (e.g. for select placeholder).
- */
 export const toStringOrUndefined = (value: unknown): string | undefined =>
   isNullish(value) ? undefined : String(value);
 
@@ -89,15 +68,8 @@ export interface GetRjsfTextChangeValueArgs {
   emptyValue?: unknown;
 }
 
-/**
- * Returns the value to pass to onChange for a text input.
- *
- * @param args.text - The current text input value.
- * @param args.emptyValue - The value to use when text is empty (e.g. options.emptyValue from WidgetProps).
- * @returns emptyValue when text is empty, otherwise text.
- */
 export const getRjsfTextChangeValue = ({ text, emptyValue }: GetRjsfTextChangeValueArgs): unknown => {
-  if (text === '') return emptyValue;
+  if (isBlank(text)) return emptyValue;
   return text;
 };
 
@@ -109,7 +81,6 @@ export const parseDateOrNull = (value?: string): Date | null => {
   return isValid ? date : null;
 };
 
-/** Returns YYYY-MM-DD for JSON Schema "date" format (form storage). */
 export const dateToDateOnlyString = (date: Date): string => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -119,7 +90,10 @@ export const dateToDateOnlyString = (date: Date): string => {
 
 const DATE_ONLY_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
-/** Parses a date-only or full ISO string into a Date at local midnight (for date picker display). */
+/** habit-hooks-disable non-essential-comment
+ * Keeps only the date part of a full ISO string and builds the Date at LOCAL midnight, so the picker
+ * never shows the previous day in timezones behind UTC.
+ */
 export const parseDateOnlyToLocalDate = (value?: string): Date | null => {
   if (isBlank(value)) return null;
 
@@ -131,7 +105,7 @@ export const parseDateOnlyToLocalDate = (value?: string): Date | null => {
   return new Date(y, m - 1, d);
 };
 
-/**
+/** habit-hooks-disable non-essential-comment
  * The date of a full ISO or date-only string, for display. With a locale it reads `24 sept. 2026`;
  * without one it stays the raw YYYY-MM-DD.
  */
@@ -144,7 +118,7 @@ export const formatDateOnlyForDisplay = (value?: string, locale?: DisplayLocale)
   return locale ? formatDisplayDate(parseDateOnlyToLocalDate(dateOnly), locale) : dateOnly;
 };
 
-/**
+/** habit-hooks-disable non-essential-comment
  * A full ISO or date string for date-time display. With a locale it reads `24 sept. 2026, 13 h 31`;
  * without one it falls back to the engine's `toLocaleString()`.
  */
@@ -154,7 +128,7 @@ export const formatDateTimeForDisplay = (value?: string, locale?: DisplayLocale)
   return locale ? formatDisplayDateTime(date, locale) : date.toLocaleString();
 };
 
-/**
+/** habit-hooks-disable non-essential-comment
  * Time-only fields : a clock reading with no day behind it — the date is entered once in
  * the form header and each reading row carries only HH:MM.
  *
@@ -167,14 +141,13 @@ export const formatDateTimeForDisplay = (value?: string, locale?: DisplayLocale)
  */
 const TIME_ONLY_REGEX = /^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/;
 
-/** Returns HH:MM:00 in the local clock, for JSON Schema "time" format (form storage). */
 export const timeToTimeOnlyString = (date: Date): string => {
   const h = String(date.getHours()).padStart(2, '0');
   const m = String(date.getMinutes()).padStart(2, '0');
   return `${h}:${m}:00`;
 };
 
-/**
+/** habit-hooks-disable non-essential-comment
  * Parses HH:MM or HH:MM:SS into a Date for the picker to open on.
  *
  * Anchored on TODAY rather than a fixed epoch date: the picker needs a Date, and a time that does
@@ -193,7 +166,7 @@ export const parseTimeOnlyToLocalDate = (value?: string): Date | null => {
   return anchor;
 };
 
-/**
+/** habit-hooks-disable non-essential-comment
  * A stored time-only string for display. Seconds are never shown. With a locale it reads `13 h 31` /
  * `13:31`; without one it stays the raw HH:MM.
  */
@@ -205,10 +178,14 @@ export const formatTimeOnlyForDisplay = (value?: string, locale?: DisplayLocale)
   return locale ? formatDisplayTime(parseTimeOnlyToLocalDate(trimmed), locale) : trimmed.slice(0, 5);
 };
 
-type FormLayoutContext = {
-  labelCol?: { span: number };
-  wrapperCol?: { span: number };
-};
+export interface FormLayoutColSpan {
+  span: number;
+}
+
+export interface FormLayoutContext {
+  labelCol?: FormLayoutColSpan;
+  wrapperCol?: FormLayoutColSpan;
+}
 
 const DEFAULT_SPAN = 24;
 

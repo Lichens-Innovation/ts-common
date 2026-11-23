@@ -1,70 +1,99 @@
 /**
- * ESLint flat config — TypeScript + TODO ticket reference (company default).
- * Same stack as rjsf-toolbox, without React/Testing Library.
+ * ESLint flat config — TypeScript coding standards (Lichens coding-guide)
  */
 
 import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import reactHooks from 'eslint-plugin-react-hooks';
+import sonarjs from 'eslint-plugin-sonarjs';
+import unicorn from 'eslint-plugin-unicorn';
 import { globalIgnores } from 'eslint/config';
-import todoTicketRef from './eslint-rules/todo-ticket-ref.js';
+import codingGuide, { configs as codingGuideConfigs } from '@lichens-innovation/eslint-plugin-coding-guide';
 
-const baseConfig = tseslint.config(
-  globalIgnores(['dist', '**/*.gen.ts', '.husky']),
+const testFiles = ['**/*.test.ts', '**/*.spec.ts'];
+
+export default tseslint.config(
+  globalIgnores(['dist', 'coverage', '**/*.gen.ts', '.husky']),
   js.configs.recommended,
-  {
-    files: ['eslint.config.js', 'prettier.config.js', 'scripts/**'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        console: 'readonly',
-        process: 'readonly',
-        module: 'readonly',
-      },
-    },
-  },
   ...tseslint.configs.recommended,
+  // Node: root config files
+  {
+    files: ['*.config.js'],
+    languageOptions: { globals: { ...globals.node } },
+  },
   {
     files: ['**/*.ts'],
+    plugins: {
+      sonarjs,
+      unicorn,
+      'coding-guide': codingGuide,
+    },
     languageOptions: {
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
-        project: './tsconfig.eslint.json',
+        projectService: {
+          allowDefaultProject: ['*.config.ts', 'vitest.setup.ts'],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
-      globals: globals.node,
+      globals: { ...globals.node },
     },
     rules: {
-      'prefer-const': 'error',
-      'no-console': 'warn',
+      'no-duplicate-imports': 'error',
+      'no-warning-comments': ['warn', { terms: ['fixme', 'xxx', 'hack'], location: 'anywhere' }],
+      'no-console': 'error',
       eqeqeq: ['error', 'always'],
       'no-nested-ternary': 'error',
-      'no-empty': ['error', { allowEmptyCatch: false }],
-      'no-useless-catch': 'error',
-      'max-depth': ['warn', 4],
-      '@typescript-eslint/no-explicit-any': 'error',
+      'max-depth': ['error', 2],
+      complexity: ['error', 15],
+      'sonarjs/cognitive-complexity': ['error', 15],
+      ...codingGuideConfigs.recommended.rules,
+      '@typescript-eslint/no-non-null-assertion': 'error',
+      '@typescript-eslint/no-inferrable-types': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/prefer-nullish-coalescing': 'error',
       '@typescript-eslint/consistent-indexed-object-style': ['error', 'record'],
-    },
-  }
-);
-
-export default [
-  ...baseConfig,
-  {
-    files: ['**/*.{ts,js}'],
-    plugins: { 'todo-plz': todoTicketRef },
-    rules: {
-      'todo-plz/ticket-ref': [
-        'warn',
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-misused-promises': 'error',
+      '@typescript-eslint/only-throw-error': 'error',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
+      'func-style': ['error', 'expression'],
+      'no-restricted-imports': [
+        'error',
         {
-          pattern: '([A-Z]+(?:-[A-Z0-9]+)*-\\d+)',
-          comment: 'TODO must include a ticket reference (e.g. TODO: JIRA-1234 - description)',
+          paths: [
+            {
+              name: 'lodash',
+              message:
+                "Use a named import from 'lodash-es' instead (tree-shakeable), e.g. import { groupBy } from 'lodash-es'.",
+            },
+          ],
         },
       ],
+      'no-eval': 'error',
+      'no-new-func': 'error',
+      'unicorn/filename-case': ['error', { case: 'kebabCase' }],
+      'max-lines': ['error', { max: 400, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['error', { max: 30, skipBlankLines: true, skipComments: true }],
     },
   },
-  { files: ['eslint-rules/**'], rules: { 'todo-plz/ticket-ref': 'off' } },
-  { files: ['eslint.config.js'], rules: { 'todo-plz/ticket-ref': 'off' } },
-];
+  // rjsf ships React hooks (no JSX): hooks rules only there
+  {
+    files: ['src/rjsf/**/*.ts'],
+    plugins: { 'react-hooks': reactHooks },
+    rules: {
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'error',
+    },
+  },
+  // one test file per subject: describe blocks and it.each tables legitimately run long
+  {
+    files: ['*.config.ts', ...testFiles],
+    rules: { 'max-lines': 'off', 'max-lines-per-function': 'off' },
+  }
+);

@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version-file: package.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Squash merges use the PR title as commit message, which semantic-release analyzes
+      - name: Lint PR title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$PR_TITLE" | bunx --no-install commitlint
+
+      # coding-guide check: ESLint + knip + comments + jscpd, honoring .coding-guide/snooze.json
+      - name: Lint (coding-guide)
+        run: bun run lint
+
+      - name: Format check
+        run: bun run format:check
+
+      - name: Lint package.json
+        run: bun run lint:package
+
+      - name: Unused files, dependencies and exports
+        run: bun run lint:unused
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Unit tests with coverage threshold
+        run: bun run test:coverage
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage
+          path: coverage
+          retention-days: 7
+
+      - name: Build
+        run: bun run build
+
+      # publint packs the build output: validates exports, types and files
+      - name: Lint package exports
+        run: bun run lint:exports
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist
+          retention-days: 1

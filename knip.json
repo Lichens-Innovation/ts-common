@@ -1,3 +1,10 @@
 {
-  "ignoreDependencies": ["@semantic-release/github", "cross-env", "prettier"]
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "rules": {
+    "exports": "warn",
+    "types": "warn",
+    "duplicates": "warn"
+  },
+  "entry": ["src/*/*.index.ts"],
+  "ignoreDependencies": ["@semantic-release/github", "cross-env"]
 }

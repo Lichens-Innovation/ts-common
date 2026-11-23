@@ -51,24 +51,43 @@ Table of content
 
 ## Prerequisites
 
-- Node.js (>=20.x)
+- Node.js (>=24.18.0, see `.nvmrc`)
 - Bun (>=1.2.0)
 
 ## Scripts
 
-| Command                  | Description                                                                                     |
-| ------------------------ | ----------------------------------------------------------------------------------------------- |
-| `bun run prepare`        | Configures Husky (Git hooks). Runs automatically after `bun install`.                           |
-| `bun run build`          | Compiles the project with tsup (outputs to `dist/`).                                            |
-| `bun run clean:node`     | Removes `node_modules` and `bun.lockb`.                                                         |
-| `bun run clean:dist`     | Removes the `dist` directory.                                                                   |
-| `bun run typecheck`      | Type-checks TypeScript without emitting files (`tsc --noEmit`).                                 |
-| `bun run lint`           | Runs ESLint on the project.                                                                     |
-| `bun run lint:fix`       | Runs ESLint and applies automatic fixes.                                                        |
-| `bun run security:check` | Audits deps for new CVEs vs `.cve-lite/baseline.json`, fails on high severity (`cve-lite-cli`). |
-| `bun run test`           | Runs tests with Vitest and coverage report.                                                     |
-| `bun run test:watch`     | Runs tests in watch mode with Vitest.                                                           |
-| `bun run test:coverage`  | Runs tests with coverage report using Vitest.                                                   |
+| Command                    | Description                                                                                     |
+| -------------------------- | ----------------------------------------------------------------------------------------------- |
+| `bun run prepare`          | Configures Husky (Git hooks). Runs automatically after `bun install`.                           |
+| `bun run build`            | Compiles the project with tsup (outputs to `dist/`).                                            |
+| `bun run clean:node`       | Removes `node_modules` and `bun.lock`.                                                          |
+| `bun run clean:dist`       | Removes the `dist` directory.                                                                   |
+| `bun run typecheck`        | Type-checks sources and tests without emitting files (`tsc --noEmit`).                          |
+| `bun run lint`             | Runs the coding-guide habit checks on the whole project (ESLint + knip + comments + jscpd).     |
+| `bun run lint:ci`          | Runs ESLint only.                                                                               |
+| `bun run lint:fix`         | Runs ESLint and applies automatic fixes.                                                        |
+| `bun run lint:package`     | Lints `package.json` (exact dependency versions).                                               |
+| `bun run lint:exports`     | Validates the published `exports`, types and files with publint (needs `bun run build` first).  |
+| `bun run lint:unused`      | Detects unused files, dependencies and exports with knip.                                       |
+| `bun run format`           | Formats all files with Prettier.                                                                |
+| `bun run format:check`     | Checks Prettier formatting.                                                                     |
+| `bun run habit:hooks`      | Runs the coding-guide checks on files changed since `main` (run it before opening a PR).        |
+| `bun run habit:hooks:full` | Runs the coding-guide checks on the whole project.                                              |
+| `bun run habit:snoozed`    | Lists snoozed keys (`.coding-guide/snooze.json`, kept empty).                                   |
+| `bun run security:check`   | Audits deps for new CVEs vs `.cve-lite/baseline.json`, fails on high severity (`cve-lite-cli`). |
+| `bun run test`             | Runs tests with Vitest.                                                                         |
+| `bun run test:watch`       | Runs tests in watch mode with Vitest.                                                           |
+| `bun run test:coverage`    | Runs tests with coverage report and the 80% threshold.                                          |
+
+### Git hooks
+
+| Hook         | Checks                                                                                                                           |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `pre-commit` | typecheck, lint-staged (Prettier, `package.json` lint), `coding-guide check --staged`, `lint:package`, CVE scan when deps change |
+| `pre-push`   | knip (`lint:unused`), tests with coverage threshold, blocks force pushes on `main`/`master`/`development`                        |
+| `commit-msg` | commitlint (Conventional Commits)                                                                                                |
+
+The same checks run in CI on every pull request (`.github/workflows/ci.yml`), plus a commitlint check of the PR title (squash merges use it as the release commit message).
 
 ## Optional modules
 
@@ -77,19 +96,19 @@ This library provides optional subpath modules with external dependencies. Insta
 ### Excel (`@lichens-innovation/ts-common/excel`)
 
 ```bash
-npm install exceljs mime
+bun add exceljs mime
 ```
 
 ### CSV (`@lichens-innovation/ts-common/csv`)
 
 ```bash
-npm install papaparse mime
+bun add papaparse mime
 ```
 
 ### PDF (`@lichens-innovation/ts-common/pdf`)
 
 ```bash
-npm install jspdf jspdf-autotable
+bun add jspdf jspdf-autotable
 ```
 
 ### Web (`@lichens-innovation/ts-common/web`)
@@ -128,7 +147,7 @@ Picker file types default to the MIME type derived from the file extension; pass
 ### MIME (`@lichens-innovation/ts-common/mime`)
 
 ```bash
-npm install mime
+bun add mime
 ```
 
 ### Logger (`@lichens-innovation/ts-common/logger`)
@@ -141,13 +160,13 @@ Logger based on [pino](https://getpino.io/) with formatted console output (times
 **Install the dependencies:**
 
 ```bash
-npm install pino
+bun add pino
 ```
 
 For **Node.js** (required for pretty output):
 
 ```bash
-npm install pino-pretty
+bun add pino-pretty
 ```
 
 **Exports:** `logger`, `setLoggerMinimumLevel`, type `Level`.
@@ -172,7 +191,7 @@ Utilities and hooks for [React JSON Schema Form (RJSF)](https://rjsf-team.github
 **Install the dependencies:**
 
 ```bash
-npm install @rjsf/core @rjsf/utils @rjsf/validator-ajv8 ajv-i18n i18next react-i18next
+bun add @rjsf/core @rjsf/utils @rjsf/validator-ajv8 ajv-i18n i18next react-i18next
 ```
 
 ## Contributions
@@ -197,9 +216,12 @@ Follow [Semantic Versioning](https://semver.org/#summary) (`MAJOR.MINOR.PATCH`) 
 
 ## Project coding guidelines
 
-Adhering to established coding guidelines is essential for developing efficient, maintainable, and scalable software. These guidelines promote consistency across codebases, making it easier for teams to collaborate and for new developers to understand existing code. By following standardized patterns, such as those outlined in the [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md), developers can reduce errors and enhance code readability.
+The codebase follows the Lichens coding standard enforced by [`@lichens-innovation/eslint-plugin-coding-guide`](https://github.com/Lichens-Innovation/eslint-plugin-coding-guide): ESLint rules (`eslint.config.js`) plus the `coding-guide` CLI, which also reports unused code (knip), non-essential comments and duplicated code (jscpd), and prints a coaching guide for each smell.
 
-- [Coding guidelines](https://github.com/amwebexpert/chrome-extensions-collection/blob/master/packages/coding-guide-helper/public/markdowns/table-of-content.md)
+- Every commit is checked on its staged files; run `bun run habit:hooks` before opening a PR.
+- The snooze list (`.coding-guide/snooze.json`) is empty and should stay that way: fix the finding, or justify a single exception in place with `// eslint-disable-next-line <rule> -- <reason>` or `habit-hooks-disable <smell>`.
+- Inside `src`, import from the defining file, never from a `*.index.ts` barrel: barrels only define the published entry points.
+- See the [adoption guide](https://github.com/Lichens-Innovation/eslint-plugin-coding-guide/blob/main/docs/adoption-guide.md) and the [CLI documentation](https://github.com/Lichens-Innovation/eslint-plugin-coding-guide/blob/main/docs/cli.md).
 
 ## TODOs
 

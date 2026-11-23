@@ -1,6 +1,6 @@
 import type { Font, Fill, Alignment } from 'exceljs';
 
-/** A cell showing `text` that opens `hyperlink` when clicked in Excel. */
+/** A cell showing `text` that opens `hyperlink` when clicked in Excel. habit-hooks-disable non-essential-comment */
 export interface CellHyperlink {
   text: string;
   hyperlink: string;
@@ -19,14 +19,15 @@ export interface ColumnMetadata {
   valueType?: ColumnValueType;
 }
 
-interface BorderSide {
-  style?: 'thin' | 'medium' | 'thick' | 'dotted' | 'dashed' | 'double';
-  color?: { argb: string };
+export interface ArgbColor {
+  argb: string;
 }
 
-/**
- * Type for ExcelJS cell borders.
- */
+interface BorderSide {
+  style?: 'thin' | 'medium' | 'thick' | 'dotted' | 'dashed' | 'double';
+  color?: ArgbColor;
+}
+
 export interface CellBorder {
   top?: BorderSide;
   bottom?: BorderSide;
@@ -34,10 +35,6 @@ export interface CellBorder {
   right?: BorderSide;
 }
 
-/**
- * Type for ExcelJS cell styles.
- * This is a simplified version of ExcelJS.Style that focuses on commonly used properties.
- */
 export interface CellStyle {
   font?: Partial<Font>;
   fill?: Partial<Fill>;
@@ -46,16 +43,9 @@ export interface CellStyle {
   numFmt?: string;
 }
 
-/**
- * Helper type to convert RGB color string to ARGB format for ExcelJS.
- * ExcelJS uses ARGB format: "FFFFFFFF" where FF is alpha, then RGB.
- */
-export type ArgbColor = { argb: string };
-
-/**
- * Helper function to convert RGB color string to ARGB format.
- * @param rgb - RGB color string without # (e.g., "FFFFFF")
- * @returns ARGB color object (e.g., { argb: "FFFFFFFF" })
+/** habit-hooks-disable non-essential-comment
+ * Converts an RGB hex string without `#` (e.g. "FFFFFF") to the ARGB form ExcelJS expects,
+ * with a fully opaque alpha prefix (e.g. { argb: "FFFFFFFF" }).
  */
 export const rgbToArgb = (rgb: string): ArgbColor => {
   return { argb: `FF${rgb}` };
