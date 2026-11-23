@@ -1,3 +1,10 @@
+## [1.30.2](https://github.com/Lichens-Innovation/ts-common/compare/v1.30.1...v1.30.2) (2026-11-23)
+
+
+### Bug Fixes
+
+* **updates deps:** bump minor/patch dependencies ([#69](https://github.com/Lichens-Innovation/ts-common/issues/69)) ([b48a3f2](https://github.com/Lichens-Innovation/ts-common/commit/b48a3f28ec82c5797f199e3c9946db872cfe5be3))
+
 ## [1.30.1](https://github.com/Lichens-Innovation/ts-common/compare/v1.30.0...v1.30.1) (2026-11-23)
 
 
