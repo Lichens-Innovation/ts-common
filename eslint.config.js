@@ -50,7 +50,6 @@ export default tseslint.config(
       complexity: ['error', 15],
       'sonarjs/cognitive-complexity': ['error', 15],
       ...codingGuideConfigs.recommended.rules,
-      '@typescript-eslint/max-params': ['error', { max: 3 }],
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-inferrable-types': 'error',
       '@typescript-eslint/no-unused-vars': [
