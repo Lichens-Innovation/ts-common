@@ -1,27 +1,27 @@
 #!/usr/bin/env sh
 
-# exit immediately if any command fails
+# Exit immediately if any command fails
 set -e
 
-echo "Running typecheck to ensure the code is type-safe..."
+echo "Running typecheck..."
 bun run typecheck
-echo "✅ Typecheck completed"
+echo "  -->  ✅ Typecheck completed"
 
-echo "Running lint:fix to apply automatic fixes to the code..."
-bun run lint:fix
-echo "✅ Lint completed"
+echo "Running lint-staged (prettier on staged files)..."
+bunx lint-staged
+echo "  -->  ✅ Lint-staged completed"
 
-echo "Running format:check to enforce Prettier formatting..."
-bun run format:check
-echo "✅ Format check completed"
+echo "Running coding-guide on staged files..."
+bunx coding-guide check --staged
+echo "  -->  ✅ coding-guide completed"
 
-echo "Running lint:package to enforce exact dependency versions..."
+echo "Running package.json lint..."
 bun run lint:package
-echo "✅ Package lint completed"
+echo "  -->  ✅ package.json lint completed"
 
 # Scan for known CVEs only when dependencies change.
 if git diff --cached --name-only | grep -qE '^(package\.json|bun\.lock)$'; then
   echo "Running security check to detect known CVEs in dependencies..."
   bun run security:check
-  echo "✅ Security check completed"
+  echo "  -->  ✅ Security check completed"
 fi
