@@ -15,6 +15,8 @@ import { csvUtil } from '@lichens-innovation/ts-common/csv'; // + papaparse
 import { pdfUtil } from '@lichens-innovation/ts-common/pdf'; // + jspdf
 import { webUtil } from '@lichens-innovation/ts-common/web'; // Browser APIs
 import { mimeUtil } from '@lichens-innovation/ts-common/mime'; // + mime
+import { loggerUtil } from '@lichens-innovation/ts-common/logger'; // + pino
+import { rjsfUtil } from '@lichens-innovation/ts-common/rjsf'; // + @rjsf/*, i18next
 ```
 
 ## Architecture Components
@@ -24,12 +26,14 @@ import { mimeUtil } from '@lichens-innovation/ts-common/mime'; // + mime
 ```typescript
 export default defineConfig({
   entry: {
-    index: 'src/index.ts',
-    excel: 'src/excel/index.ts',
-    csv: 'src/csv/index.ts',
-    pdf: 'src/pdf/index.ts',
-    web: 'src/web/index.ts',
-    mime: 'src/mime/index.ts',
+    index: 'src/ts-common.index.ts',
+    excel: 'src/excel/excel.index.ts',
+    csv: 'src/csv/csv.index.ts',
+    pdf: 'src/pdf/pdf.index.ts',
+    web: 'src/web/web.index.ts',
+    mime: 'src/mime/mime.index.ts',
+    logger: 'src/logger/logger.index.ts',
+    rjsf: 'src/rjsf/rjsf.index.ts',
   },
   format: ['esm', 'cjs'],
   dts: true,
@@ -43,6 +47,8 @@ This generates:
 - `dist/index.js` + `dist/index.cjs` + `dist/index.d.ts`
 - `dist/excel.js` + `dist/excel.cjs` + `dist/excel.d.ts`
 - And so on for each module...
+
+The entry **keys** (`index`, `excel`, ...) name the files in `dist/`; the source barrel names (`<domain>.index.ts`, required by the coding-guide `filename-convention-by-export-shape` rule) are never visible to consumers. Barrels only define the published entry points: inside `src`, modules import from the defining file, never from a barrel.
 
 ### 2. Package.json Exports
 
@@ -162,9 +168,9 @@ With `splitting: false`, no common chunks are created. This increases the npm pa
 
 ### 3. NPM Package Size
 
-- 6 bundles × 2 formats = 12 files + type definitions
+- 8 bundles × 2 formats = 16 files + type definitions
 - The npm package becomes larger (but end users benefit from smaller bundles)
-- More files to download during `npm install`
+- More files to download at install time
 
 ### 4. Documentation Required
 
@@ -172,7 +178,7 @@ Users need to know they must manually install peer dependencies:
 
 ```bash
 # Must be documented clearly
-npm install exceljs mime
+bun add exceljs mime
 ```
 
 Your README documents this well, but it's still a friction point for new users.
@@ -255,7 +261,7 @@ This would reduce duplication but increase output complexity.
 #### 2. Add Export Validation Script
 
 ```bash
-npm install -D publint
+bun add -d publint
 ```
 
 ```json
@@ -284,7 +290,7 @@ Enables faster iteration during development.
 #### 4. Add Package Size Monitoring
 
 ```bash
-npm install -D @packagephobia/cli
+bun add -d @packagephobia/cli
 ```
 
 ```json
