@@ -7,17 +7,13 @@ echo "Running typecheck..."
 bun run typecheck
 echo "  -->  ✅ Typecheck completed"
 
-echo "Running lint-staged (prettier on staged files)..."
+echo "Running lint-staged (prettier + package.json lint on staged files)..."
 bunx lint-staged
 echo "  -->  ✅ Lint-staged completed"
 
 echo "Running coding-guide on staged files..."
 bunx coding-guide check --staged
 echo "  -->  ✅ coding-guide completed"
-
-echo "Running package.json lint..."
-bun run lint:package
-echo "  -->  ✅ package.json lint completed"
 
 # Scan for known CVEs only when dependencies change.
 if git diff --cached --name-only | grep -qE '^(package\.json|bun\.lock)$'; then

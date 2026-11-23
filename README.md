@@ -56,36 +56,37 @@ Table of content
 
 ## Scripts
 
-| Command                    | Description                                                                                     |
-| -------------------------- | ----------------------------------------------------------------------------------------------- |
-| `bun run prepare`          | Configures Husky (Git hooks). Runs automatically after `bun install`.                           |
-| `bun run build`            | Compiles the project with tsup (outputs to `dist/`).                                            |
-| `bun run clean:node`       | Removes `node_modules` and `bun.lock`.                                                          |
-| `bun run clean:dist`       | Removes the `dist` directory.                                                                   |
-| `bun run typecheck`        | Type-checks sources and tests without emitting files (`tsc --noEmit`).                          |
-| `bun run lint`             | Runs the coding-guide habit checks on the whole project (ESLint + knip + comments + jscpd).     |
-| `bun run lint:ci`          | Runs ESLint only.                                                                               |
-| `bun run lint:fix`         | Runs ESLint and applies automatic fixes.                                                        |
-| `bun run lint:package`     | Lints `package.json` (exact dependency versions).                                               |
-| `bun run lint:exports`     | Validates the published `exports`, types and files with publint (needs `bun run build` first).  |
-| `bun run lint:unused`      | Detects unused files, dependencies and exports with knip.                                       |
-| `bun run format`           | Formats all files with Prettier.                                                                |
-| `bun run format:check`     | Checks Prettier formatting.                                                                     |
-| `bun run habit:hooks`      | Runs the coding-guide checks on files changed since `main` (run it before opening a PR).        |
-| `bun run habit:hooks:full` | Runs the coding-guide checks on the whole project.                                              |
-| `bun run habit:snoozed`    | Lists snoozed keys (`.coding-guide/snooze.json`, kept empty).                                   |
-| `bun run security:check`   | Audits deps for new CVEs vs `.cve-lite/baseline.json`, fails on high severity (`cve-lite-cli`). |
-| `bun run test`             | Runs tests with Vitest.                                                                         |
-| `bun run test:watch`       | Runs tests in watch mode with Vitest.                                                           |
-| `bun run test:coverage`    | Runs tests with coverage report and the 80% threshold.                                          |
+| Command                    | Description                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------ |
+| `bun run prepare`          | Configures Husky (Git hooks). Runs automatically after `bun install`.                            |
+| `bun run build`            | Compiles the project with tsup (outputs to `dist/`).                                             |
+| `bun run clean:node`       | Removes `node_modules` and `bun.lock`.                                                           |
+| `bun run clean:dist`       | Removes the `dist` directory.                                                                    |
+| `bun run typecheck`        | Type-checks sources and tests without emitting files (`tsc --noEmit`).                           |
+| `bun run lint`             | Runs the coding-guide habit checks on the whole project (ESLint + knip + comments + jscpd).      |
+| `bun run lint:ci`          | Runs ESLint only.                                                                                |
+| `bun run lint:fix`         | Runs ESLint and applies automatic fixes.                                                         |
+| `bun run lint:package`     | Lints `package.json` (exact dependency versions).                                                |
+| `bun run lint:exports`     | Validates the published `exports`, types and files with publint (needs `bun run build` first).   |
+| `bun run lint:types`       | Checks published types resolve under node16 and bundler with attw (needs `bun run build` first). |
+| `bun run lint:unused`      | Detects unused files, dependencies and exports with knip.                                        |
+| `bun run format`           | Formats all files with Prettier.                                                                 |
+| `bun run format:check`     | Checks Prettier formatting.                                                                      |
+| `bun run habit:hooks`      | Runs the coding-guide checks on files changed since `main` (run it before opening a PR).         |
+| `bun run habit:hooks:full` | Runs the coding-guide checks on the whole project.                                               |
+| `bun run habit:snoozed`    | Lists snoozed keys (`.coding-guide/snooze.json`, kept empty).                                    |
+| `bun run security:check`   | Audits deps for new CVEs vs `.cve-lite/baseline.json`, fails on high severity (`cve-lite-cli`).  |
+| `bun run test`             | Runs tests with Vitest.                                                                          |
+| `bun run test:watch`       | Runs tests in watch mode with Vitest.                                                            |
+| `bun run test:coverage`    | Runs tests with coverage report and the 80% threshold.                                           |
 
 ### Git hooks
 
-| Hook         | Checks                                                                                                                           |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| `pre-commit` | typecheck, lint-staged (Prettier, `package.json` lint), `coding-guide check --staged`, `lint:package`, CVE scan when deps change |
-| `pre-push`   | knip (`lint:unused`), tests with coverage threshold, blocks force pushes on `main`/`master`/`development`                        |
-| `commit-msg` | commitlint (Conventional Commits)                                                                                                |
+| Hook         | Checks                                                                                                           |
+| ------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `pre-commit` | typecheck, lint-staged (Prettier, `package.json` lint), `coding-guide check --staged`, CVE scan when deps change |
+| `pre-push`   | blocks force pushes on `main`/`master`/`development`, knip (`lint:unused`), tests with coverage threshold        |
+| `commit-msg` | commitlint (Conventional Commits)                                                                                |
 
 The same checks run in CI on every pull request (`.github/workflows/ci.yml`), plus a commitlint check of the PR title (squash merges use it as the release commit message).
 

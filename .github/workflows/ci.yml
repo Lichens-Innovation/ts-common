@@ -11,6 +11,9 @@ jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
+    env:
+      # Git hooks are local-only; skip husky in `prepare` (bun install, npm pack)
+      HUSKY: 0
 
     steps:
       - name: Checkout
@@ -38,21 +41,22 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: echo "$PR_TITLE" | bunx --no-install commitlint
 
-      # coding-guide check: ESLint + knip + comments + jscpd, honoring .coding-guide/snooze.json
-      - name: Lint (coding-guide)
-        run: bun run lint
-
+      # Checks ordered from fastest to slowest so failures surface early
       - name: Format check
         run: bun run format:check
 
       - name: Lint package.json
         run: bun run lint:package
 
+      - name: Typecheck
+        run: bun run typecheck
+
       - name: Unused files, dependencies and exports
         run: bun run lint:unused
 
-      - name: Typecheck
-        run: bun run typecheck
+      # coding-guide check: ESLint + knip + comments + jscpd, honoring .coding-guide/snooze.json
+      - name: Lint (coding-guide)
+        run: bun run lint
 
       - name: Unit tests with coverage threshold
         run: bun run test:coverage
@@ -71,6 +75,10 @@ jobs:
       # publint packs the build output: validates exports, types and files
       - name: Lint package exports
         run: bun run lint:exports
+
+      # attw resolves the packed types as tsc does (node16 CJS/ESM + bundler)
+      - name: Lint package types
+        run: bun run lint:types
 
       - name: Upload build output
         uses: actions/upload-artifact@v7
