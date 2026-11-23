@@ -67,6 +67,7 @@ Table of content
 | `bun run lint:ci`          | Runs ESLint only.                                                                               |
 | `bun run lint:fix`         | Runs ESLint and applies automatic fixes.                                                        |
 | `bun run lint:package`     | Lints `package.json` (exact dependency versions).                                               |
+| `bun run lint:exports`     | Validates the published `exports`, types and files with publint (needs `bun run build` first).  |
 | `bun run lint:unused`      | Detects unused files, dependencies and exports with knip.                                       |
 | `bun run format`           | Formats all files with Prettier.                                                                |
 | `bun run format:check`     | Checks Prettier formatting.                                                                     |

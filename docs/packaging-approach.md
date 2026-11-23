@@ -56,21 +56,16 @@ The entry **keys** (`index`, `excel`, ...) name the files in `dist/`; the source
 {
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
+      "import": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+      "require": { "types": "./dist/index.d.cts", "default": "./dist/index.cjs" },
       "default": "./dist/index.js"
-    },
-    "./excel": {
-      "types": "./dist/excel.d.ts",
-      "import": "./dist/excel.js",
-      "require": "./dist/excel.cjs",
-      "default": "./dist/excel.js"
     }
-    // ... other subpaths
+    // ... same shape for every subpath
   }
 }
 ```
+
+Each condition carries its own `types`: ESM consumers get the `.d.ts`, CommonJS consumers the `.d.cts` emitted by tsup. A single top-level `types` would be interpreted as ESM for `require`, breaking TypeScript CommonJS consumers (`moduleResolution: node16/nodenext`). `bun run lint:exports` (publint, also run in CI) guards this shape.
 
 ### 3. Peer Dependencies Strategy
 
@@ -243,65 +238,6 @@ const excel = await import('@lichens-innovation/ts-common/excel');
 - `unplugin-*` with framework-specific builds
 - `@babel/*` packages
 - `@types/*` packages
-
-### Recommended Improvements
-
-#### 1. Enable Splitting for Shared Code
-
-```typescript
-// tsup.config.ts
-export default defineConfig({
-  splitting: true, // Create common chunks
-  // ...
-});
-```
-
-This would reduce duplication but increase output complexity.
-
-#### 2. Add Export Validation Script
-
-```bash
-bun add -d publint
-```
-
-```json
-{
-  "scripts": {
-    "validate:exports": "publint"
-  }
-}
-```
-
-Validates that your exports are correctly configured and accessible.
-
-#### 3. Consider Watch Mode for Development
-
-```json
-{
-  "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup"
-  }
-}
-```
-
-Enables faster iteration during development.
-
-#### 4. Add Package Size Monitoring
-
-```bash
-bun add -d @packagephobia/cli
-```
-
-```json
-{
-  "scripts": {
-    "size": "packagephobia ."
-  }
-}
-```
-
-Track package size changes over time.
 
 ## Summary
 
